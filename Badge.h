@@ -9,4 +9,4 @@ class Badge {
         Badge idString();
 };
 
-#endif
+#endif  
