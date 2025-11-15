@@ -1,4 +1,5 @@
 #include "Usuario.h"
+#include <iostream>
 
 Usuario::Usuario()
     : nomeDeUsuario("Jogador"),
@@ -37,3 +38,4 @@ Inventario& Usuario::getInventario() {
 HistoricoEstudos& Usuario::getHistorico() {
     return this->historico;
 }
+
