@@ -1,47 +1,34 @@
 #ifndef USUARIO_H
 #define USUARIO_H
 
-#include <iostream>
 #include <string>
+#include "inventario.h" 
+#include "HistoricoEstudos.h" 
 
 class Usuario {
 private:
-    //Dados
-    int idUnico;
     std::string nomeDeUsuario;
-    std::string email;
-    std::string senha;
-
-    //Configurações e progresso
-    bool privacidade;
+    int moedas;
     int pontos;
+    int nivel;
 
-    //Ponteiros 
-    int* idsAmigos;
-    std::string* historicoEstudos;
-
-    //Contadores para o número de elementos atuais
-    int totalAmigos;
-    int totalLogsEstudo;
-
-    //Contadores para a capacidade máxima 
-    int capacidadeAmigos;
-    int capacidadeLogsEstudo;
+    //Composicao 
+    HistoricoEstudos historico;
+    Inventario inventario;
 
 public:
-    //Construtor
-    Usuario(int id, const std::string& usuario, const std::string& email, const std::string& senhaInicial);
+    Usuario();
 
-    //Destrutor
-    ~Usuario();
+    void addMoedas(int qnt);
 
-    //Desabilitar cópia para evitar problemas com ponteiros (Regra dos Três/Cinco)
-    Usuario(const Usuario&) = delete;
-    Usuario& operator=(const Usuario&) = delete;
+    int getMoedas() const; 
 
-    //Métodos públicos
-    bool validarLogin(const std::string& usuario, const std::string& senhaFornecida);
-    bool trocarSenha(const std::string& senhaAntiga, const std::string& novaSenha);
+    std::string getNome() const;
+
+    void setNome(const std::string& novoNome);
+
+    Inventario& getInventario();
+
+    HistoricoEstudos& getHistorico();
 };
-
-#endif // USUARIO_H
+#endif
