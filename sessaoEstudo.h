@@ -20,6 +20,8 @@ private:
     std::string descricao;
 
 public:
+    // construtor default (necessário para array dinâmico)
+    SessaoEstudo();
     // construtor
     SessaoEstudo(long long int segundos, int estadoSessao, std::string disciplina, std::string etiqueta, std::string descricao);
     // gerenciar o estado de uma sessão
