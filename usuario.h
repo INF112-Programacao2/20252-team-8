@@ -2,7 +2,7 @@
 #define USUARIO_H
 
 #include <string>
-#include "inventario.h" 
+#include "Inventario.h" 
 #include "HistoricoEstudos.h" 
 
 class Usuario {
