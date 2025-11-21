@@ -6,9 +6,9 @@
 #include "RepositorioBase.h"
 
 class RepositorioGamificacao : public RepositorioBase {
-    private:
-
     public:
+        RepositorioGamificacao(const std::string& nomeUsuario);
+
         bool getBadge(int badge_idx);
         void setBadge (int badge_idx, bool obtido);
 
