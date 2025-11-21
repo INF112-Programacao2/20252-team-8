@@ -45,11 +45,46 @@ RepositorioGamificacao::RepositorioGamificacao(const std::string& nomeUsuario) :
 
 
 bool RepositorioGamificacao::getBadge(int badge_idx) {
+    // MAPEAMENTO: Traduz o ID (1,2,3,4) para o Texto esperado
+    std::string badgeEsperada;
+    
+    switch (badge_idx) {
+        case 1: badgeEsperada = "Calouro"; break;
+        case 2: badgeEsperada = "Estudante"; break;
+        case 3: badgeEsperada = "Veterano"; break;
+        case 4: badgeEsperada = "Formando"; break;
+        default: 
+            // Se passar um número inválido (ex: 5), retorna false 
+            return false; 
+    }
+    std::ifstream repositorio (this->caminhoArquivo);
+
+    std::string linhaAtual;
+    std::string badgeNoArquivo = "NULL"; // Valor padrão caso não ache nada
+
+    // LEITURA DO ARQUIVO
+    if (repositorio.is_open()) {
+        while (std::getline(repositorio, linhaAtual)) {
+            // Verifica se a linha contem a chave "Badges: "
+            if (linhaAtual.find("Badges: ") != std::string::npos) {
+                badgeNoArquivo = linhaAtual.substr(8);  // Le até o fim da linha
+                break;
+            }
+        }
+        repositorio.close();
+    }
+    // COMPARAÇÃO E RETORNO
+    // Se o que está no arquivo for igual ao que o ID pede, retorna true.
+    if (badgeNoArquivo == badgeEsperada) {
+        return true;
+    } else {
+        return false;
+    }
 
 }
 
 
-void RepositorioGamificacao::setBadge (int badge_idx, bool obtido) {
+void RepositorioGamificacao::setBadge (int badge_idx) {
 
 }
 

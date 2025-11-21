@@ -10,7 +10,7 @@ class RepositorioGamificacao : public RepositorioBase {
         RepositorioGamificacao(const std::string& nomeUsuario);
 
         bool getBadge(int badge_idx);
-        void setBadge (int badge_idx, bool obtido);
+        void setBadge (int badge_idx);
 
         int getNivel();
         void setNivel (int nivel_atual);
