@@ -1,67 +1,44 @@
 #include "RepositorioBase.h"
-#include <fstream>  // Para std::ifstream (leitura) e std::ofstream (escrita)
-#include <iostream> // Para std::cerr (relatar erros)
+#include <fstream>  
+#include <iostream> 
 
-/**
- * Construtor 1:
- * Recebe um caminho de arquivo direto.
- */
-RepositorioBase::RepositorioBase(const std::string& caminho) {
-    this->caminhoArquivo = caminho;
-    garantirArquivoExiste(); // Garante que o arquivo seja criado se não existir
-}
+// Construtor (cria 'usuário_repositorio.txt')
+RepositorioBase::RepositorioBase(const std::string& nomeUsuario) {
+    this->caminhoArquivo = nomeUsuario + "_repositorio.txt";
 
-/**
- * Construtor 2:
- * Gera um nome de arquivo (ex: "usuario_repositorio.txt")
- * O parâmetro 'gerarArquivo' é um truque para diferenciar as assinaturas
- * (C++ não permite sobrecarga apenas por lógica interna).
- */
-RepositorioBase::RepositorioBase(const std::string& nomeUsuario, bool gerarArquivo) {
-    if (gerarArquivo) {
-        this->caminhoArquivo = nomeUsuario + "_repositorio.txt";
-    } else {
-        // Fallback para caso 'gerarArquivo' seja falso, embora o esperado seja true.
-        this->caminhoArquivo = nomeUsuario;
+    // Verifica se o repositório já existe, abrindo-o no modo escrita
+    std::ifstream arquivo (caminhoArquivo);
+    if (arquivo.good()){
+        std::cout << "\nBem vindo novamente, " << nomeUsuario << " !\n";
+        arquivo.close();
     }
-    garantirArquivoExiste(); // Garante que o arquivo seja criado
-}
-
-/**
- * Função auxiliar privada para garantir a existência do arquivo.
- * Tenta abrir o arquivo em modo 'append'. Se o arquivo não existir,
- * o std::ofstream o criará automaticamente.
- */
-void RepositorioBase::garantirArquivoExiste() {
-    // std::ios::app (append) abre para escrita no final.
-    // Crucialmente, ele CRIA o arquivo se não existir, sem apagar o conteúdo.
-    std::ofstream ofs(this->caminhoArquivo, std::ios::app); 
-
-    if (!ofs.is_open()) {
-        // Se mesmo assim não conseguir abrir (ex: permissão negada),
-        // informa o erro.
-        std::cerr << "Erro: Nao foi possivel criar ou abrir o arquivo em: " 
-                  << this->caminhoArquivo << std::endl;
+    else {
+        // Cria arquivo em modo escrita e padroniza formato
+        std::ofstream arquivo (caminhoArquivo);
+        
+        if (!arquivo.is_open()){
+            throw std::runtime_error("ERRO: Não foi possível criar o arquivo.");
+        }
+        else {
+            std::cout << "\nRepositório criado com sucesso!\n";
+        }
+    
+        arquivo << "REPOSITÓRIO USUÁRIO: " << nomeUsuario << std::endl;
+        arquivo.close();
     }
-    // O arquivo é fechado automaticamente quando 'ofs' sai do escopo.
 }
 
-/**
- * Lê todo o conteúdo do arquivo e retorna um vetor de strings,
- * onde cada elemento é uma linha.
- */
+
+// Lê todo o conteúdo do arquivo e retorna um vetor de strings, onde cada elemento é uma linha.
 std::vector<std::string> RepositorioBase::LerLinhasDoArquivo() {
     std::vector<std::string> linhas;
     std::ifstream ifs(this->caminhoArquivo);
 
-    // Conforme sua solicitação: o construtor garante que o arquivo existe,
-    // mas esta função trata erros de leitura (ex: permissão).
     if (!ifs.is_open()) {
         std::cerr << "Erro: Nao foi possivel ler o arquivo (verifique permissoes): " 
                   << this->caminhoArquivo << std::endl;
         
-        // Retorna um vetor vazio para sinalizar o erro
-        return linhas; 
+        throw std::runtime_error("ERRO: Não foi possível ler o arquivo.");
     }
 
     std::string linha;
@@ -69,19 +46,14 @@ std::vector<std::string> RepositorioBase::LerLinhasDoArquivo() {
         linhas.push_back(linha);
     }
 
-    // ifs.close() é chamado automaticamente quando sai do escopo.
+    ifs.close();
     return linhas;
 }
 
-/**
- * Escreve um vetor de strings no arquivo.
- * Conforme solicitado, ele adiciona (append) as novas linhas ao final.
- * * Este método é 'virtual', então RepositorioItens pode, por exemplo,
- * reimplementá-lo para ler tudo, modificar, e reescrever o arquivo (simulando
- * uma substituição de linha).
- */
+
+// Escreve um vetor de strings no arquivo.
+// Ele adiciona (append) as novas linhas ao final.
 void RepositorioBase::escreverLinhasNoArquivo(const std::vector<std::string>& linhasParaEscrever) {
-    // Abre em modo 'append' (adicionar ao final)
     std::ofstream ofs(this->caminhoArquivo, std::ios::app); 
 
     if (!ofs.is_open()) {
@@ -90,13 +62,8 @@ void RepositorioBase::escreverLinhasNoArquivo(const std::vector<std::string>& li
         return; // Sai da função se não conseguir escrever
     }
 
-    // Adiciona um separador ou nova linha se o arquivo já tiver conteúdo
-    // (Opcional, mas útil para logs)
-    // ofs << "\n"; 
-
     for (const std::string& linha : linhasParaEscrever) {
         ofs << linha << "\n";
     }
     
-    // ofs.close() é chamado automaticamente.
 }
