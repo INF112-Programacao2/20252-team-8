@@ -19,8 +19,6 @@ private:
 public:
     Usuario();
 
-    void addMoedas(int qnt);
-
     int getMoedas() const; 
 
     std::string getNome() const;
@@ -32,3 +30,4 @@ public:
     HistoricoEstudos& getHistorico();
 };
 #endif
+
