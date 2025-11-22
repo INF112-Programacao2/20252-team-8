@@ -40,7 +40,11 @@ class HistoricoEstudos {
 
         //retorna ID do usuário
         std::string getIdUsuario() const;
+
+        //retorna o tempo total de estudos de uma disciplina específica
+        long long int getTempoTotalPorDisciplina(const std::string& disciplina) const;
     
 };
 
 #endif
+
