@@ -2,15 +2,10 @@
 #define TELA_INVENTARIO_H
 
 #include "TelaBase.h"
-#include <iostream>
 
-class telaInventario : public telaBase {
-    private:
-        void mostrarItensAdquiridos();
-
-    public:
-        telaInventario();
-        void exibir() override;
+class telaInventario : public TelaBase {
+public:
+    int exibir(Usuario* usuario) override;
 };
 
 #endif

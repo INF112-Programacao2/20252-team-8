@@ -2,16 +2,10 @@
 #define TELA_PERFIL_H
 
 #include "TelaBase.h"
-#include <iostream>
 
-class telaPerfil : public telaBase {
-    private:
-        void mostrarDadosUsuario();
-        void mostrarOpcoesEdicao();
-        void mostrarEstatisticas();
-    public:
-        telaPerfil();
-        void exibirTela() override;
+class telaPerfil : public TelaBase {
+public:
+    int exibir(Usuario* usuario) override;
 };
 
 #endif

@@ -18,27 +18,27 @@ void ControladorPrincipal::iniciar() {
         
         TelaBase* telaAtual = nullptr;
 
-        // Fábrica de telas usando IF/ELSE em vez de SWITCH
+        // Fábrica de telas
         if (proximaTela == TELA_PRINCIPAL) {
-            telaAtual = new TelaPrincipal();
+            telaAtual = new telaPrincipal();
         } 
         else if (proximaTela == TELA_PERFIL) {
-            telaAtual = new TelaPerfil();
+            telaAtual = new telaPerfil();
         }
         else if (proximaTela == TELA_LOJA) {
-            telaAtual = new TelaLoja();
+            telaAtual = new telaLoja();
         }
         else if (proximaTela == TELA_INVENTARIO) {
-            telaAtual = new TelaInventario();
+            telaAtual = new telaInventario();
         }
         else if (proximaTela == TELA_ESTUDO) {
-            telaAtual = new TelaEstudo();
+            telaAtual = new telaEstudo();
         }
 
         // Executa e depois deleta
         if (telaAtual != nullptr) {
-            proximaTela = telaAtual->exibirTela(usuario);
-            delete telaAtual; // Gerenciamento de memória!
+            proximaTela = telaAtual->exibir(usuario);
+            delete telaAtual;
         } else {
             std::cout << "Erro fatal: Tela nao encontrada." << std::endl;
             proximaTela = TELA_SAIR;

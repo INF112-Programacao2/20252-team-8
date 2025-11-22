@@ -2,19 +2,10 @@
 #define TELA_PRINCIPAL_H
 
 #include "TelaBase.h"
-#include <iostream>
 
-
-class telaPrincipal : public telaBase {
-    private:
-        void mostrarLoja();
-        void mostrarPerfil();
-        void mostrarInventario();
-        void mostrarMenuEstudo();
-
+class telaPrincipal : public TelaBase {
     public:
-        telaPrincipal();
-        void exibirTela() override;
+        int exibir(Usuario* usuario) override;
 };
 
 #endif

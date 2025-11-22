@@ -4,7 +4,7 @@
 #include "usuario.h"
 #include <iostream>
 
-class telaBase {
+class TelaBase {
     protected:
         void limparTela();
         
@@ -16,7 +16,7 @@ class telaBase {
         // Recebe ponteiro para usuário para poder alterar dados
         virtual int exibir(Usuario* usuario) = 0; 
 
-        virtual ~telaBase();
+        virtual ~TelaBase();
         
 };
 
