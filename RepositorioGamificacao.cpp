@@ -84,8 +84,55 @@ bool RepositorioGamificacao::getBadge(int badge_idx) {
 }
 
 
-void RepositorioGamificacao::setBadge (int badge_idx) {
+#include <vector> // Necessário para armazenar as linhas temporariamente
 
+void RepositorioGamificacao::setBadge(int badge_idx) {
+    std::string novaBadge;
+    switch (badge_idx) {
+        case 1: novaBadge = "Calouro"; break;
+        case 2: novaBadge = "Estudante"; break;
+        case 3: novaBadge = "Veterano"; break;
+        case 4: novaBadge = "Formando"; break;
+        default:
+            std::cerr << "Erro: Indice de badge invalido (use 1-4)." << std::endl;
+            return; 
+    }
+
+    // LER TODO O ARQUIVO PARA A MEMÓRIA
+    std::vector<std::string> linhasDoArquivo;
+    std::string linhaAtual;
+    std::ifstream leitura(this->caminhoArquivo);
+
+    if (leitura.is_open()) {
+        while (std::getline(leitura, linhaAtual)) {
+            // Se encontramos a linha de Badges, substituímos ela pela nova versão
+            if (linhaAtual.find("Badges: ") != std::string::npos) {
+                linhasDoArquivo.push_back("Badges: " + novaBadge);
+            } 
+            else {
+                // Se não for a linha de badges, copiamos a linha original
+                linhasDoArquivo.push_back(linhaAtual);
+            }
+        }
+        leitura.close();
+    } else {
+        std::cerr << "Erro: Nao foi possivel ler o repositorio." << std::endl;
+        return;
+    }
+
+    // REESCREVER O ARQUIVO
+    // ofstream APAGA tudo o que tinha antes (truncate) e começa do zero
+    std::ofstream escrita(this->caminhoArquivo);
+
+    if (escrita.is_open()) {
+        for (const std::string& linha : linhasDoArquivo) {
+            escrita << linha << std::endl;
+        }
+        escrita.close();
+        std::cout << "Badge atualizada com sucesso para: " << novaBadge << std::endl;
+    } else {
+        std::cerr << "Erro crítico: Nao foi possivel salvar a nova badge." << std::endl;
+    }
 }
 
 int RepositorioGamificacao::getNivel() {
