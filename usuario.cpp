@@ -8,14 +8,6 @@ Usuario::Usuario()
       nivel(1),
     {}
 
-void Usuario::addMoedas(int qnt) {
-    if (qnt > 0) {
-        this->moedas += qnt;
-    } else {
-        //moedas devem ser valores positivos
-        std::cerr << "Tentativa de adicionar quantidade inválida de moedas: " << qnt << std::endl;
-    }
-}
 
 int Usuario::getMoedas() const {
     return this->moedas;
@@ -38,4 +30,5 @@ Inventario& Usuario::getInventario() {
 HistoricoEstudos& Usuario::getHistorico() {
     return this->historico;
 }
+
 
