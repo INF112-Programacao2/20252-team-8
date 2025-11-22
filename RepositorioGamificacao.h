@@ -4,12 +4,23 @@
 #include <string>
 #include <vector>
 #include "RepositorioBase.h"
-#include "Badge.h"
 
 class RepositorioGamificacao : public RepositorioBase {
     public:
-        std::vector <Badge> carregarBadges();
-        
+        RepositorioGamificacao(const std::string& nomeUsuario);
+
+        bool getBadge(int badge_idx);
+        void setBadge (int badge_idx);
+
+        int getNivel();
+        void setNivel (int nivel_atual);
+
+        int getMoedas();
+        void setMoedas (int qtd_moedas);
+
+        int getPontos();
+        void setPontos (int qtd_pontos);
+
 };
 
 #endif
