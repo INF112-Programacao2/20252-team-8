@@ -60,6 +60,17 @@ void HistoricoEstudos::calcularTempoTotal() {
     std::cout << "Tempo total calculado: " << tempoTotal << " segundos" << std::endl;
 }
 
+//retorna o tempo total de estudos de uma disciplina específica
+long long int HistoricoEstudos::getTempoTotalPorDisciplina(const std::string& disciplina) const {
+    long long int total = 0;
+    for (int i = 0; i < quantidade; i++) {
+        if (sessoes[i].getDisciplina() == disciplina) {
+            total += sessoes[i].getSegundos();
+        }
+    }
+    return total;
+}
+
 // define período
 void HistoricoEstudos::definirPeriodo(std::string dataInicio, std::string dataFim, std::string horaInicio, std::string horaFim) {
     this->DataInicio = dataInicio;
@@ -77,4 +88,5 @@ long long int HistoricoEstudos::getTempoTotal() const {
 // retorna ID do usuário
 std::string HistoricoEstudos::getIdUsuario() const {
     return idUsuario;
+
 }
