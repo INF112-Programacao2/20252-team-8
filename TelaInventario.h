@@ -10,7 +10,7 @@ class telaInventario : public telaBase {
 
     public:
         telaInventario();
-        void exibirTela() override;
+        void exibir() override;
 };
 
 #endif

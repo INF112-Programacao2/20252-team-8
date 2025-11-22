@@ -12,7 +12,7 @@ class telaEstudo : public telaBase {
         
     public:
         telaEstudo();
-        void exibirTela() override;
+        void exibir() override;
 };
 
 #endif

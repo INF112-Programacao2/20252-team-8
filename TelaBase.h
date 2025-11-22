@@ -1,16 +1,21 @@
 #ifndef TELA_BASE_H
 #define TELA_BASE_H
 
+#include "usuario.h"
 #include <iostream>
 
 class telaBase {
     protected:
-        std::string Titulo;
         void limparTela();
+        
         void aguardarEnter();
-        void virtual exibirTela();
+
     public:
-        telaBase();
+
+        // Método virtual puro, para ser implementado pelas classes filhas
+        // Recebe ponteiro para usuário para poder alterar dados
+        virtual int exibir(Usuario* usuario) = 0; 
+
         virtual ~telaBase();
         
 };

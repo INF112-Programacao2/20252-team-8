@@ -13,6 +13,6 @@ void telaEstudo::menuSelecionarEstudo(){
 
 }
 
-void telaEstudo::exibirTela(){
+void telaEstudo::exibir(){
     
 }
