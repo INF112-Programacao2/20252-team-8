@@ -1,7 +1,7 @@
 #ifndef TELA_BASE_H
 #define TELA_BASE_H
 
-#include "usuario.h"
+#include "Usuario.h"
 #include <iostream>
 
 class TelaBase {
