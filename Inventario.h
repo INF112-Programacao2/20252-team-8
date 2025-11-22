@@ -21,6 +21,7 @@ public:
     int getQuantidadeAtual() const;
 
     int getCapacidadeMaxima() const;
-};
 
+    bool salvarInventario(const std::string& nomeArquivo) const;
+};
 #endif
