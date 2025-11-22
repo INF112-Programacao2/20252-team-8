@@ -6,7 +6,7 @@ protected:
     int _tempo_de_estudo;
     int pontos;
     
-    // Status de Badges e Níveis
+    // Variáveis de controle
     bool badge1, badge2, badge3, badge4;
     bool nivel1, nivel2, nivel3, nivel4;
 
@@ -14,16 +14,8 @@ public:
     ControladorGamificacao(int tempo_inicial);
     ~ControladorGamificacao();
 
-    // Lógica
-    void atualizarStatusBaseadoNoTempo(); // Antigo Badges()
-    bool gastarPontos(int valor);
-
-    // Getters
+    void atualizarStatus(); 
+    void mostrarBadges();   
     int getPontos();
-    int getHoras();
-    
-    void comunicarSubidaDeNivel();
-    void comunicarBadges();
 };
-
-#endif // CONTROLADORGAMIFICACAO_H
+#endif
