@@ -84,8 +84,6 @@ bool RepositorioGamificacao::getBadge(int badge_idx) {
 }
 
 
-#include <vector> // Necessário para armazenar as linhas temporariamente
-
 void RepositorioGamificacao::setBadge(int badge_idx) {
     std::string novaBadge;
     switch (badge_idx) {

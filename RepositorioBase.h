@@ -10,7 +10,7 @@ protected:
 
 public:
     // Construtor que recebe um caminho de arquivo existente
-    RepositorioBase(const std::string& caminho);
+    RepositorioBase(const std::string& nomeUsuario);
 
     // Métodos de leitura e escrita
     std::vector<std::string> LerLinhasDoArquivo();
