@@ -2,8 +2,8 @@
 #define USUARIO_H
 
 #include <string>
-#include "Inventario.h" 
-#include "HistoricoEstudos.h" 
+#include "Loja.h" 
+#include "RepositorioEstudos.h" 
 
 class Usuario {
 private:
@@ -13,8 +13,8 @@ private:
     int nivel;
 
     //Composicao 
-    HistoricoEstudos historico;
-    Inventario inventario;
+    RepositorioEstudos Repositorio;
+    Loja loja;
 
 public:
     Usuario();
@@ -25,9 +25,9 @@ public:
 
     void setNome(const std::string& novoNome);
 
-    Inventario& getInventario();
+    Loja& getLoja();
 
-    HistoricoEstudos& getHistorico();
+    RepositorioEstudos& getRepositorio();
 };
 #endif
 
