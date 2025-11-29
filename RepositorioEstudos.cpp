@@ -1,9 +1,9 @@
-#include "HistoricoEstudos.h"
+#include "RepositorioEstudos.h"
 #include <iostream>
 #include <vector>
 
 // construtor
-HistoricoEstudos::HistoricoEstudos(std::string idUsuario)
+RepositorioEstudos::RepositorioEstudos(std::string idUsuario)
     : idUsuario(idUsuario), quantidade(0), capacidade(2), tempoTotal(0)
 {
     // aloca array dinâmico
@@ -11,12 +11,12 @@ HistoricoEstudos::HistoricoEstudos(std::string idUsuario)
 }
 
 // destrutor
-HistoricoEstudos::~HistoricoEstudos() {
+RepositorioEstudos::~RepositorioEstudos() {
     delete[] sessoes; // libera memória
 }
 
 // adiciona sessão com realocação dinâmica
-void HistoricoEstudos::adicionarSessao(const SessaoEstudo& sessao) {
+void RepositorioEstudos::adicionarSessao(const SessaoEstudo& sessao) {
     if (quantidade >= capacidade) {
         // dobra o tamanho
         capacidade *= 2;
@@ -38,12 +38,12 @@ void HistoricoEstudos::adicionarSessao(const SessaoEstudo& sessao) {
 }
 
 // retorna número de sessões
-int HistoricoEstudos::getQuantidade() const {
+int RepositorioEstudos::getQuantidade() const {
     return quantidade;
 }
 
 // retorna ponteiro para sessão específica
-SessaoEstudo* HistoricoEstudos::getSessao(int i) const {
+SessaoEstudo* RepositorioEstudos::getSessao(int i) const {
     if (i < 0 || i >= quantidade) {
         std::cerr << "Índice inválido!" << std::endl;
         return nullptr;
@@ -52,7 +52,7 @@ SessaoEstudo* HistoricoEstudos::getSessao(int i) const {
 }
 
 // soma os tempos de todas as sessões
-void HistoricoEstudos::calcularTempoTotal() {
+void RepositorioEstudos::calcularTempoTotal() {
     tempoTotal = 0;
     for (int i = 0; i < quantidade; i++) {
         tempoTotal += sessoes[i].getSegundos();
@@ -61,7 +61,7 @@ void HistoricoEstudos::calcularTempoTotal() {
 }
 
 //retorna o tempo total de estudos de uma disciplina específica
-long long int HistoricoEstudos::getTempoTotalPorDisciplina(const std::string& disciplina) const {
+long long int RepositorioEstudos::getTempoTotalPorDisciplina(const std::string& disciplina) const {
     long long int total = 0;
     for (int i = 0; i < quantidade; i++) {
         if (sessoes[i].getDisciplina() == disciplina) {
@@ -72,7 +72,7 @@ long long int HistoricoEstudos::getTempoTotalPorDisciplina(const std::string& di
 }
 
 // define período
-void HistoricoEstudos::definirPeriodo(std::string dataInicio, std::string dataFim, std::string horaInicio, std::string horaFim) {
+void RepositorioEstudos::definirPeriodo(std::string dataInicio, std::string dataFim, std::string horaInicio, std::string horaFim) {
     this->DataInicio = dataInicio;
     this->DataFim = dataFim;
     this->HoraInicio = horaInicio;
@@ -81,12 +81,12 @@ void HistoricoEstudos::definirPeriodo(std::string dataInicio, std::string dataFi
 }
 
 // retorna tempo total
-long long int HistoricoEstudos::getTempoTotal() const {
+long long int RepositorioEstudos::getTempoTotal() const {
     return tempoTotal;
 }
 
 // retorna ID do usuário
-std::string HistoricoEstudos::getIdUsuario() const {
+std::string RepositorioEstudos::getIdUsuario() const {
     return idUsuario;
 
 }

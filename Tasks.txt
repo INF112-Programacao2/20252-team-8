@@ -1,0 +1,17 @@
+Tasks - Refatoração do Código (29/11)
+
+OK - Atualização do Diagrama de Classes
+OK - Atualização do nome das variáveis e classes segundo Diagrama
+OK - Criação do esboço da main.cpp
+OK - Atualizando github com tasks e main
+
+EM PROGRESSO - Atualizando Diagrama de Classes com mudança nas telas
+
+A IMPLEMENTAR:
+    
+    - Atualizar repositorioInventario com construtor e lógica de repositorio
+    - Criar método carregarUsuario() no repositorioGamificacao 
+    - Criar construtor para Usuario()
+    - Criar construtor para Controladores de acordo com a main
+    - Criar método executar() no controlador principal
+    - Criar novas tasks
