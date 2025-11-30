@@ -1,5 +1,6 @@
 #include "RepositorioGamificacao.h"
 #include "RepositorioBase.h"
+#include "Usuario.h"
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -8,17 +9,19 @@
 RepositorioGamificacao::RepositorioGamificacao(const std::string& nomeUsuario) :
     RepositorioBase(nomeUsuario) {
     
+    this->_nomeUsuario = nomeUsuario;   // Salva o nome para uso posterior
+
     // Verifica se usuário é novo
     bool usuarioNovo = true;
     std::string linhaAtual;
     std::ifstream checkArquivo(this->caminhoArquivo);
     
+    // Tenta achar "Moedas:" para verificar se o usuário é novo
     if (checkArquivo.is_open()) {
         while (std::getline(checkArquivo, linhaAtual)) {
-            // Verifica se a linha contem a chave "Moedas:"
             if (linhaAtual.find("Moedas:") != std::string::npos) {
                 usuarioNovo = false;
-                break; // Não precisa ler o resto.
+                break; 
             }
         }
         checkArquivo.close();
@@ -28,7 +31,7 @@ RepositorioGamificacao::RepositorioGamificacao(const std::string& nomeUsuario) :
     if (usuarioNovo) {
         std::cout << "Criando perfil de gamificação padrão...\n";
 
-        // Inicialização de vetor com informações do repositório
+        // ORDEM PADRÃO DE DADOS:
         std::vector<std::string> linhasParaAdicionar = {
             "Moedas: 0",
             "Pontos: 0",
@@ -44,43 +47,78 @@ RepositorioGamificacao::RepositorioGamificacao(const std::string& nomeUsuario) :
 }
 
 
-bool RepositorioGamificacao::getBadge(int badge_idx) {
-    // MAPEAMENTO: Traduz o ID (1,2,3,4) para o Texto esperado
-    std::string badgeEsperada;
-    
-    switch (badge_idx) {
-        case 1: badgeEsperada = "Calouro"; break;
-        case 2: badgeEsperada = "Estudante"; break;
-        case 3: badgeEsperada = "Veterano"; break;
-        case 4: badgeEsperada = "Formando"; break;
-        default: 
-            // Se passar um número inválido (ex: 5), retorna false 
-            return false; 
-    }
-    std::ifstream repositorio (this->caminhoArquivo);
+// Le infomações contidas no repositorio e retorna ponteiro Usuario
+Usuario* RepositorioGamificacao::carregarUsuario(){
+    std::vector<std::string> linhas = LerLinhasDoArquivo();
 
-    std::string linhaAtual;
-    std::string badgeNoArquivo = "NULL"; // Valor padrão caso não ache nada
+    // Valores padrão caso falhe a leitura
+    int moedas = 0;
+    int xp = 0;
+    int nivel = 1;
 
-    // LEITURA DO ARQUIVO
-    if (repositorio.is_open()) {
-        while (std::getline(repositorio, linhaAtual)) {
-            // Verifica se a linha contem a chave "Badges: "
-            if (linhaAtual.find("Badges: ") != std::string::npos) {
-                badgeNoArquivo = linhaAtual.substr(8);  // Le até o fim da linha
-                break;
+    for (const std::string& linha : linhas) {
+        try {
+            if (linha.find("Moedas: ") != std::string::npos) {
+                moedas = std::stoi(linha.substr(8)); // Pula "Moedas: "
             }
+            else if (linha.find("Pontos: ") != std::string::npos) {
+                xp = std::stoi(linha.substr(8));    // Pula "Pontos: "
+            }
+            else if (linha.find("Nivel: ") != std::string::npos) {
+                nivel = std::stoi(linha.substr(7)); // Pula "Nivel: "
+            }
+        } catch (std::exception& e) {
+            std::cerr << "Erro ao ler valor numérico no arquivo." << std::endl;
         }
-        repositorio.close();
-    }
-    // COMPARAÇÃO E RETORNO
-    // Se o que está no arquivo for igual ao que o ID pede, retorna true.
-    if (badgeNoArquivo == badgeEsperada) {
-        return true;
-    } else {
-        return false;
     }
 
+    // Retorna o objeto Usuario montado
+    return new Usuario(this->_nomeUsuario, nivel, xp, moedas);
+}
+
+
+// Recebe ponteiro Usuario e atualiza repositorio
+void RepositorioGamificacao::salvarUsuario(Usuario* usuario) {
+    if (!usuario) return;   
+
+    // 1. Ler badge atual do arquivo
+    std::string badgeSalva = "NULL";
+    std::vector<std::string> linhasAtuais = LerLinhasDoArquivo();
+    for(const auto& linha : linhasAtuais) {
+        if(linha.find("Badges: ") != std::string::npos) {
+            badgeSalva = linha.substr(8);
+            break;
+        }
+    }
+
+    //2. Montar novo conteúdo no mesmo padrão
+    std::vector<std::string> novosDados;
+    novosDados.push_back("Moedas: " + std::to_string(usuario->getMoedas()));
+    novosDados.push_back("Pontos: " + std::to_string(usuario->getXp()));
+    novosDados.push_back("Nivel: " + std::to_string(usuario->getNivel()));
+    novosDados.push_back("Badges: " + badgeSalva); // Mantém a badge antiga
+
+    // 3. Sobrescrever arquivo (truncate)
+    std::ofstream ofs(this->caminhoArquivo, std::ios::trunc);
+    if(ofs.is_open()) {
+        for(const auto& l : novosDados) {
+            ofs << l << "\n";
+        }
+    }
+}
+
+
+// Le repositorio e retorna badge salva
+std::string RepositorioGamificacao::getBadge() {
+
+    std::vector<std::string> linhas = LerLinhasDoArquivo();
+    for (const auto& linha : linhas) {
+        if (linha.find("Badges: ") != std::string::npos) {
+            std::string badgeNoArquivo = linha.substr(8);
+            return badgeNoArquivo;
+        }
+    }
+    return "NULL";
 }
 
 
@@ -96,40 +134,22 @@ void RepositorioGamificacao::setBadge(int badge_idx) {
             return; 
     }
 
-    // LER TODO O ARQUIVO PARA A MEMÓRIA
-    std::vector<std::string> linhasDoArquivo;
-    std::string linhaAtual;
-    std::ifstream leitura(this->caminhoArquivo);
-
-    if (leitura.is_open()) {
-        while (std::getline(leitura, linhaAtual)) {
-            // Se encontramos a linha de Badges, substituímos ela pela nova versão
-            if (linhaAtual.find("Badges: ") != std::string::npos) {
-                linhasDoArquivo.push_back("Badges: " + novaBadge);
-            } 
-            else {
-                // Se não for a linha de badges, copiamos a linha original
-                linhasDoArquivo.push_back(linhaAtual);
-            }
+    // Ler tudo
+    std::vector<std::string> linhas = LerLinhasDoArquivo();
+    
+    // Modificar na memória
+    for (auto& linha : linhas) {
+        if (linha.find("Badges: ") != std::string::npos) {
+            linha = "Badges: " + novaBadge;
+            break; // Achou e trocou
         }
-        leitura.close();
-    } else {
-        std::cerr << "Erro: Nao foi possivel ler o repositorio." << std::endl;
-        return;
     }
 
-    // REESCREVER O ARQUIVO
-    // ofstream APAGA tudo o que tinha antes (truncate) e começa do zero
-    std::ofstream escrita(this->caminhoArquivo);
-
+    std::ofstream escrita(this->caminhoArquivo, std::ios::trunc);
     if (escrita.is_open()) {
-        for (const std::string& linha : linhasDoArquivo) {
-            escrita << linha << std::endl;
+        for (const auto& linha : linhas) {
+            escrita << linha << "\n";
         }
-        escrita.close();
-        std::cout << "Badge atualizada com sucesso para: " << novaBadge << std::endl;
-    } else {
-        std::cerr << "Erro crítico: Nao foi possivel salvar a nova badge." << std::endl;
     }
 }
 
