@@ -8,39 +8,51 @@ private:
     // tempo
     long long int segundos;
     long long int tempoInicial;
-    // métodos privados para gerenciar estados
+    
+    // métodos para gerenciar estados
     void sessaoiniciada();
     void sessaopausada();
     void sessaofinalizada();
+    void obterDataHoraAtual(std::string& data, std::string& hora);
+    
     // estado da sessão
     int estadoSessao; //0 = parado, 1 = rodando, 2 = pausado
+    
     // metadados
     std::string disciplina;
-    std::string etiqueta;
     std::string descricao;
+    
+    // dados de data e hora
+    std::string dataInicio;
+    std::string dataFinal;
+    std::string horarioInicio;
+    std::string horarioFinal;
 
 public:
-    // construtor default (necessário para array dinâmico)
+    // construtor default 
     SessaoEstudo();
     // construtor
     SessaoEstudo(long long int segundos, int estadoSessao, std::string disciplina, std::string etiqueta, std::string descricao);
+    
     // gerenciar o estado de uma sessão
     void gerenciar();
+    
     // para marcar o tempo
     void iniciar();
     void pausar();
     void resetar();
     void continuar();
-    // armazenar disciplina, etiqueta e descrição
+    
+    // armazenar disciplina e descrição
     void armazenar();
-    // retorna o tempo estudado
+    
+    // getters
     long long int getSegundos();
-    // retorna a disciplina estudada
     std::string getDisciplina();
-    // retorna a etiqueta do seu estudo
-    std::string getEtiqueta();
-    // retorna a descrição do seu estudo
     std::string getDescricao();
+    std::string getDataInicio();
+    std::string getDataFinal();
+    std::string getHorarioInicio();
+    std::string getHorarioFinal();
 };
-
 #endif

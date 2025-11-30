@@ -1,18 +1,24 @@
 #include "SessaoEstudo.h"
 #include <iostream>
 #include <ctime>
+#include <stdexcept>
+#include <iomanip>
+#include <sstream>
 
 // construtor default
 SessaoEstudo::SessaoEstudo()
     : segundos(0), estadoSessao(0), tempoInicial(0),
-      disciplina(""), etiqueta(""), descricao("") {}
+      disciplina(""), descricao("") {}
 
 // construtor parametrizado
 SessaoEstudo::SessaoEstudo(long long int segundos, int estadoSessao, std::string disciplina, std::string etiqueta, std::string descricao)
-    :segundos(segundos), estadoSessao(estadoSessao), disciplina(disciplina), etiqueta(etiqueta), descricao(descricao), tempoInicial(0) {}
+    :segundos(segundos), estadoSessao(estadoSessao), disciplina(disciplina), descricao(descricao), tempoInicial(0) {}
 
-// métodos privados para gerenciar estados
+// métodos para gerenciar estados
 void SessaoEstudo::sessaoiniciada() {
+    if (disciplina.empty()) {
+        throw std::logic_error("Não é possível iniciar sessão sem disciplina");
+    }
     std::cout << "Sessão iniciada para: " << disciplina << std::endl;
 }
 
@@ -21,12 +27,39 @@ void SessaoEstudo::sessaopausada() {
 }
 
 void SessaoEstudo::sessaofinalizada() {
+     if (segundos < 0) {
+        throw std::logic_error("Tempo de sessão inválido");
+    }
     std::cout << "Sessão finalizada. Tempo total: " << segundos << " segundos" << std::endl;
 }
 
-// Ggrenciar estado
+// Função auxiliar para obter data e hora 
+void SessaoEstudo::obterDataHoraAtual(std::string& data, std::string& hora) {
+    std::time_t agora = std::time(nullptr);
+    std::tm* tempoLocal = std::localtime(&agora);
+    
+    std::stringstream ssData, ssHora;
+    
+    // Formata data: dd/mm/aa
+    ssData << std::setfill('0') << std::setw(2) << tempoLocal->tm_mday << "/"
+           << std::setfill('0') << std::setw(2) << (tempoLocal->tm_mon + 1) << "/"
+           << std::setfill('0') << std::setw(2) << (tempoLocal->tm_year % 100);
+    
+    // Formata hora: hh:mm:ss
+    ssHora << std::setfill('0') << std::setw(2) << tempoLocal->tm_hour << ":"
+           << std::setfill('0') << std::setw(2) << tempoLocal->tm_min << ":"
+           << std::setfill('0') << std::setw(2) << tempoLocal->tm_sec;
+    
+    data = ssData.str();
+    hora = ssHora.str();
+}
+
+// Gerenciar estado
 void SessaoEstudo::gerenciar() {
     switch(estadoSessao) {
+        if (estadoSessao < 0 || estadoSessao > 2) {
+            throw std::logic_error("Estado da sessão inválido: " + std::to_string(estadoSessao));
+    }
         case 0:
             std::cout << "Sessão parada" << std::endl;
             break;
@@ -37,7 +70,8 @@ void SessaoEstudo::gerenciar() {
             std::cout << "Sessão pausada" << std::endl;
             break;
         default:
-            std::cout << "Estado inválido" << std::endl;
+            throw std::logic_error("Estado inválido não detectado");
+
     }
 }
 
@@ -46,25 +80,44 @@ void SessaoEstudo::iniciar() {
     if (estadoSessao == 0) {
         tempoInicial = time(nullptr);
         estadoSessao = 1;
+        
+        // Registrar data e hora de início
+        obterDataHoraAtual(dataInicio, horarioInicio);
+        
         sessaoiniciada();
+    } else if (estadoSessao == 1) {
+        throw std::logic_error("Sessão já está em andamento");
+    } else if (estadoSessao == 2) {
+        throw std::logic_error("Sessão está pausada. Use continuar() em vez de iniciar()");
     }
 }
 
-// pausar cronômetro
+// Pausar cronômetro
 void SessaoEstudo::pausar() {
     if (estadoSessao == 1) {
         long long int tempoAtual = time(nullptr);
         segundos += (tempoAtual - tempoInicial);
         estadoSessao = 2;
         sessaopausada();
+    } else if (estadoSessao == 0) {
+        throw std::logic_error("Sessão não está em andamento");
+    } else if (estadoSessao == 2) {
+        throw std::logic_error("Sessão já está pausada");
     }
 }
 
-// resetar cronômetro
+// Resetar cronômetro
 void SessaoEstudo::resetar() {
     segundos = 0;
     tempoInicial = 0;
     estadoSessao = 0;
+    
+    // Limpar dados de data/hora
+    dataInicio = "";
+    dataFinal = "";
+    horarioInicio = "";
+    horarioFinal = "";
+    
     std::cout << "Sessão resetada" << std::endl;
 }
 
@@ -74,19 +127,27 @@ void SessaoEstudo::continuar() {
         tempoInicial = time(nullptr);
         estadoSessao = 1;
         std::cout << "Sessão retomada" << std::endl;
+    } else if (estadoSessao == 0) {
+        throw std::logic_error("Sessão não está pausada. Use iniciar()");
+    } else if (estadoSessao == 1) {
+        throw std::logic_error("Sessão já está em andamento");
     }
 }
 
-// armazenar metadados
 void SessaoEstudo::armazenar() {
     if (estadoSessao == 1) {
-        pausar();
+        // Registrar tempo final antes de pausar
+        long long int tempoAtual = time(nullptr);
+        segundos += (tempoAtual - tempoInicial);
+        
+        // Registrar data e hora final
+        obterDataHoraAtual(dataFinal, horarioFinal);
     }
+    
     sessaofinalizada();
     estadoSessao = 0;
 }
 
-// getters
 long long int SessaoEstudo::getSegundos() {
     // Se está rodando, adiciona o tempo decorrido
     if (estadoSessao == 1) {
@@ -100,10 +161,21 @@ std::string SessaoEstudo::getDisciplina() {
     return disciplina;
 }
 
-std::string SessaoEstudo::getEtiqueta() {
-    return etiqueta;
-}
-
 std::string SessaoEstudo::getDescricao() {
     return descricao;
+}
+std::string SessaoEstudo::getDataInicio() {
+    return dataInicio;
+}
+
+std::string SessaoEstudo::getDataFinal() {
+    return dataFinal;
+}
+
+std::string SessaoEstudo::getHorarioInicio() {
+    return horarioInicio;
+}
+
+std::string SessaoEstudo::getHorarioFinal() {
+    return horarioFinal;
 }
