@@ -6,14 +6,19 @@ OK - Criação do esboço da main.cpp
 OK - Atualizando github com tasks e main
 OK - Atualizando Diagrama de Classes com mudança nas telas
 OK - Criação de um resumo das responsabilidades e conexões entre as classes
+OK - Implementação da classe Usuario
 
-EM PROGRESSO - Implementação da classe Usuario
+EM PROGRESSO - Adequação de repositorioGamificacao
+			OK - atributo nomeUsuario no .h
+			OK - Construtor
+			OK - método carregarUsuario
+			OK - método salvarUsuario
+			OK - método getBadge, setBadge
 
 
 
 A IMPLEMENTAR:
     
-	- Usuario
 	- SessaoEstudo
 	- Item (base)
 	- Loja

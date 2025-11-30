@@ -3,7 +3,6 @@
 
 #include <string>
 
-
 class Usuario {
 private:
     std::string nome;
