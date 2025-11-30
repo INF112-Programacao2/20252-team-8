@@ -20,11 +20,10 @@ void ControladorEstudo::iniciarSessao(int duracao) {
 
     //solicita os dados da sessão
     std::string disciplina, etiqueta, descricao;
+    std::cin.ignore();
     std::cout << "\nConfigurar Sessão de Estudo" << std::endl;
     std::cout << "Disciplina: ";
     std::getline(std::cin, disciplina);
-    std::cout << "Etiqueta (ex: Prova, Trabalho, Revisão): ";
-    std::getline(std::cin, etiqueta);
     std::cout << "Descrição (opcional): ";
     std::getline(std::cin, descricao);
 
@@ -49,7 +48,7 @@ void ControladorEstudo::pausarSessao() {
     }
 }
 
-void ControladorEstudo::finalizarSessao() {
+void ControladorEstudo::finalizarSessao(Usuario* u) {
     if (sessaoAtiva == nullptr) {
         std::cerr << "Erro: Não há sessão ativa para finalizar." << std::endl;
         return;
@@ -73,7 +72,7 @@ void ControladorEstudo::finalizarSessao() {
 
 void ControladorEstudo::salvarSessao(Usuario* u, SessaoEstudo& sessao) {
     sessao.armazenar();
-    u->getHistorico().adicionarSessao(sessao);
+    u->getRepositorio().adicionarSessao(sessao);
     
     //atualiza a gamificação
     if (controladorGami != nullptr) {

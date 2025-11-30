@@ -1,7 +1,7 @@
 #ifndef CONTROLADOR_PRINCIPAL_H
 #define CONTROLADOR_PRINCIPAL_H
 
-#include "usuario.h"
+#include "Usuario.h"
 #include "TelaBase.h"
 
 class ControladorPrincipal {

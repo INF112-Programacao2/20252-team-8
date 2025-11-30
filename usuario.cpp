@@ -4,15 +4,19 @@
 
 // Construtor usado na main - cria usuário novo
 Usuario::Usuario(const std::string nome)
-    : nome(nome), moedas(100), xp(0), nivel(1), badge("Iniciante") 
+    : nome(nome), moedas(100), xp(0), nivel(1), badge("Iniciante"), repositorio(nome) 
 {
     // Usuário novo começa com 100 moedas e badge "Iniciante"
 }
 
 // Construtor usado pelo Repositorio - carrega usuário existente
 Usuario::Usuario(std::string nome, int nivel, int xp, int moedas, std::string badge) 
-    : nome(nome), nivel(nivel), xp(xp), moedas(moedas), badge(badge) 
+    : nome(nome), nivel(nivel), xp(xp), moedas(moedas), badge(badge), repositorio(nome)
 {
+}
+
+RepositorioEstudos& Usuario::getRepositorio(){
+    return this-> repositorio;
 }
 
 // métodos Getters
@@ -71,23 +75,30 @@ void Usuario::setBadge(std::string badge) {
 void Usuario::verificarSubidaNivel() {
     int xpNecessario = nivel * 100;  //cada nível precisa de mais XP
     
+    bool subiu = false;
+
     while (xp >= xpNecessario) {
         xp -= xpNecessario;  //reduz o XP gasto no nível
         nivel++;              //sobe de nível
         moedas += 50;         //recompensa por subir de nível
-        
-        std::cout << "🎉 Parabéns! Você subiu para o nível " << nivel << "!" << std::endl;
-        std::cout << "💰 +50 moedas de recompensa!" << std::endl;
-        //atualiza XP necessário para o próximo nível
-        xpNecessario = nivel * 100;
-        
-        //atualiza badge baseado no nível
-        if (nivel >= 10) {
-            badge = "Mestre";  //nível mestre
-        } else if (nivel >= 5) {
-            badge = "Avançado";  //nível avançado
-        } else if (nivel >= 3) {
-            badge = "Intermediário";  //nível intermediário
-        }
+        xpNecessario = nivel * 100; // Recalcula para o próximo loop
+        subiu = true;
     }
+
+    if (subiu) {
+        std::cout << "\n***********************************" << std::endl;
+        std::cout << " Parabens! Voce subiu para o nivel " << nivel << "!" << std::endl;
+        std::cout << " +50 moedas de recompensa!" << std::endl;
+        
+        // Atualiza badge
+        std::string badgeAntiga = badge;
+        if (nivel >= 10) badge = "Mestre";
+        else if (nivel >= 5) badge = "Avancado";
+        else if (nivel >= 3) badge = "Intermediario";
+
+        if (badge != badgeAntiga) {
+             std::cout << " NOVA BADGE DESBLOQUEADA: " << badge << std::endl;
+        }
+        std::cout << "***********************************\n" << std::endl;
+    }    
 }

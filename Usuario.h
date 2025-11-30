@@ -2,6 +2,7 @@
 #define USUARIO_H
 
 #include <string>
+#include "RepositorioEstudos.h"
 
 class Usuario {
 private:
@@ -10,6 +11,7 @@ private:
     int xp;
     int nivel;
     std::string badge;
+    RepositorioEstudos repositorio;
 
 public:
     // Construtor usado na main
@@ -31,6 +33,8 @@ public:
     bool gastarMoedas(int quantidade);
     void setBadge (std::string badge);
     
+    RepositorioEstudos& getRepositorio();
+
     // Método para verificar se subiu de nível
     void verificarSubidaNivel();
 

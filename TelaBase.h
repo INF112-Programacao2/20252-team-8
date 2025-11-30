@@ -11,7 +11,8 @@ class TelaBase {
         void aguardarEnter();
 
     public:
-
+        TelaBase();
+        
         // Método virtual puro, para ser implementado pelas classes filhas
         // Recebe ponteiro para usuário para poder alterar dados
         virtual int exibir(Usuario* usuario) = 0; 

@@ -1,9 +1,10 @@
 #ifndef CONTROLADOR_ESTUDO_H
 #define CONTROLADOR_ESTUDO_H
 
-#include "usuario.h"
+#include "Usuario.h"
 #include "SessaoEstudo.h"
 #include "ControladorGamificacao.h"
+#include "RepositorioEstudos.h"
 #include <string>
 
 class ControladorEstudo {
@@ -18,9 +19,11 @@ public:
 
     void iniciarSessao(int duracao);
     void pausarSessao();
-    void finalizarSessao();
+    void finalizarSessao(Usuario* u);
     void salvarSessao(Usuario* u, SessaoEstudo& sessao);
     
+    RepositorioEstudos& recuperarHistorico(Usuario* u);
+
     SessaoEstudo* getSessaoAtiva();
     std::string getEstado() const;
 };

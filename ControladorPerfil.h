@@ -1,7 +1,7 @@
 #ifndef CONTROLADOR_PERFIL_H
 #define CONTROLADOR_PERFIL_H
 
-#include "usuario.h"
+#include "Usuario.h"
 #include <string>
 
 class ControladorPerfil {
