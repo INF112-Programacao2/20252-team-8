@@ -15,16 +15,13 @@ EM PROGRESSO - Adequação de repositorioGamificacao
 			OK - método carregarUsuario
 			OK - método salvarUsuario
 			OK - método getBadge, setBadge
-<<<<<<< HEAD
 			OK - Atualização do repositorioBase (método lerLinhaArquivo truncate/append)
 			   - 
 
 Gabriel
 EM PROGRESSO - 
-=======
 			OK - SessaoEstudo
 			OK - Item (base)
->>>>>>> TesteDaMusica
 
 
 A IMPLEMENTAR:
