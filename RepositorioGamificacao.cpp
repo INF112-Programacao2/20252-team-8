@@ -55,7 +55,8 @@ Usuario* RepositorioGamificacao::carregarUsuario(){
     // Valores padrão caso falhe a leitura
     int moedas = 0;
     int xp = 0;
-    int nivel = 1;
+    int nivel = 0;
+    std::string badge = "NULL";
 
     for (const std::string& linha : linhas) {
         try {
@@ -68,13 +69,21 @@ Usuario* RepositorioGamificacao::carregarUsuario(){
             else if (linha.find("Nivel: ") != std::string::npos) {
                 nivel = std::stoi(linha.substr(7)); // Pula "Nivel: "
             }
+            else if (linha.find("Badges: ") != std::string::npos) {
+                badge = linha.substr(8);
+                // Tratamento extra: Remover quebras de linha (CR/LF) que podem vir do arquivo
+                // Isso evita bugs visuais na hora de imprimir
+                if (!badge.empty() && badge.back() == '\r') {
+                    badge.pop_back();
+                }
+            }
         } catch (std::exception& e) {
-            std::cerr << "Erro ao ler valor numérico no arquivo." << std::endl;
+            std::cerr << "Erro ao ler valor do arquivo: " << e.what() << std::endl;
         }
     }
 
     // Retorna o objeto Usuario montado
-    return new Usuario(this->_nomeUsuario, nivel, xp, moedas);
+    return new Usuario(this->_nomeUsuario, nivel, xp, moedas, badge);
 }
 
 
@@ -99,7 +108,7 @@ void RepositorioGamificacao::salvarUsuario(Usuario* usuario) {
     novosDados.push_back("Nivel: " + std::to_string(usuario->getNivel()));
     novosDados.push_back("Badges: " + badgeSalva); // Mantém a badge antiga
 
-    // 3. Sobrescrever arquivo (truncate)
+    // 3. Sobrescrever arquivo (false = truncate/sobrescrever)
     this->escreverLinhasNoArquivo(novosDados, false);
 }
 
@@ -265,7 +274,7 @@ void RepositorioGamificacao::setPontos (int qtd_pontos) {
 
     // Se não achou a linha "Pontos:", adiciona ela no final para não perder o dado
     if (!achou) {
-        linhas.push_back("Moedas: " + std::to_string(qtd_pontos));
+        linhas.push_back("Pontos: " + std::to_string(qtd_pontos));
     }
 
     // Atualizar repositorio (false = sobrescrever/truncate)

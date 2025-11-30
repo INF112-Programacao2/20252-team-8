@@ -9,14 +9,18 @@ OK - Criação de um resumo das responsabilidades e conexões entre as classes
 OK - Implementação da classe Usuario
 
 Nicolas
-EM PROGRESSO - Adequação de repositorioGamificacao
+OK - Adequação de repositorioGamificacao
 			OK - atributo nomeUsuario no .h
 			OK - Construtor
 			OK - método carregarUsuario
 			OK - método salvarUsuario
 			OK - método getBadge, setBadge
 			OK - Atualização do repositorioBase (método lerLinhaArquivo truncate/append)
-			   - Adaptação dos itens
+			OK - Conferência final do repositorioGamificacao
+			OK - Atualizar classe construtor Usuario para englobar badge
+			OK - Atualizar método carregarUsuario()
+
+
 
 Gabriel
 EM PROGRESSO - Loja
@@ -35,6 +39,7 @@ EM PROGRESSO - TelaBase
 
 A IMPLEMENTAR:
 
+	- Usuario
 	- Cabeçalhos Telas filhas
 	- Controladores
 	- Controlador Principal 

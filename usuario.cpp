@@ -1,12 +1,21 @@
 #include "Usuario.h"
 #include <iostream>
+#include <string>
 
-Usuario::Usuario()
-    : nomeDeUsuario("Jogador"),
-      moedas(0),
-      pontos(0),
-      nivel(1),
-    {}
+Usuario::Usuario(std::string nome)
+    : moedas(0), pontos(0),
+      nivel(1), badge("NULL") {
+        this->nome = nome;
+    }
+
+
+Usuario::Usuario(std::string nome, int nivel, int pontos, int moedas, std::string badge) {
+    this->nome = nome;
+    this->nivel = nivel;
+    this->pontos = pontos;
+    this->moedas = moedas;
+    this->badge = badge;
+}
 
 
 int Usuario::getMoedas() const {
