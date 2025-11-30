@@ -8,6 +8,7 @@ OK - Atualizando Diagrama de Classes com mudança nas telas
 OK - Criação de um resumo das responsabilidades e conexões entre as classes
 OK - Implementação da classe Usuario
 
+Nicolas
 EM PROGRESSO - Adequação de repositorioGamificacao
 			OK - atributo nomeUsuario no .h
 			OK - Construtor
@@ -15,6 +16,8 @@ EM PROGRESSO - Adequação de repositorioGamificacao
 			OK - método salvarUsuario
 			OK - método getBadge, setBadge
 
+Gabriel
+EM PROGRESSO - 
 
 
 A IMPLEMENTAR:
