@@ -7,8 +7,6 @@ OK - Atualizando github com tasks e main
 OK - Atualizando Diagrama de Classes com mudança nas telas
 OK - Criação de um resumo das responsabilidades e conexões entre as classes
 OK - Implementação da classe Usuario
-
-Nicolas
 OK - Adequação de repositorioGamificacao
 			OK - atributo nomeUsuario no .h
 			OK - Construtor
@@ -20,6 +18,13 @@ OK - Adequação de repositorioGamificacao
 			OK - Atualizar classe construtor Usuario para englobar badge
 			OK - Atualizar método carregarUsuario()
 
+Nicolas
+EM PROGRESSO - repositorioInventario
+	- 
+	-
+	-
+	-
+	-
 
 
 Gabriel
