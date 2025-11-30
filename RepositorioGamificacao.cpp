@@ -6,6 +6,7 @@
 #include <fstream>
 #include <vector>
 
+// Construtor
 RepositorioGamificacao::RepositorioGamificacao(const std::string& nomeUsuario) :
     RepositorioBase(nomeUsuario) {
     
@@ -39,7 +40,7 @@ RepositorioGamificacao::RepositorioGamificacao(const std::string& nomeUsuario) :
             "Badges: NULL"
         };
 
-        this->escreverLinhasNoArquivo(linhasParaAdicionar);
+        this->escreverLinhasNoArquivo(linhasParaAdicionar, true);
     } 
     else {
         std::cout << "Perfil de gamificação carregado.\n";
@@ -79,7 +80,7 @@ Usuario* RepositorioGamificacao::carregarUsuario(){
 
 // Recebe ponteiro Usuario e atualiza repositorio
 void RepositorioGamificacao::salvarUsuario(Usuario* usuario) {
-    if (!usuario) return;   
+    if (!usuario) return;      // Para o caso de ponteiro nulo
 
     // 1. Ler badge atual do arquivo
     std::string badgeSalva = "NULL";
@@ -99,12 +100,7 @@ void RepositorioGamificacao::salvarUsuario(Usuario* usuario) {
     novosDados.push_back("Badges: " + badgeSalva); // Mantém a badge antiga
 
     // 3. Sobrescrever arquivo (truncate)
-    std::ofstream ofs(this->caminhoArquivo, std::ios::trunc);
-    if(ofs.is_open()) {
-        for(const auto& l : novosDados) {
-            ofs << l << "\n";
-        }
-    }
+    this->escreverLinhasNoArquivo(novosDados, false);
 }
 
 
@@ -122,6 +118,7 @@ std::string RepositorioGamificacao::getBadge() {
 }
 
 
+// Atualiza a badge no repositorio
 void RepositorioGamificacao::setBadge(int badge_idx) {
     std::string novaBadge;
     switch (badge_idx) {
@@ -145,22 +142,54 @@ void RepositorioGamificacao::setBadge(int badge_idx) {
         }
     }
 
-    std::ofstream escrita(this->caminhoArquivo, std::ios::trunc);
-    if (escrita.is_open()) {
-        for (const auto& linha : linhas) {
-            escrita << linha << "\n";
+    // Atualizar repositorio
+    this->escreverLinhasNoArquivo(linhas, false);
+}
+
+
+// Le repositorio e retorna nivel salvo (padrão = 0)
+int RepositorioGamificacao::getNivel() {
+    std::vector<std::string> linhas = LerLinhasDoArquivo();
+    for (const auto& linha : linhas) {
+        if (linha.find("Nivel: ") != std::string::npos) {
+            try {
+                return std::stoi(linha.substr(7));
+            }
+            catch (...) {
+                return 0;   // Valor padrão, caso repositório esteja corrompido
+            }
         }
     }
+    return 0;   // Valor padrão, caso repositório não tenha "Nivel: "
 }
 
-int RepositorioGamificacao::getNivel() {
 
-}
-
+// Atualiza nivel no repositorio
 void RepositorioGamificacao::setNivel (int nivel_atual) {
+    // Ler tudo
+    std::vector<std::string> linhas = LerLinhasDoArquivo();
+    bool achou = false;  // Flag auxiliar
 
+    // Modificar na memória
+    for (auto& linha : linhas) {
+        if (linha.find("Nivel: ") != std::string::npos) {
+            linha = "Nivel: " + std::to_string(nivel_atual);
+            achou = true;
+            break; // Achou e trocou
+        }
+    }
+
+    // Se não achou a linha "Nivel:", adiciona ela no final para não perder o dado
+    if (!achou) {
+        linhas.push_back("Nivel: " + std::to_string(nivel_atual));
+    }
+
+    // Atualizar repositorio (false = sobrescrever/truncate)
+    this->escreverLinhasNoArquivo(linhas, false);
 }
 
+
+// Le repo
 int RepositorioGamificacao::getMoedas() {
 
 }

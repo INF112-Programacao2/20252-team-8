@@ -52,9 +52,14 @@ std::vector<std::string> RepositorioBase::LerLinhasDoArquivo() {
 
 
 // Escreve um vetor de strings no arquivo.
-// Ele adiciona (append) as novas linhas ao final.
-void RepositorioBase::escreverLinhasNoArquivo(const std::vector<std::string>& linhasParaEscrever) {
-    std::ofstream ofs(this->caminhoArquivo, std::ios::app); 
+// Usa bool para decidir entre modo append (adicionar escrita no final do arquivo) ou truncate (reescrita total)
+// Padrão é truncate
+void RepositorioBase::escreverLinhasNoArquivo(const std::vector<std::string>& linhasParaEscrever, bool modoAppend) {
+    
+    // Define o modo de abertura com base no booleano
+    std::ios_base::openmode modo = modoAppend ? std::ios::app : std::ios::trunc;
+
+    std::ofstream ofs(this->caminhoArquivo, modo); 
 
     if (!ofs.is_open()) {
         std::cerr << "Erro: Nao foi possivel escrever no arquivo (verifique permissoes): " 

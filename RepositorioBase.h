@@ -16,7 +16,8 @@ public:
     std::vector<std::string> LerLinhasDoArquivo();
 
     // Declarado como 'virtual' para permitir sobrescrita nas classes filhas
-    virtual void escreverLinhasNoArquivo(const std::vector<std::string>& linhasParaEscrever);
+    // Escreve no modo truncate por padrão
+    virtual void escreverLinhasNoArquivo(const std::vector<std::string>& linhasParaEscrever, bool modoAppend = false);
 
     // Destrutor virtual 
     virtual ~RepositorioBase() {} 
