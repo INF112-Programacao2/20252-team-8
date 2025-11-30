@@ -2,32 +2,34 @@
 #define USUARIO_H
 
 #include <string>
-#include "Loja.h" 
-#include "RepositorioEstudos.h" 
+
 
 class Usuario {
 private:
-    std::string nomeDeUsuario;
+    std::string nome;
     int moedas;
-    int pontos;
+    int xp;
     int nivel;
 
-    //Composicao 
-    RepositorioEstudos Repositorio;
-    Loja loja;
-
 public:
-    Usuario();
+    // Construtor usado na main
+    Usuario(std::string nome);
 
+    // Construtor usado pelo Repositorio
+    Usuario (std::string, int nivel, int xp, int moedas);
+
+    // Getters
+    std::string getNome() const;
+    int getNivel() const;
+    int getXp() const;
     int getMoedas() const; 
 
-    std::string getNome() const;
+    // Setters / Modificadores
+    void adicionarXp(int quantidade);
+    void adicionarMoedas(int quantidade);
+    bool gastarMoedas(int quantidade);
 
-    void setNome(const std::string& novoNome);
-
-    Loja& getLoja();
-
-    RepositorioEstudos& getRepositorio();
 };
+
 #endif
 
