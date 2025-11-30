@@ -7,13 +7,13 @@ class Usuario {
 private:
     std::string nome;
     int moedas;
-    int pontos;
+    int xp;
     int nivel;
     std::string badge;
 
 public:
     // Construtor usado na main
-    Usuario(std::string nome);
+    Usuario(const std::string nome);
 
     // Construtor usado pelo Repositorio
     Usuario (std::string nome, int nivel, int pontos, int moedas, std::string badge);
@@ -30,6 +30,9 @@ public:
     void adicionarMoedas(int quantidade);
     bool gastarMoedas(int quantidade);
     void setBadge (std::string badge);
+    
+    // Método para verificar se subiu de nível
+    void verificarSubidaNivel();
 
 };
 
