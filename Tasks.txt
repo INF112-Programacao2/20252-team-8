@@ -1,17 +1,26 @@
-Tasks - Refatoração do Código (29/11)
+Tasks - Refatoração do Código (30/11)
 
 OK - Atualização do Diagrama de Classes
 OK - Atualização do nome das variáveis e classes segundo Diagrama
 OK - Criação do esboço da main.cpp
 OK - Atualizando github com tasks e main
+OK - Atualizando Diagrama de Classes com mudança nas telas
+OK - Criação de um resumo das responsabilidades e conexões entre as classes
 
-EM PROGRESSO - Atualizando Diagrama de Classes com mudança nas telas
+EM PROGRESSO - Implementação da classe Usuario
+
+
 
 A IMPLEMENTAR:
     
-    - Atualizar repositorioInventario com construtor e lógica de repositorio
-    - Criar método carregarUsuario() no repositorioGamificacao 
-    - Criar construtor para Usuario()
-    - Criar construtor para Controladores de acordo com a main
-    - Criar método executar() no controlador principal
-    - Criar novas tasks
+	- Usuario
+	- SessaoEstudo
+	- Item (base)
+	- Loja
+	- RepositorioInventario
+	- RepositorioGamificacao
+	- RepositorioEstudos
+	- TelaBase
+	- Cabeçalhos Telas filhas
+	- Controladores
+	- Controlador Principal 
