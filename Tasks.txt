@@ -14,13 +14,13 @@ EM PROGRESSO - Adequação de repositorioGamificacao
 			OK - método carregarUsuario
 			OK - método salvarUsuario
 			OK - método getBadge, setBadge
-
+			OK - SessaoEstudo
+			OK - Item (base)
 
 
 A IMPLEMENTAR:
     
-	- SessaoEstudo
-	- Item (base)
+	
 	- Loja
 	- RepositorioInventario
 	- RepositorioGamificacao
