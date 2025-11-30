@@ -1,0 +1,31 @@
+Tasks - Refatoração do Código (30/11)
+
+OK - Atualização do Diagrama de Classes
+OK - Atualização do nome das variáveis e classes segundo Diagrama
+OK - Criação do esboço da main.cpp
+OK - Atualizando github com tasks e main
+OK - Atualizando Diagrama de Classes com mudança nas telas
+OK - Criação de um resumo das responsabilidades e conexões entre as classes
+OK - Implementação da classe Usuario
+
+EM PROGRESSO - Adequação de repositorioGamificacao
+			OK - atributo nomeUsuario no .h
+			OK - Construtor
+			OK - método carregarUsuario
+			OK - método salvarUsuario
+			OK - método getBadge, setBadge
+
+
+
+A IMPLEMENTAR:
+    
+	- SessaoEstudo
+	- Item (base)
+	- Loja
+	- RepositorioInventario
+	- RepositorioGamificacao
+	- RepositorioEstudos
+	- TelaBase
+	- Cabeçalhos Telas filhas
+	- Controladores
+	- Controlador Principal 
