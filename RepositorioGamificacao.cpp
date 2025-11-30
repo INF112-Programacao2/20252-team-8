@@ -189,19 +189,85 @@ void RepositorioGamificacao::setNivel (int nivel_atual) {
 }
 
 
-// Le repo
+// Le repositorio e retorna quantidade de moedas
 int RepositorioGamificacao::getMoedas() {
-
+    std::vector<std::string> linhas = LerLinhasDoArquivo();
+    for (const auto& linha : linhas) {
+        if (linha.find("Moedas: ") != std::string::npos) {
+            try {
+                return std::stoi(linha.substr(8));
+            }
+            catch (...) {
+                return 0;   // Valor padrão, caso repositório esteja corrompido
+            }
+        }
+    }
+    return 0;   // Valor padrão, caso repositório não tenha "Moedas: "
 }
 
+
+// Atualiza moedas no repositorio
 void RepositorioGamificacao::setMoedas (int qtd_moedas) {
+    // Ler tudo
+    std::vector<std::string> linhas = LerLinhasDoArquivo();
+    bool achou = false;  // Flag auxiliar
 
+    // Modificar na memória
+    for (auto& linha : linhas) {
+        if (linha.find("Moedas: ") != std::string::npos) {
+            linha = "Moedas: " + std::to_string(qtd_moedas);
+            achou = true;
+            break; // Achou e trocou
+        }
+    }
+
+    // Se não achou a linha "Moedas:", adiciona ela no final para não perder o dado
+    if (!achou) {
+        linhas.push_back("Moedas: " + std::to_string(qtd_moedas));
+    }
+
+    // Atualizar repositorio (false = sobrescrever/truncate)
+    this->escreverLinhasNoArquivo(linhas, false);
 }
 
+
+// Le repositorio e retorna quantidade de pontos
 int RepositorioGamificacao::getPontos() {
-
+    std::vector<std::string> linhas = LerLinhasDoArquivo();
+    for (const auto& linha : linhas) {
+        if (linha.find("Pontos: ") != std::string::npos) {
+            try {
+                return std::stoi(linha.substr(8));
+            }
+            catch (...) {
+                return 0;   // Valor padrão, caso repositório esteja corrompido
+            }
+        }
+    }
+    return 0;   // Valor padrão, caso repositório não tenha "Pontos: "
 }
 
-void RepositorioGamificacao::setPontos (int qtd_pontos) {
 
+// Atualiza pontos (xp) no repositorio 
+void RepositorioGamificacao::setPontos (int qtd_pontos) {
+    // Ler tudo
+    std::vector<std::string> linhas = LerLinhasDoArquivo();
+    bool achou = false;  // Flag auxiliar
+
+    // Modificar na memória
+    for (auto& linha : linhas) {
+        if (linha.find("Pontos: ") != std::string::npos) {
+            linha = "Pontos: " + std::to_string(qtd_pontos);
+            achou = true;
+            break; // Achou e trocou
+        }
+    }
+
+    // Se não achou a linha "Pontos:", adiciona ela no final para não perder o dado
+    if (!achou) {
+        linhas.push_back("Moedas: " + std::to_string(qtd_pontos));
+    }
+
+    // Atualizar repositorio (false = sobrescrever/truncate)
+    this->escreverLinhasNoArquivo(linhas, false);
 }

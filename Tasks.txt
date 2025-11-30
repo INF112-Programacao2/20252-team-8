@@ -16,22 +16,25 @@ EM PROGRESSO - Adequação de repositorioGamificacao
 			OK - método salvarUsuario
 			OK - método getBadge, setBadge
 			OK - Atualização do repositorioBase (método lerLinhaArquivo truncate/append)
-			   - 
+			   - Adaptação dos itens
 
 Gabriel
-EM PROGRESSO - 
+EM PROGRESSO - Loja
 			OK - SessaoEstudo
 			OK - Item (base)
 
 
+Murilo
+EM PROGRESSO - RepositorioEstudos
+
+
+
+Pedro
+EM PROGRESSO - TelaBase
+			
+
 A IMPLEMENTAR:
-    
-	
-	- Loja
-	- RepositorioInventario
-	- RepositorioGamificacao
-	- RepositorioEstudos
-	- TelaBase
+
 	- Cabeçalhos Telas filhas
 	- Controladores
 	- Controlador Principal 
