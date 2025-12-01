@@ -11,7 +11,7 @@ SessaoEstudo::SessaoEstudo()
       disciplina(""), descricao("") {}
 
 // construtor parametrizado
-SessaoEstudo::SessaoEstudo(long long int segundos, int estadoSessao, std::string disciplina, std::string etiqueta, std::string descricao)
+SessaoEstudo::SessaoEstudo(long long int segundos, int estadoSessao, std::string disciplina, std::string descricao)
     :segundos(segundos), estadoSessao(estadoSessao), disciplina(disciplina), descricao(descricao), tempoInicial(0) {}
 
 // métodos para gerenciar estados
