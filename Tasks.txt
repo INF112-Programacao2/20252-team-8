@@ -39,7 +39,7 @@ EM PROGRESSO:
 	- Depurar código
 	- Adicionar construtor em repositorio inventário     
 	- Adicionar construtor em ControladorLoja ctrlLoja(usuarioAtual, &repoInventario, &repoGamificacao);
-
+	- Atualizar loja.cpp
 
 CLASSES:
 	OK - Usuario
