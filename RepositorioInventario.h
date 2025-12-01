@@ -1,13 +1,22 @@
-#include "RepositorioBase.h"
-#include <vector>
+#ifndef REPOSITORIO_INVENTARIO_H
+#define REPOSITORIO_INVENTARIO_H
 
-class RepositorioInventario : public RepositorioBase {
+#include <vector>
+#include <string>
+
+class RepositorioInventario {
+private:
+    std::string caminhoArquivo;
+
 public:
-    RepositorioInventario(const std::string& nomeUsuario);
-    
-    void adicionarItem(int id);
-    bool possuiItem(int id);
-    
-    // Retorna apenas os IDs brutos
-    std::vector<int> carregarIds(); 
+    // Construtor
+    RepositorioInventario();
+
+    // --- ESTE É O MÉTODO QUE O ERRO DIZ ESTAR FALTANDO ---
+    std::vector<std::string> carregarItens();
+
+    // Método para salvar novos itens
+    void adicionarItem(const std::string& dadosItem);
 };
+
+#endif
