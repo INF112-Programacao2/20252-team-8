@@ -3,35 +3,38 @@
 
 #include "RepositorioGamificacao.h"
 #include "Usuario.h"
+#include <string>
 
 class ControladorGamificacao {
 private:
     Usuario* usuarioAtual;
     RepositorioGamificacao* repositorio;
     
-    // Configurações de progressão
+    // Configurações
     static constexpr int XP_POR_NIVEL = 100;
-    static constexpr int MOEDAS_POR_NIVEL = 10;
+    static constexpr int RECOMPENSA_MOEDAS = 50;
     
-    void calcularProgressao(); // Recalcula nível baseado no XP
+    // Método auxiliar para converter nível em nome de badge
+    std::string calcularNomeBadge(int nivel);
+    // Método auxiliar para converter nível em ID de badge (para o repositorio)
+    int calcularIdBadge(int nivel);
     
+    void verificarEvolucao(); // Verifica se subiu de nível baseado no XP total
+
 public:
     ControladorGamificacao(Usuario* usuario, RepositorioGamificacao* repo);
     
-    // Métodos principais
-    void exibirPerfil();
+    // Métodos de Ação
     void adicionarXP(int quantidade);
     void adicionarMoedas(int quantidade);
-    void atualizarBadge(int badgeIdx);
-    
-    // Métodos de atualização
-    void sincronizarComRepositorio();
-    void salvarEstado();
+    void salvarTudo(); // Força o salvamento de todos os dados
     
     // Getters
+    // IMPORTANTE: Estes getters calculam o estado real, ignorando 
+    // limitações do objeto Usuario se necessário.
     Usuario* getUsuario() const;
     int getXP() const;
-    int getNivel() const;
+    int getNivel() const;      // Calcula nível baseado no XP total
     int getMoedas() const;
     std::string getBadge() const;
 };
