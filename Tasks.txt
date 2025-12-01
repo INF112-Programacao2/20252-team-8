@@ -18,18 +18,16 @@ OK - Adequação de repositorioGamificacao
 			OK - Atualizar classe construtor Usuario para englobar badge
 			OK - Atualizar método carregarUsuario()
 			OK - Usuario
-Nicolas
-EM PROGRESSO - repositorioInventario
+OK - repositorioInventario
 	OK - Atualização de construtor Base (para repoInventario e repoEstudos)
 	OK - Implementação de construtor Base
 	OK - Adaptação para que retorne apenas IDs brutos
-	- 
-	-
-
-EM PROGRESSO - Usuario
+OK - Usuario
 	OK - Tirar o getRepositorio()
 	OK - Mudar o método verificarSubidaDeNivel para controladorGamificacao
+	OK - Conferência final
 
+Nicolas
 EM PROGRESSO - Refatorar Loja
 	 - Implementar método estático de construção de itens (catálogo) 
 
