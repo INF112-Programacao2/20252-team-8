@@ -32,9 +32,9 @@ void ControladorEstudo::iniciarSessao() {
     }
     
     std::cout << "\n";
-    std::cout << "╔════════════════════════════════════════╗\n";
+    std::cout << "╔═══════════════════════════════════════╗\n";
     std::cout << "║        NOVA SESSÃO DE ESTUDO           ║\n";
-    std::cout << "╚════════════════════════════════════════╝\n";
+    std::cout << "╚═══════════════════════════════════════╝\n";
     
     // Coleta dados da sessão
     std::string disciplina, descricao;
@@ -65,9 +65,9 @@ void ControladorEstudo::iniciarSessao() {
         estado = "rodando";
         
         std::cout << "\n";
-        std::cout << "╔════════════════════════════════════════╗\n";
+        std::cout << "╔═══════════════════════════════════════╗\n";
         std::cout << "║           SESSÃO INICIADA              ║\n";
-        std::cout << "╚════════════════════════════════════════╝\n";
+        std::cout << "╚═══════════════════════════════════════╝\n";
         std::cout << " Disciplina: " << disciplina << std::endl;
         std::cout << " Inicio: " << sessaoAtiva->getDataInicio() 
                   << " as " << sessaoAtiva->getHorarioInicio() << std::endl;
@@ -98,9 +98,9 @@ void ControladorEstudo::pausarSessao() {
         long long segundos = sessaoAtiva->getSegundos();
         
         std::cout << "\n";
-        std::cout << "╔════════════════════════════════════════╗\n";
+        std::cout << "╔═══════════════════════════════════════╗\n";
         std::cout << "║           SESSÃO PAUSADA               ║\n";
-        std::cout << "╚════════════════════════════════════════╝\n";
+        std::cout << "╚═══════════════════════════════════════╝\n";
         std::cout << " Sessao pausada com sucesso!\n";
         std::cout << " Tempo parcial: " << formatarTempo(segundos) << std::endl;
         std::cout << "\nUse 'continuar' para retomar ou 'finalizar' para encerrar.\n" << std::endl;
@@ -122,9 +122,9 @@ void ControladorEstudo::continuarSessao() {
         estado = "rodando";
         
         std::cout << "\n";
-        std::cout << "╔════════════════════════════════════════╗\n";
+        std::cout << "╔═══════════════════════════════════════╗\n";
         std::cout << "║          SESSÃO RETOMADA               ║\n";
-        std::cout << "╚════════════════════════════════════════╝\n";
+        std::cout << "╚═══════════════════════════════════════╝\n";
         std::cout << " Cronometro retomado!\n";
         std::cout << " Disciplina: " << sessaoAtiva->getDisciplina() << std::endl;
         std::cout << " Tempo ate agora: " << formatarTempo(sessaoAtiva->getSegundos()) << std::endl;
@@ -213,9 +213,9 @@ void ControladorEstudo::mostrarProgresso() const {
     }
     
     std::cout << "\n";
-    std::cout << "╔════════════════════════════════════════╗\n";
+    std::cout << "╔═══════════════════════════════════════╗\n";
     std::cout << "║          PROGRESSO ATUAL               ║\n";
-    std::cout << "╚════════════════════════════════════════╝\n";
+    std::cout << "╚═══════════════════════════════════════╝\n";
     
     std::cout << " Disciplina: " << sessaoAtiva->getDisciplina() << std::endl;
     
@@ -229,13 +229,13 @@ void ControladorEstudo::mostrarProgresso() const {
     
     std::cout << " Estado: ";
     if (estado == "rodando") {
-        std::cout << "EM ANDAMENTO " << std::endl;
+        std::cout << "EM ANDAMENTO ⏱" << std::endl;
     } else if (estado == "pausado") {
-        std::cout << "PAUSADO " << std::endl;
+        std::cout << "PAUSADO ⏸" << std::endl;
     }
     
     long long segundos = sessaoAtiva->getSegundos();
-    std::cout << "Tempo: " << formatarTempo(segundos) << std::endl;
+    std::cout << " Tempo: " << formatarTempo(segundos) << std::endl;
     
     // Barra de progresso simples
     std::cout << "\n[";
@@ -252,30 +252,31 @@ void ControladorEstudo::mostrarProgresso() const {
 
 void ControladorEstudo::mostrarEstatisticas() const {
     std::cout << "\n";
-    std::cout << "╔════════════════════════════════════════╗\n";
+    std::cout << "╔═══════════════════════════════════════╗\n";
     std::cout << "║           ESTATÍSTICAS                 ║\n";
-    std::cout << "╚════════════════════════════════════════╝\n";
+    std::cout << "╚═══════════════════════════════════════╝\n";
     
     if (controladorGami != nullptr) {
-        // Usa o método mostrarBadges do ControladorGamificacao
-        controladorGami->mostrarBadges();
+        // Exibe dados da gamificação
+        std::cout << " Nivel: " << controladorGami->getNivel() << std::endl;
+        std::cout << " XP Total: " << controladorGami->getXP() << std::endl;
+        std::cout << " Moedas: " << controladorGami->getMoedas() << std::endl;
+        std::cout << " Badge: " << controladorGami->getBadge() << std::endl;
     } else {
-        std::cout << "Sistema de gamificacao nao disponivel.\n" << std::endl;
+        std::cout << " Sistema de gamificacao nao disponivel.\n";
     }
+    std::cout << std::endl;
 }
 
 void ControladorEstudo::mostrarHistorico() const {
     std::cout << "\n";
-    std::cout << "╔════════════════════════════════════════╗\n";
+    std::cout << "╔═══════════════════════════════════════╗\n";
     std::cout << "║           HISTÓRICO                    ║\n";
-    std::cout << "╚════════════════════════════════════════╝\n";
+    std::cout << "╚═══════════════════════════════════════╝\n";
     
-    // Esta funcionalidade agora é possível com os repositórios
-    // Mas precisamos de um usuário para buscar o histórico
-    std::cout << "Use a opcao de historico no menu.\n" << std::endl;
+    std::cout << " Use a opcao 'mostrarHistoricoCompleto' para ver detalhes.\n" << std::endl;
 }
 
-// Novo método para mostrar histórico completo
 void ControladorEstudo::mostrarHistoricoCompleto(Usuario* usuario) const {
     if (usuario == nullptr) {
         std::cout << "\n ERRO: Usuario nao especificado.\n" << std::endl;
@@ -287,9 +288,9 @@ void ControladorEstudo::mostrarHistoricoCompleto(Usuario* usuario) const {
         std::vector<SessaoEstudo> historico = repo.obterHistorico();
         
         std::cout << "\n";
-        std::cout << "╔══════════════════════════════════════════════════╗\n";
+        std::cout << "╔═════════════════════════════════════════════════╗\n";
         std::cout << "║              HISTÓRICO COMPLETO                  ║\n";
-        std::cout << "╚══════════════════════════════════════════════════╝\n";
+        std::cout << "╚═════════════════════════════════════════════════╝\n";
         
         if (historico.empty()) {
             std::cout << " Nenhuma sessao registrada ainda.\n" << std::endl;
@@ -299,13 +300,14 @@ void ControladorEstudo::mostrarHistoricoCompleto(Usuario* usuario) const {
         std::cout << " Total de sessoes: " << historico.size() << std::endl;
         std::cout << " Tempo total estudado: " << formatarTempo(repo.getTempoTotal()) << std::endl;
         std::cout << "\n";
-        std::cout << "═══════════════════════════════════════════════════\n";
+        std::cout << "═════════════════════════════════════════════════\n";
         
         for (size_t i = 0; i < historico.size(); i++) {
             const SessaoEstudo& sessao = historico[i];
             
             std::cout << "\n Sessao #" << (i + 1) << std::endl;
-            std::cout << "   Disciplina: " << sessao.getDisciplina() << " (" << formatarTempo(sessao.getSegundos()) << ")\n";
+            std::cout << "   Disciplina: " << sessao.getDisciplina() 
+                      << " (" << formatarTempo(sessao.getSegundos()) << ")\n";
             
             std::string desc = sessao.getDescricao();
             if (!desc.empty() && desc != " ") {
@@ -331,7 +333,7 @@ void ControladorEstudo::mostrarHistoricoCompleto(Usuario* usuario) const {
             }
         }
         
-        std::cout << "\n═══════════════════════════════════════════════════\n" << std::endl;
+        std::cout << "\n═════════════════════════════════════════════════\n" << std::endl;
         
     } catch (const std::exception& e) {
         std::cout << "\n[ERRO] Falha ao carregar historico: " << e.what() << std::endl;
@@ -385,18 +387,21 @@ void ControladorEstudo::atualizarGamificacao(long long segundos) {
     if (controladorGami != nullptr && segundos > 0) {
         int minutos = segundos / 60;
         
-        // Adiciona tempo de estudo
-        controladorGami->adicionarTempoEstudo(minutos);
+        // Calcula XP baseado no tempo (1 XP por minuto)
+        int xpGanho = minutos;
+        
+        // Adiciona XP via controlador de gamificação
+        controladorGami->adicionarXP(xpGanho);
         
         std::cout << " Progresso salvo no sistema de gamificacao!" << std::endl;
-        std::cout << "  " << minutos << " minutos adicionados ao seu tempo total.\n" << std::endl;
+        std::cout << "  +" << xpGanho << " XP ganhos (" << minutos << " minutos de estudo)\n" << std::endl;
     }
 }
 
-std::string ControladorEstudo::formatarTempo(long long segundos) const {
-    int horas = segundos / 3600;
-    int minutos = (segundos % 3600) / 60;
-    int segundos = segundos % 60;
+std::string ControladorEstudo::formatarTempo(long long segundosTotais) const {
+    int horas = segundosTotais / 3600;
+    int minutos = (segundosTotais % 3600) / 60;
+    int segundos = segundosTotais % 60;
     
     char buffer[50];
     sprintf(buffer, "%02dh %02dm %02ds", horas, minutos, segundos);
@@ -409,9 +414,9 @@ void ControladorEstudo::exibirResumoSessao() const {
     }
     
     std::cout << "\n";
-    std::cout << "╔════════════════════════════════════════╗\n";
+    std::cout << "╔═══════════════════════════════════════╗\n";
     std::cout << "║           RESUMO DA SESSÃO             ║\n";
-    std::cout << "╚════════════════════════════════════════╝\n";
+    std::cout << "╚═══════════════════════════════════════╝\n";
     
     std::cout << " Disciplina: " << sessaoAtiva->getDisciplina() << std::endl;
     
@@ -431,6 +436,6 @@ void ControladorEstudo::exibirResumoSessao() const {
     }
     
     long long segundos = sessaoAtiva->getSegundos();
-    std::cout << "  Tempo total: " << formatarTempo(segundos) << std::endl;
+    std::cout << " ⏱ Tempo total: " << formatarTempo(segundos) << std::endl;
     std::cout << "==========================================\n" << std::endl;
 }
