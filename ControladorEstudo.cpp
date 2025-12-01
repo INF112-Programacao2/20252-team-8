@@ -98,11 +98,11 @@ void ControladorEstudo::gerenciarSessaoEmAndamento() {
             case 1: // Alternar Pausa
                 try {
                     // Se rodando -> Pausa
-                    if (sessaoAtual.getEstado() == "rodando") {
+                    if (sessaoAtual.getEstado() == SessaoEstudo::rodando) {
                         sessaoAtual.pausar();
                     } 
                     // Se pausado -> Continua
-                    else if (sessaoAtual.getEstado() == "pausado") {
+                    else if (sessaoAtual.getEstado() == SessaoEstudo::pausado) {
                         sessaoAtual.continuar();
                     }
                 } catch (std::exception& e) {

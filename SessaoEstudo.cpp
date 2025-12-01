@@ -165,6 +165,8 @@ std::string SessaoEstudo::getHorarioInicio() const { return horarioInicio; }
 std::string SessaoEstudo::getHorarioFinal() const { return horarioFinal; }
 SessaoEstudo::Estado SessaoEstudo::getEstado() const {return estadoSessao;}
 
+void SessaoEstudo::setDisciplina(const std::string& d) { disciplina = d; }
+void SessaoEstudo::setDescricao(const std::string& d) { descricao = d; }
 void SessaoEstudo::setDataInicio(const std::string& d) { dataInicio = d; }
 void SessaoEstudo::setDataFinal(const std::string& d)  { dataFinal = d; }
 void SessaoEstudo::setHoraInicio(const std::string& h) { horarioInicio = h; }

@@ -10,7 +10,7 @@ public:
         rodando = 1,
         pausado = 2
     };
-    
+
 private:
     // tempo
     long long int segundos;
@@ -62,6 +62,8 @@ public:
     std::string getHorarioFinal() const;
     Estado getEstado() const;
 
+    void setDisciplina(const std::string& d);
+    void setDescricao(const std::string& d);
     void setDataInicio(const std::string& d);
     void setDataFinal(const std::string& d);
     void setHoraInicio(const std::string& h);
