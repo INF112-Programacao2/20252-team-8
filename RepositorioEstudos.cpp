@@ -33,11 +33,14 @@ std::vector<SessaoEstudo> RepositorioEstudos::obterHistorico() const {
     std::vector<SessaoEstudo> historico;
     std::vector<std::string> linhas = LerLinhasDoArquivo();
     
-    // Variáveis temporárias para montar o objeto
-    std::string disc, desc, data;
+    // 1. Variáveis temporárias para TODAS as informações
+    std::string disc = "", desc = "";
+    std::string dataIni = "", dataFim = "";
+    std::string horaIni = "", horaFim = "";
     long long int tempo = 0;
     
     for (const auto& linha : linhas) {
+        // Parse dos campos simples
         if (linha.find("Disciplina: ") != std::string::npos) {
             disc = linha.substr(12);
         }
@@ -47,19 +50,37 @@ std::vector<SessaoEstudo> RepositorioEstudos::obterHistorico() const {
         else if (linha.find("Tempo: ") != std::string::npos) {
             try { tempo = std::stoll(linha.substr(7)); } catch(...) { tempo = 0; }
         }
-        else if (linha.find("Data: ") != std::string::npos) {
-            data = linha.substr(6);
+        // Parse das Datas e Horas (Note os índices baseados no tamanho da string)
+        else if (linha.find("DataInicio: ") != std::string::npos) {
+            dataIni = linha.substr(12); // "DataInicio: " tem 12 chars
+        }
+        else if (linha.find("DataFinal: ") != std::string::npos) {
+            dataFim = linha.substr(11); // "DataFinal: " tem 11 chars
+        }
+        else if (linha.find("HoraInicio: ") != std::string::npos) {
+            horaIni = linha.substr(12); // "HoraInicio: " tem 12 chars
+        }
+        // 2. O gatilho: HoraFinal é o último dado salvo, então criamos o objeto aqui
+        else if (linha.find("HoraFinal: ") != std::string::npos) {
+            horaFim = linha.substr(11); // "HoraFinal: " tem 11 chars
             
-            // Quando lemos a última info, criamos o objeto e adicionamos ao vetor
+            // Cria o objeto base com o construtor que você já tem
             SessaoEstudo s(tempo, 0, disc, desc);
-            s.setDataInicio(data);
+            
+            // Popula os dados de tempo/data que não estavam no construtor
+            // (Você precisará adicionar esses setters na SessaoEstudo, veja abaixo)
+            s.setDataInicio(dataIni);
+            s.setDataFinal(dataFim);
+            s.setHoraInicio(horaIni);
+            s.setHoraFinal(horaFim);
+            
             historico.push_back(s);
 
-            // --- LIMPEZA PARA A PRÓXIMA ITERAÇÃO ---
-            disc = "";
-            desc = "";
+            // 3. Limpeza das variáveis para a próxima iteração
+            disc = ""; desc = ""; 
+            dataIni = ""; dataFim = "";
+            horaIni = ""; horaFim = "";
             tempo = 0;
-            data = "";
         }
     }
     return historico;
@@ -72,7 +93,7 @@ int RepositorioEstudos::getQuantidade() const{
 }
 
 
-// Retorna o tempo total de estudos de uma disciplina específica
+// Retorna o tempo total de estudos de uma disciplina específica (em segundos)
 long long int RepositorioEstudos::getTempoTotalPorDisciplina(const std::string& disciplina) const {
     std::vector<SessaoEstudo> sessoes = obterHistorico();
         long long int total = 0;
@@ -86,11 +107,11 @@ long long int RepositorioEstudos::getTempoTotalPorDisciplina(const std::string& 
 }
 
 
-// Retorna tempo total
+// Retorna tempo total (em segundos)
 long long int RepositorioEstudos::getTempoTotal() const {
     std::vector<SessaoEstudo> sessoes = obterHistorico();
         long long int total = 0;
-        for (auto& s : sessoes) {
+        for (const auto& s : sessoes) {
             total += s.getSegundos(); // Note que no seu .h getter é const, perfeito
         }
         return total;

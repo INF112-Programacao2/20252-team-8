@@ -53,6 +53,10 @@ public:
     std::string getHorarioInicio() const;
     std::string getHorarioFinal() const;
 
-    void setDataInicio(const std::string& data);
+    void setDataInicio(const std::string& d);
+    void setDataFinal(const std::string& d);
+    void setHoraInicio(const std::string& h);
+    void setHoraFinal(const std::string& h);
+
 };
 #endif

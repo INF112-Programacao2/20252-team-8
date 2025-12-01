@@ -147,11 +147,6 @@ void SessaoEstudo::finalizar() {
 }
 
 
-void SessaoEstudo::setDataInicio(const std::string& data) {
-    this->dataInicio = data;
-}
-
-
 long long int SessaoEstudo::getSegundos() const {
     // Se está rodando, adiciona o tempo decorrido
     if (estadoSessao == 1) {
@@ -161,25 +156,15 @@ long long int SessaoEstudo::getSegundos() const {
     return segundos;
 }
 
-std::string SessaoEstudo::getDisciplina() const {
-    return disciplina;
-}
 
-std::string SessaoEstudo::getDescricao() const {
-    return descricao;
-}
-std::string SessaoEstudo::getDataInicio() const {
-    return dataInicio;
-}
+std::string SessaoEstudo::getDisciplina() const { return disciplina; }
+std::string SessaoEstudo::getDescricao() const { return descricao; }
+std::string SessaoEstudo::getDataInicio() const { return dataInicio; }
+std::string SessaoEstudo::getDataFinal() const { return dataFinal; }
+std::string SessaoEstudo::getHorarioInicio() const { return horarioInicio; }
+std::string SessaoEstudo::getHorarioFinal() const { return horarioFinal; }
 
-std::string SessaoEstudo::getDataFinal() const {
-    return dataFinal;
-}
-
-std::string SessaoEstudo::getHorarioInicio() const {
-    return horarioInicio;
-}
-
-std::string SessaoEstudo::getHorarioFinal() const {
-    return horarioFinal;
-}
+void SessaoEstudo::setDataInicio(const std::string& d) { dataInicio = d; }
+void SessaoEstudo::setDataFinal(const std::string& d)  { dataFinal = d; }
+void SessaoEstudo::setHoraInicio(const std::string& h) { horarioInicio = h; }
+void SessaoEstudo::setHoraFinal(const std::string& h)  { horarioFinal = h; }
