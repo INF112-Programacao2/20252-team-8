@@ -3,7 +3,7 @@
 
 #include "TelaBase.h"
 
-class telaPrincipal : public TelaBase {
+class TelaPrincipal : public TelaBase {
     public:
         int exibir(Usuario* usuario) override;
 };
