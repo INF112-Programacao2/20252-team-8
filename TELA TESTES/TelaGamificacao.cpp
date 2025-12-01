@@ -15,13 +15,31 @@ void TelaGamificacao::mostrarPerfil(Usuario* usuario) {
     std::cout << "XP:     " << usuario->getXp() << " pts" << std::endl;
     std::cout << "Moedas: " << usuario->getMoedas() << " $" << std::endl;
     
-    // Barra de progresso visual simples (simulação)
-    std::cout << "\nProgresso Geral:" << std::endl;
-    std::cout << "[|||||||       ] (Em desenvolvimento)" << std::endl;
+    // --- BARRA DE PROGRESSO DINÂMICA ---
+    // Calcula quanto falta para o próximo nível (0 a 99)
+    int xpNesteNivel = usuario->getXp() % 100; 
+    
+    // Configura tamanho da barra
+    int tamanhoBarra = 20; 
+    int qtdPreenchida = (xpNesteNivel * tamanhoBarra) / 100;
+
+    std::cout << "\nProximo Nivel:" << std::endl;
+    std::cout << "[";
+    
+    // Loop para desenhar a barra
+    for (int i = 0; i < tamanhoBarra; i++) {
+        if (i < qtdPreenchida) 
+            std::cout << "|"; // Parte cheia
+        else 
+            std::cout << " "; // Parte vazia
+    }
+    
+    std::cout << "] " << xpNesteNivel << "%" << std::endl;
+    // -----------------------------------
 
     std::cout << "\n----------------------------------------" << std::endl;
     
-    // CORRIGIDO: Agora chama o método exato que existe na sua TelaBase
+    // CORRIGIDO: Usa o método correto da TelaBase
     esperarEnter();
 }
 
@@ -45,6 +63,6 @@ void TelaGamificacao::mostrarLevelUp(int novoNivel, int moedasGanhas, const std:
     }
     std::cout << "=========================================\n" << std::endl;
     
-    // CORRIGIDO: Usa esperarEnter() da TelaBase para pausar
+    // CORRIGIDO: Usa o método correto da TelaBase
     esperarEnter(); 
 }
