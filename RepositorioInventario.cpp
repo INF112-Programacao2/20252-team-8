@@ -2,8 +2,9 @@
 #include <fstream>
 #include <iostream>
 
-RepositorioInventario::RepositorioInventario() {
+RepositorioInventario::RepositorioInventario(const std::string& nome) {
     this->caminhoArquivo = "inventario.txt";
+    this->nomeUsuario = nome;
 }
 
 // --- IMPLEMENTAÇÃO DO MÉTODO QUE FALTAVA ---
