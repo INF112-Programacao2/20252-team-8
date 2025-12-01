@@ -36,6 +36,7 @@ OK - RepositorioEstudos
 
 
 EM PROGRESSO - Controladores e telas
+	- teste
 	- Testes implementados
 		
 
