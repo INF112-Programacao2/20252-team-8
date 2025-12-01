@@ -52,5 +52,7 @@ public:
     std::string getDataFinal();
     std::string getHorarioInicio();
     std::string getHorarioFinal();
+
+    void setDataInicio(const std::string& data);
 };
 #endif

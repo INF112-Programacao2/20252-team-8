@@ -15,16 +15,16 @@ public:
     void adicionarSessao(const SessaoEstudo& sessao);
 
     // Retorna o total de sessões
-    int getQuantidade() const;
+    int getQuantidade();
 
     // Lê o arquivo e retorna o vetor de sessões 
     std::vector<SessaoEstudo> obterHistorico();
 
     // Retorna tempo total geral
-    long long int getTempoTotal() const;
+    long long int getTempoTotal();
 
     // Retorna o tempo total de estudos de uma disciplina específica
-    long long int getTempoTotalPorDisciplina(const std::string& disciplina) const;
+    long long int getTempoTotalPorDisciplina(const std::string& disciplina);
     
 };
 

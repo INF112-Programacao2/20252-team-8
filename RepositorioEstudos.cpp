@@ -2,100 +2,90 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
-#include <iomanip>
+#include <sstream>
 
-//construtor
-RepositorioEstudos::RepositorioEstudos(std::string idUsuario)
-    : idUsuario(idUsuario), quantidade(0), capacidade(2), tempoTotal(0)
-{
-    //aloca array dinâmico
-    sessoes = new SessaoEstudo[capacidade];
+// Construtor
+RepositorioEstudos::RepositorioEstudos(const std::string& nomeUsuario)
+    : RepositorioBase(nomeUsuario + "_estudos.txt", true) {} // true = usa construtor 2
+
+
+// Abre arquivo e faz um append com informações da nova sessão
+void RepositorioEstudos::adicionarSessao(const SessaoEstudo& sessao) {
+    // 1. Prepara as linhas da nova sessão
+    std::vector<std::string> dadosSessao;
+    
+    dadosSessao.push_back("--- SESSAO ---");
+    dadosSessao.push_back("Disciplina: " + sessao.getDisciplina());
+    dadosSessao.push_back("Descricao: " + sessao.getDescricao());
+    dadosSessao.push_back("Tempo: " + std::to_string(sessao.getSegundos()));
+    dadosSessao.push_back("Data: " + sessao.getDataInicio()); // Ex: 01/01/24
+    
+    // 2. Salva no arquivo (Modo Append)
+    this->escreverLinhasNoArquivo(dadosSessao, true); 
 }
 
-//destrutor
-RepositorioEstudos::~RepositorioEstudos() {
-    delete[] sessoes; // libera memória
-}
 
-void RepositorioEstudos::gerarArquivoHistorico() {
-    std::string nomeArquivo = idUsuario + "_estudos.txt";
-    std::ofstream arquivo(nomeArquivo);
+// Le repositorio e retorna vector de sessões de estudo
+std::vector<SessaoEstudo> RepositorioEstudos::obterHistorico() {
+    std::vector<SessaoEstudo> historico;
+    std::vector<std::string> linhas = LerLinhasDoArquivo();
     
-    if (!arquivo.is_open()) {
-        std::cerr << "Erro ao criar arquivo: " << nomeArquivo << std::endl;
-        return;
-    }
+    // Variáveis temporárias para montar o objeto
+    std::string disc, desc, data;
+    long long int tempo = 0;
     
-    //calcular tempo total antes de salvar
-    calcularTempoTotal();
-    
-    //escrever cabeçalho do histórico
-    arquivo << "HISTÓRICO ESTUDO:\n";
-    arquivo << "nome_usuario: " << idUsuario << "\n";
-    arquivo << "qtd_sessoes: " << quantidade << "\n";
-    arquivo << "tempo_total: " << tempoTotal << " segundos\n";
-    
-    //escrever informações de cada sessão (idx começa em 1)
-    for (int i = 0; i < quantidade; i++) {
-        SessaoEstudo* sessao = getSessao(i);
-        if (sessao != nullptr) {
-            arquivo << "  SESSÃO ESTUDO:\n";
-            arquivo << "  idx: " << (i + 1) << "\n";  // idx começa em 1
-            arquivo << "  tempo_total_sessao: " << sessao->getSegundos() << " segundos\n";
-            arquivo << "  data_inicio: " << sessao->getDataInicio() << "\n";
-            arquivo << "  data_final: " << sessao->getDataFinal() << "\n";
-            arquivo << "  horario_inicio: " << sessao->getHorarioInicio() << "\n";
-            arquivo << "  horario_final: " << sessao->getHorarioFinal() << "\n";
-            arquivo << "  disciplina: " << sessao->getDisciplina() << "\n";
-            arquivo << "\n"; //linha em branco entre sessões
+    for (const auto& linha : linhas) {
+        if (linha.find("Disciplina: ") != std::string::npos) {
+            disc = linha.substr(12);
+        }
+        else if (linha.find("Descricao: ") != std::string::npos) {
+            desc = linha.substr(11);
+        }
+        else if (linha.find("Tempo: ") != std::string::npos) {
+            try { tempo = std::stoll(linha.substr(7)); } catch(...) { tempo = 0; }
+        }
+        else if (linha.find("Data: ") != std::string::npos) {
+            data = linha.substr(6);
+            
+            // Quando lemos a última info, criamos o objeto e adicionamos ao vetor
+            SessaoEstudo s(tempo, 0, disc, desc);
+            
+            s.setDataInicio(data);
+            
+            historico.push_back(s);
         }
     }
-    arquivo.close();
-    std::cout << "Arquivo de histórico gerado: " << nomeArquivo << std::endl;
-}
-
-//soma os tempos de todas as sessões
-void RepositorioEstudos::calcularTempoTotal() {
-    tempoTotal = 0;
-    for (int i = 0; i < quantidade; i++) {
-        tempoTotal += sessoes[i].getSegundos();
-    }
-    std::cout << "Tempo total calculado: " << tempoTotal << " segundos" << std::endl;
+    return historico;
 }
 
 
-//retorna número de sessões
-int RepositorioEstudos::getQuantidade() const {
-    return quantidade;
+// Retorna número de sessões
+int RepositorioEstudos::getQuantidade() {
+    return obterHistorico().size();
 }
 
-//retorna ponteiro para sessão específica
-SessaoEstudo* RepositorioEstudos::getSessao(int i) const {
-    if (i < 0 || i >= quantidade) {
-        std::cerr << "Índice inválido!" << std::endl;
-        return nullptr;
-    }
-    return &sessoes[i];
-}
 
-//retorna o tempo total de estudos de uma disciplina específica
-long long int RepositorioEstudos::getTempoTotalPorDisciplina(const std::string& disciplina) const {
-    long long int total = 0;
-    for (int i = 0; i < quantidade; i++) {
-        if (sessoes[i].getDisciplina() == disciplina) {
-            total += sessoes[i].getSegundos();
+// Retorna o tempo total de estudos de uma disciplina específica
+long long int RepositorioEstudos::getTempoTotalPorDisciplina(const std::string& disciplina) {
+    std::vector<SessaoEstudo> sessoes = obterHistorico();
+        long long int total = 0;
+        for (const auto& s : sessoes) {
+            // Comparação de string simples
+            if (s.getDisciplina() == disciplina) {
+                total += s.getSegundos();
+            }
         }
-    }
-    return total;
+        return total;
 }
 
-//retorna tempo total
-long long int RepositorioEstudos::getTempoTotal() const {
-    return tempoTotal;
+
+// Retorna tempo total
+long long int RepositorioEstudos::getTempoTotal() {
+    std::vector<SessaoEstudo> sessoes = obterHistorico();
+        long long int total = 0;
+        for (const auto& s : sessoes) {
+            total += s.getSegundos(); // Note que no seu .h getter é const, perfeito
+        }
+        return total;
 }
 
-//retorna ID do usuário
-std::string RepositorioEstudos::getIdUsuario() const {
-    return idUsuario;
-
-}

@@ -145,6 +145,12 @@ void SessaoEstudo::finalizar() {
     estadoSessao = 0;
 }
 
+
+void SessaoEstudo::setDataInicio(const std::string& data) {
+    this->dataInicio = data;
+}
+
+
 long long int SessaoEstudo::getSegundos() {
     // Se está rodando, adiciona o tempo decorrido
     if (estadoSessao == 1) {

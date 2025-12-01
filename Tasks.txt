@@ -32,8 +32,8 @@ OK - Refatorar Loja
 
 Nicolas
 EM PROGRESSO - RepositorioEstudos
-	- Adaptar cabeçalho 
-	-
+	OK - Adaptar cabeçalho 
+	- Adaptar .cpp
 	-
 	-
 	-
