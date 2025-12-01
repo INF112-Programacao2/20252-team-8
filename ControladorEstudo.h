@@ -4,36 +4,18 @@
 #include "Usuario.h"
 #include "SessaoEstudo.h"
 #include "ControladorGamificacao.h"
-#include "RepositorioEstudos.h"
-#include "RepositorioGamificacao.h"
 #include <string>
 
 class ControladorEstudo {
 private:
-    // ===== DADOS DO USUÁRIO =====
-    Usuario* usuario;
-    RepositorioEstudos* repoEstudos;
-    RepositorioGamificacao* repoGamificacao;
-    
     // ===== ESTADO DA SESSÃO =====
     SessaoEstudo* sessaoAtiva;
     ControladorGamificacao* controladorGami;
     std::string estado; // "parado", "rodando", "pausado"
 
 public:
-    // ===== CONSTRUTORES =====
-    
-    // Construtor principal (com todos os componentes)
-    ControladorEstudo(Usuario* usuario, 
-                     ControladorGamificacao* controladorGami = nullptr,
-                     RepositorioEstudos* repoEstudos = nullptr,
-                     RepositorioGamificacao* repoGamificacao = nullptr);
-    
-    // Construtor simplificado (cria repositórios automaticamente)
-    ControladorEstudo(const std::string& nomeUsuario, 
-                     ControladorGamificacao* controladorGami = nullptr);
-    
-    // Destrutor
+    // ===== CONSTRUTOR E DESTRUTOR =====
+    ControladorEstudo(ControladorGamificacao* controladorG);
     ~ControladorEstudo();
     
     // ===== MÉTODOS PRINCIPAIS =====
@@ -48,7 +30,7 @@ public:
     void continuarSessao();
     
     // Finaliza a sessão atual e salva
-    void finalizarSessao();
+    void finalizarSessao(Usuario* usuario);
     
     // Cancela a sessão atual sem salvar
     void cancelarSessao();
@@ -64,13 +46,8 @@ public:
     // Mostra histórico de sessões
     void mostrarHistorico() const;
     
-    // ===== MÉTODOS DE CONFIGURAÇÃO =====
-    
-    // Define o usuário atual
-    void setUsuario(Usuario* usuario);
-    
-    // Define o controlador de gamificação
-    void setControladorGamificacao(ControladorGamificacao* controladorGami);
+    // Mostra histórico completo com detalhes
+    void mostrarHistoricoCompleto(Usuario* usuario) const;
     
     // ===== GETTERS =====
     
@@ -82,21 +59,12 @@ public:
     
     // Obtém a sessão ativa
     SessaoEstudo* getSessaoAtiva() const;
-    
-    // Obtém o usuário
-    Usuario* getUsuario() const;
-    
-    // Obtém estatísticas de estudo
-    void getEstatisticasEstudo(long long& tempoTotal, int& totalSessoes) const;
 
 private:
     // ===== MÉTODOS PRIVADOS =====
     
-    // Inicializa repositórios
-    void inicializarRepositorios();
-    
     // Salva a sessão no repositório
-    void salvarSessao();
+    void salvarSessao(Usuario* usuario);
     
     // Atualiza gamificação com tempo estudado
     void atualizarGamificacao(long long segundos);
@@ -106,11 +74,6 @@ private:
     
     // Exibe resumo da sessão
     void exibirResumoSessao() const;
-    
-    // Exibe barra de progresso
-    void exibirBarraProgresso(long long segundos) const;
-    
-    // Carrega dados do usuário dos repositórios
-    void carregarDadosUsuario();
 };
+
 #endif
