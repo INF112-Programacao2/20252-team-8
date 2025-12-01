@@ -35,10 +35,12 @@ OK - RepositorioEstudos
 	OK - Conferir SessaoEstudo
 
 
-EM PROGRESSO - Controladores e telas
-	- teste
-	- Testes implementados
-	- Alterando telas e sessao estudo no modelo do teste
+EM PROGRESSO:
+	- Depurar código
+	- Adicionar construtor em repositorio inventário     
+	- Adicionar construtor em ControladorLoja ctrlLoja(usuarioAtual, &repoInventario, &repoGamificacao);
+	- Atualizar loja.cpp
+	- Atualizar item consumivel e item audio
 
 CLASSES:
 	OK - Usuario
@@ -51,3 +53,4 @@ CLASSES:
 	- Telas
 	- Controladores
 	- Controlador Principal 
+	
