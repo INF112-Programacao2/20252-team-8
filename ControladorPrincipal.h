@@ -22,7 +22,7 @@ public:
     // Construtor padrão
     ControladorPrincipal();
 
-    // Setters (Injeção de Dependência conforme sua main.cpp)
+    // Setters 
     void setControladorEstudo(ControladorEstudo* ctrl);
     void setControladorLoja(ControladorLoja* ctrl);
     void setControladorInventario(ControladorInventario* ctrl);

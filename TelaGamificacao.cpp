@@ -39,7 +39,6 @@ void TelaGamificacao::mostrarPerfil(Usuario* usuario) {
 
     std::cout << "\n----------------------------------------" << std::endl;
     
-    // CORRIGIDO: Usa o método correto da TelaBase
     esperarEnter();
 }
 
@@ -63,6 +62,5 @@ void TelaGamificacao::mostrarLevelUp(int novoNivel, int moedasGanhas, const std:
     }
     std::cout << "=========================================\n" << std::endl;
     
-    // CORRIGIDO: Usa o método correto da TelaBase
     esperarEnter(); 
 }
