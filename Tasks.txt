@@ -38,7 +38,7 @@ OK - RepositorioEstudos
 EM PROGRESSO - Controladores e telas
 	- teste
 	- Testes implementados
-		
+	- Alterando telas e sessao estudo no modelo do teste
 
 CLASSES:
 	OK - Usuario

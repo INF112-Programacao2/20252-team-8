@@ -1,35 +1,29 @@
-#include "Loja.h"
-#include "ItemConsumivel.h"
-#include "ItemAudio.h"
-#include "ItemAlarme.h"
+#include "TelaLoja.h"
+#include <iostream>
 
-// A Fábrica Central - Define todos os itens do jogo AQUI
-Item* Loja::buscarItemPorId(int id) {
-    switch(id) {
-        // Exemplos que serão implementados:
-        // case 100: return new ItemAlarme(100, "padrão", 50, "ring.mp3");
-        // case 200: return new ItemAudio(200, "Musica Lofi", 150, "lofi.mp3");
-        // case 300: return new ItemConsumivel(300, "Dobro XP", 100, "boost");
-        default: return nullptr;
+int TelaLoja::mostrarVitrine(const std::vector<Item*>& itens, const Usuario& usuario) {
+    mostrarCabecalho("LOJA DE ITENS");
+
+    // Mostra o saldo para o usuário saber se pode comprar
+    std::cout << "SEU SALDO: " << usuario.getMoedas() << " moedas" << std::endl;
+    std::cout << "----------------------------------------" << std::endl;
+
+    if (itens.empty()) {
+        std::cout << "(Loja fechada ou sem estoque)" << std::endl;
+    } else {
+        for (size_t i = 0; i < itens.size(); i++) {
+            Item* item = itens[i];
+            
+            // Ex: [1] Bone (50 moedas) - Cosmetico
+            std::cout << "[" << (i + 1) << "] " 
+                      << item->getNome() 
+                      << " (" << item->getPreco() << "$) - " 
+                      << item->getTipo() << std::endl;
+        }
     }
-}
 
+    std::cout << "\nDigite o numero do item para COMPRAR" << std::endl;
+    std::cout << "Ou 0 para Sair" << std::endl;
 
-Loja::Loja() {
-    // Preenche a vitrine usando a própria lógica da fábrica
-    this->vitrine.push_back(buscarItemPorId(100));
-    this->vitrine.push_back(buscarItemPorId(200));
-}
-
-
-Loja::~Loja() {
-    for (Item* i : this->vitrine) {
-        delete i; // Limpa a memória
-    }
-    this->vitrine.clear();
-}
-
-
-std::vector<Item*> Loja::getItensParaVenda() const {
-    return this->vitrine;
+    return lerOpcao();
 }

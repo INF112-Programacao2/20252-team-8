@@ -31,12 +31,19 @@ private:
 public:
     // construtor default 
     SessaoEstudo();
+
+    enum Estado {
+        parado = 0,
+        rodando = 1,
+        pausado = 2
+    };
+    
     // construtor
-    SessaoEstudo(long long int segundos, int estadoSessao, std::string disciplina, std::string descricao);
+    SessaoEstudo(long long int segundos, Estado estado, std::string disciplina, std::string descricao);
     
     // gerenciar o estado de uma sessão
     void gerenciar();
-    
+
     // para marcar o tempo
     void iniciar();
     void pausar();
@@ -52,6 +59,7 @@ public:
     std::string getDataFinal() const;
     std::string getHorarioInicio() const;
     std::string getHorarioFinal() const;
+    Estado getEstado() const;
 
     void setDataInicio(const std::string& d);
     void setDataFinal(const std::string& d);

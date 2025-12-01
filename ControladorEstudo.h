@@ -1,79 +1,60 @@
 #ifndef CONTROLADOR_ESTUDO_H
 #define CONTROLADOR_ESTUDO_H
 
+// --- Dependências de Associação (Ponteiros recebidos da Main) ---
 #include "Usuario.h"
+#include "RepositorioEstudos.h"
+#include "RepositorioGamificacao.h"
+
+// --- Dependência de Composição (A Tela pertence ao Controlador) ---
+#include "TelaEstudo.h"
+
+// --- Dependência de Uso (O objeto que vamos manipular) ---
 #include "SessaoEstudo.h"
-#include "ControladorGamificacao.h"
-#include <string>
 
 class ControladorEstudo {
 private:
-    // ===== ESTADO DA SESSÃO =====
-    SessaoEstudo* sessaoAtiva;
-    ControladorGamificacao* controladorGami;
-    std::string estado; // "parado", "rodando", "pausado"
+    // Poteiros para os objetos principais do sistema (Injeção de Dependência)
+    // O Controlador USA estes objetos, mas não é dono deles (não dá delete)
+    Usuario* usuario;
+    RepositorioEstudos* repoEstudos;
+    RepositorioGamificacao* repoGamificacao; 
+
+    // Instância da Tela (Composição)
+    // Criada automaticamente quando o controlador nasce
+    TelaEstudo tela;
+
+    // Objeto que representa a sessão que está acontecendo agora
+    // Mantemos na memória para controlar o cronômetro
+    SessaoEstudo sessaoAtual;
 
 public:
-    // ===== CONSTRUTOR E DESTRUTOR =====
-    ControladorEstudo(ControladorGamificacao* controladorG);
-    ~ControladorEstudo();
-    
-    // ===== MÉTODOS PRINCIPAIS =====
-    
-    // Inicia uma nova sessão 
-    void iniciarSessao();
-    
-    // Pausa a sessão atual
-    void pausarSessao();
-    
-    // Continua uma sessão pausada
-    void continuarSessao();
-    
-    // Finaliza a sessão atual e salva
-    void finalizarSessao(Usuario* usuario);
-    
-    // Cancela a sessão atual sem salvar
-    void cancelarSessao();
-    
-    // ===== MÉTODOS DE CONSULTA =====
-    
-    // Mostra progresso atual da sessão
-    void mostrarProgresso() const;
-    
-    // Mostra estatísticas do usuário
-    void mostrarEstatisticas() const;
-    
-    // Mostra histórico de sessões
-    void mostrarHistorico() const;
-    
-    // Mostra histórico completo com detalhes
-    void mostrarHistoricoCompleto(Usuario* usuario) const;
-    
-    // ===== GETTERS =====
-    
-    // Verifica se há sessão ativa
-    bool temSessaoAtiva() const;
-    
-    // Obtém o estado atual
-    std::string getEstado() const;
-    
-    // Obtém a sessão ativa
-    SessaoEstudo* getSessaoAtiva() const;
+    // Construtor
+    // Recebe os ponteiros fundamentais inicializados na main
+    ControladorEstudo(Usuario* usuario, 
+                      RepositorioEstudos* repoEstudos, 
+                      RepositorioGamificacao* repoGamificacao);
+
+    // Método Principal
+    // Inicia o loop do menu de estudos (Chamado pelo ControladorPrincipal)
+    void executar();
 
 private:
-    // ===== MÉTODOS PRIVADOS =====
-    
-    // Salva a sessão no repositório
-    void salvarSessao(Usuario* usuario);
-    
-    // Atualiza gamificação com tempo estudado
-    void atualizarGamificacao(long long segundos);
-    
-    // Formata tempo para exibição
-    std::string formatarTempo(long long segundos) const;
-    
-    // Exibe resumo da sessão
-    void exibirResumoSessao() const;
+    // --- Métodos Auxiliares (Lógica Interna) ---
+
+    // 1. Pede disciplina/descrição e prepara o objeto sessaoAtual
+    void iniciarNovaSessao();
+
+    // 2. Loop do cronômetro (Pausar, Continuar, Finalizar)
+    // Fica travado aqui enquanto o usuário estuda
+    void gerenciarSessaoEmAndamento();
+
+    // 3. Chamado ao encerrar: Salva no repo e dá XP/Moedas ao usuário
+    void finalizarSessao();
+
+    // 4. Busca dados no repoEstudos e manda a tela exibir
+    void exibirHistorico();
 };
+
 #endif
 

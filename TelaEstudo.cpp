@@ -1,82 +1,48 @@
 #include "TelaEstudo.h"
-#include "ControladorEstudo.h"
-#include "Constantes.h"
-#include "SessaoEstudo.h"
-#include "RepositorioEstudos.h"
 #include <iostream>
-#include <limits>
 
-telaEstudo::telaEstudo(ControladorEstudo& controlador) {
+int TelaEstudo::mostrarMenuEstudos() {
+    mostrarCabecalho("MONITOR DE ESTUDOS");
+    std::cout << "1. Iniciar Nova Sessao" << std::endl;
+    std::cout << "2. Ver Historico" << std::endl;
+    std::cout << "0. Voltar" << std::endl;
+    return lerOpcao();
 }
 
-int telaEstudo::exibir(Usuario* usuario) {
-    ControladorEstudo ctrl(nullptr);
+int TelaEstudo::mostrarSessaoAtiva(const SessaoEstudo& sessao) {
+    limparTela();
+    std::cout << "=== ESTUDANDO: " << sessao.getDisciplina() << " ===" << std::endl;
+    
+    // Converte segundos em HH:MM:SS
+    long long totalSeg = sessao.getSegundos();
+    int h = totalSeg / 3600;
+    int m = (totalSeg % 3600) / 60;
+    int s = totalSeg % 60;
 
-    while (true) {
-        limparTela();
-        std::cout << "=== MODO ESTUDO ===" << std::endl;
-        std::cout << "1. Iniciar Nova Sessao" << std::endl;
-        std::cout << "2. Ver Historico e Progresso" << std::endl;
-        std::cout << "0. Voltar ao Menu Principal" << std::endl;
-        std::cout << "Escolha: ";
-        
-        int op;
-        std::cin >> op;
-        
-        // Tratamento de erro se digitar letra
-        if (std::cin.fail()) {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            op = -1; 
-        }
+    std::cout << "\n      " << h << ":" << m << ":" << s << "\n" << std::endl;
+    std::cout << "Status: " << (int)sessao.getEstado() << std::endl; // Pode melhorar convertendo enum pra string
+    
+    std::cout << "-------------------------" << std::endl;
+    std::cout << "1. Pausar / Continuar" << std::endl;
+    std::cout << "2. Finalizar Sessao" << std::endl;
+    
+    // Aqui usamos uma leitura simples para não travar o loop do controlador se possível,
+    // ou bloqueamos esperando ação do usuário.
+    int op;
+    std::cin >> op;
+    return op;
+}
 
-        if (op == 0) {
-            return TELA_PRINCIPAL;
-        }
-        
-        if (op == 1) {
-            // Inicia a sessão
-            ctrl.iniciarSessao();
-            
-            bool sessaoRodando = true;
-            while (sessaoRodando) {
-                // Verifica se realmente iniciou (pode ter dado erro)
-                if (!ctrl.temSessaoAtiva()) break;
-
-                std::cout << "\n--- Sessao em Andamento ---" << std::endl;
-                std::cout << "1. Pausar" << std::endl;
-                std::cout << "2. Continuar" << std::endl;
-                std::cout << "3. Finalizar" << std::endl;
-                std::cout << "4. Cancelar" << std::endl;
-                std::cout << "Opcao: ";
-                
-                int opSessao;
-                std::cin >> opSessao;
-
-                if (opSessao == 1) ctrl.pausarSessao();
-                else if (opSessao == 2) ctrl.continuarSessao();
-                else if (opSessao == 3) {
-                    ctrl.finalizarSessao(usuario);
-                    sessaoRodando = false;
-                    aguardarEnter();
-                }
-                else if (opSessao == 4) {
-                    ctrl.cancelarSessao();
-                    sessaoRodando = false;
-                    aguardarEnter();
-                }
-                else {
-                    std::cout << "Opcao invalida." << std::endl;
-                }
-            }
-        }
-        else if (op == 2) {
-            ctrl.mostrarHistoricoCompleto(usuario);
-            aguardarEnter();
-        }
-        else {
-            std::cout << "Opcao invalida!" << std::endl;
-            aguardarEnter();
-        }
+void TelaEstudo::mostrarHistorico(const std::vector<SessaoEstudo>& historico) {
+    mostrarCabecalho("HISTORICO DE ESTUDOS");
+    
+    for (const auto& s : historico) {
+        std::cout << "Data: " << s.getDataInicio() 
+                  << " | " << s.getDisciplina() 
+                  << " | " << s.getSegundos() << "s" << std::endl;
     }
+    
+    std::cout << "\nPressione ENTER para voltar...";
+    std::cin.ignore();
+    std::cin.get();
 }
