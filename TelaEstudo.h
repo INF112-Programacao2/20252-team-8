@@ -8,8 +8,6 @@ class telaEstudo : public TelaBase {
 public:
     int exibir(Usuario* usuario) override;
     telaEstudo(ControladorEstudo& controlador);
-    void mostrarProgressoEstudo(RepositorioEstudos* repositorio);
-    void menuSelecionarEstudo();
 };
 
 #endif

@@ -1,24 +1,34 @@
 #include "TelaInventario.h"
-#include "ControladorInventario.h"
-#include "Constantes.h"
 #include <iostream>
-#include <vector>
+#include <iomanip> // Para formatar o output se quiser
 
-int telaInventario::exibir(Usuario* usuario) {
-    limparTela();
-    std::cout << "=== INVENTARIO ===" << std::endl;
-    
-    std::vector<Item> itens = usuario->getInventario().getItens();
-    if(itens.empty()) {
-        std::cout << "(Vazio)" << std::endl;
-    } else {
-        for(size_t i=0; i<itens.size(); i++) {
-             std::cout << "- " << itens[i].getNome() << std::endl;
+int TelaInventario::mostrarInventario(const std::vector<Item*>& itens) {
+    // 1. Usa o cabeçalho padrão da TelaBase
+    mostrarCabecalho("MEU INVENTARIO");
+
+    // 2. Exibe os itens
+    if (itens.empty()) {
+        mostrarMensagem("Sua mochila esta vazia. Visite a Loja para comprar itens!");
+    } 
+    else {
+        std::cout << "--- Seus Itens ---" << std::endl;
+        
+        // Loop para listar ponteiros (Item*)
+        for (size_t i = 0; i < itens.size(); i++) {
+            // Exemplo de output: "[1] Bone Vermelho (Cosmetico)"
+            // Usamos -> pois itens[i] é um ponteiro
+            std::cout << "[" << (i + 1) << "] " 
+                      << itens[i]->getNome() 
+                      << " (" << itens[i]->getTipo() << ")" 
+                      << std::endl;
         }
     }
-    
-    std::cout << "0. Voltar" << std::endl;
-    int op;
-    std::cin >> op;
-    return TELA_PRINCIPAL;
+
+    // 3. Mostra opções de navegação
+    std::cout << "\n----------------------------------------" << std::endl;
+    std::cout << "Digite o numero do item para ver detalhes" << std::endl;
+    std::cout << "Ou digite 0 para Voltar" << std::endl;
+
+    // 4. Usa a leitura segura da TelaBase
+    return lerOpcao();
 }
