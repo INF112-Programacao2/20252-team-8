@@ -2,7 +2,8 @@
 #include <iostream>
 
 // Chama o construtor do pai com ':', o resto é feito dentro das chaves
-ControladorLoja::ControladorLoja(int tempo_inicial) : ControladorGamificacao(tempo_inicial) {
+ControladorLoja::ControladorLoja(Usuario* usuario, RepositorioGamificacao* repo) 
+    : ControladorGamificacao(usuario, repo) {
     
     // --- ADICIONANDO AS 10 MÚSICAS ---
     musicas.push_back(Musica("Study Calm Lo-Fi", "lofi-study-calm-peaceful-chill-hop-112191.mp3", 300));
@@ -34,14 +35,23 @@ bool ControladorLoja::comprarMusica(int indice) {
         return false;
     }
 
-    // 3. Verifica se tem pontos
-    if (pontos >= musicas[indice].valor) {
-        pontos = pontos - musicas[indice].valor; // Desconta pontos
-        musicas[indice].comprada = true;         // Marca como comprada
+    // 3. Verifica se tem moedas suficientes (usando getMoedas() herdado)
+    int moedasAtuais = getMoedas();
+    int precoMusica = musicas[indice].valor;
+    
+    if (moedasAtuais >= precoMusica) {
+        // Desconta moedas usando o método herdado (passa valor negativo)
+        adicionarMoedas(-precoMusica);
+        
+        // Marca como comprada
+        musicas[indice].comprada = true;
+        
         std::cout << "SUCESSO! Voce comprou: " << musicas[indice].nome << "\n";
+        std::cout << "Saldo restante: " << getMoedas() << " moedas\n";
         return true;
     } else {
-        std::cout << "Saldo insuficiente. Voce precisa de " << musicas[indice].valor << " pontos.\n";
+        std::cout << "Saldo insuficiente. Voce precisa de " << precoMusica << " moedas.\n";
+        std::cout << "Voce tem: " << moedasAtuais << " moedas.\n";
         return false;
     }
 }
