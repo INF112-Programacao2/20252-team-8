@@ -29,7 +29,10 @@ OK - Usuario
 
 Nicolas
 EM PROGRESSO - Refatorar Loja
+	 - Atualização do cabeçalho
 	 - Implementar método estático de construção de itens (catálogo) 
+
+
 
 
 Gabriel

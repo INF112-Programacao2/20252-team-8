@@ -5,35 +5,17 @@
 #include "Item.h"
 class Loja {
 private:
-    std::vector<Item> itens;        // Lista de itens
-    int capacidadeMaxima;           // Capacidade máxima da loja
+    std::vector<Item*> vitrine;        // Lista de itens que se pode comprar
 
 public:
-    // Construtor com capacidade inicial = 100
-    Loja(int capacidadeMaxima = 100);
+    // Construtor: Aqui se preenche a 'vitrine' com os itens disponíveis para compra
+    Loja();
 
-    // Adiciona item se não ultrapassar a capacidade
-    void adicionarItem(const Item& item);
+    // Destrutor: Importante para limpar a memória dos itens da vitrine ao fechar o programa
+    ~Loja();
 
-    // Remove item por ID
-    bool removerItem(const std::string& id);
-
-    // Busca item por ID
-    Item* buscarItem(const std::string& id);
-
-    // Getters
-    const std::vector<Item>& getItens() const;
-    int getQuantidadeAtual() const;  
-    int getCapacidadeMaxima() const;
-
-    // Verifica se está cheia
-    bool estaCheia() const;
-
-    // Salvar em arquivo
-    bool salvarLoja(const std::string& nomeArquivo) const;
-
-    // Carregar do arquivo
-    bool carregarLoja(const std::string& nomeArquivo);
+    // Método usado pelo ControladorLoja para pegar a lista e mostrar na Tela
+    std::vector<Item*> getItensParaVenda() const;
 
     static Item* buscarItemPorId(int id); // Fábrica estática
 };
