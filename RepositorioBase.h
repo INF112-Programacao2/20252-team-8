@@ -17,7 +17,7 @@ public:
     RepositorioBase(const std::string& nomeRepo, bool isCaminho);
 
     // Métodos de leitura e escrita
-    std::vector<std::string> LerLinhasDoArquivo();
+    std::vector<std::string> LerLinhasDoArquivo() const;
 
     // Declarado como 'virtual' para permitir sobrescrita nas classes filhas
     // Escreve no modo truncate por padrão

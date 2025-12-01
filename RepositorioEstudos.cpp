@@ -18,7 +18,10 @@ void RepositorioEstudos::adicionarSessao(const SessaoEstudo& sessao) {
     dadosSessao.push_back("Disciplina: " + sessao.getDisciplina());
     dadosSessao.push_back("Descricao: " + sessao.getDescricao());
     dadosSessao.push_back("Tempo: " + std::to_string(sessao.getSegundos()));
-    dadosSessao.push_back("Data: " + sessao.getDataInicio()); // Ex: 01/01/24
+    dadosSessao.push_back("DataInicio: " + sessao.getDataInicio());
+    dadosSessao.push_back("DataFinal: " + sessao.getDataFinal());
+    dadosSessao.push_back("HoraInicio: " + sessao.getHorarioInicio());
+    dadosSessao.push_back("HoraFinal: " + sessao.getHorarioFinal());
     
     // 2. Salva no arquivo (Modo Append)
     this->escreverLinhasNoArquivo(dadosSessao, true); 

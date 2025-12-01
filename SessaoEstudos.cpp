@@ -137,9 +137,10 @@ void SessaoEstudo::finalizar() {
         long long int tempoAtual = time(nullptr);
         segundos += (tempoAtual - tempoInicial);
         
-        // Registrar data e hora final
-        obterDataHoraAtual(dataFinal, horarioFinal);
     }
+
+    // Registrar data e hora final
+    obterDataHoraAtual(dataFinal, horarioFinal);
     
     sessaofinalizada();
     estadoSessao = 0;
@@ -151,7 +152,7 @@ void SessaoEstudo::setDataInicio(const std::string& data) {
 }
 
 
-long long int SessaoEstudo::getSegundos() {
+long long int SessaoEstudo::getSegundos() const {
     // Se está rodando, adiciona o tempo decorrido
     if (estadoSessao == 1) {
         long long int tempoAtual = time(nullptr);
@@ -160,25 +161,25 @@ long long int SessaoEstudo::getSegundos() {
     return segundos;
 }
 
-std::string SessaoEstudo::getDisciplina() {
+std::string SessaoEstudo::getDisciplina() const {
     return disciplina;
 }
 
-std::string SessaoEstudo::getDescricao() {
+std::string SessaoEstudo::getDescricao() const {
     return descricao;
 }
-std::string SessaoEstudo::getDataInicio() {
+std::string SessaoEstudo::getDataInicio() const {
     return dataInicio;
 }
 
-std::string SessaoEstudo::getDataFinal() {
+std::string SessaoEstudo::getDataFinal() const {
     return dataFinal;
 }
 
-std::string SessaoEstudo::getHorarioInicio() {
+std::string SessaoEstudo::getHorarioInicio() const {
     return horarioInicio;
 }
 
-std::string SessaoEstudo::getHorarioFinal() {
+std::string SessaoEstudo::getHorarioFinal() const {
     return horarioFinal;
 }
