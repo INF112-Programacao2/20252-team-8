@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-int telaPerfil::exibir(Usuario* usuario) {
+int TelaPerfil::exibir(Usuario* usuario) {
     limparTela();
     std::cout << "=== MEU PERFIL ===" << std::endl;
     std::cout << "Nome: " << usuario->getNome() << std::endl;
