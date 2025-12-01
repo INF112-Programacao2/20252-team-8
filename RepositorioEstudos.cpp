@@ -40,41 +40,39 @@ std::vector<SessaoEstudo> RepositorioEstudos::obterHistorico() const {
     long long int tempo = 0;
     
     for (const auto& linha : linhas) {
-        // Parse dos campos simples
-        if (linha.find("Disciplina: ") != std::string::npos) {
-            disc = linha.substr(12);
-        }
-        else if (linha.find("Descricao: ") != std::string::npos) {
-            desc = linha.substr(11);
-        }
-        else if (linha.find("Tempo: ") != std::string::npos) {
-            try { tempo = std::stoll(linha.substr(7)); } catch(...) { tempo = 0; }
-        }
-        // Parse das Datas e Horas (Note os índices baseados no tamanho da string)
-        else if (linha.find("DataInicio: ") != std::string::npos) {
-            dataIni = linha.substr(12); // "DataInicio: " tem 12 chars
-        }
-        else if (linha.find("DataFinal: ") != std::string::npos) {
-            dataFim = linha.substr(11); // "DataFinal: " tem 11 chars
-        }
-        else if (linha.find("HoraInicio: ") != std::string::npos) {
-            horaIni = linha.substr(12); // "HoraInicio: " tem 12 chars
-        }
+            if (linha.find("Disciplina: ") != std::string::npos) {
+        disc = linha.substr(linha.find(": ") + 2);
+            }
+            else if (linha.find("Descricao: ") != std::string::npos) {
+                desc = linha.substr(linha.find(": ") + 2);
+            }
+            else if (linha.find("Tempo: ") != std::string::npos) {
+                tempo = std::stoll(linha.substr(linha.find(": ") + 2));
+            }
+            else if (linha.find("DataInicio: ") != std::string::npos) {
+                dataIni = linha.substr(linha.find(": ") + 2);
+            }
+            else if (linha.find("DataFinal: ") != std::string::npos) {
+                dataFim = linha.substr(linha.find(": ") + 2);
+            }
+            else if (linha.find("HoraInicio: ") != std::string::npos) {
+                horaIni = linha.substr(linha.find(": ") + 2);
+            }
+            else if (linha.find("HoraFinal: ") != std::string::npos) {
+                horaFim = linha.substr(linha.find(": ") + 2);
+            }
+
         // 2. O gatilho: HoraFinal é o último dado salvo, então criamos o objeto aqui
         else if (linha.find("HoraFinal: ") != std::string::npos) {
             horaFim = linha.substr(11); // "HoraFinal: " tem 11 chars
             
-            // Cria o objeto base com o construtor que você já tem
-            SessaoEstudo s(tempo, 0, disc, desc);
-            
-            // Popula os dados de tempo/data que não estavam no construtor
-            // (Você precisará adicionar esses setters na SessaoEstudo, veja abaixo)
+            SessaoEstudo s(tempo, SessaoEstudo::Estado::parado, disc, desc);
             s.setDataInicio(dataIni);
             s.setDataFinal(dataFim);
             s.setHoraInicio(horaIni);
             s.setHoraFinal(horaFim);
-            
             historico.push_back(s);
+
 
             // 3. Limpeza das variáveis para a próxima iteração
             disc = ""; desc = ""; 
