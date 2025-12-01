@@ -29,9 +29,10 @@ void ControladorPrincipal::setControladorGamificacao(ControladorGamificacao* ctr
 // Lógica de Roteamento
 void ControladorPrincipal::executar() {
     bool rodando = true;
+    Usuario* usuario = ctrlGamificacao->getUsuario();
 
     while (rodando) {
-        int opcao = tela.mostrarMenuPrincipal();
+        int opcao = tela.exibir(usuario);
 
         switch (opcao) {
             case 1: // Estudos
