@@ -6,17 +6,8 @@
 #include <iostream>
 #include <limits>
 
-
-std::string formatarTempo(long long int totalSegundos) {
-    int horas = totalSegundos / 3600;
-    int minutos = (totalSegundos % 3600) / 60;
-    int segundos = totalSegundos % 60;
-    
-    char buffer[50];
-    sprintf(buffer, "%02dh %02dm %02ds", horas, minutos, segundos);
-    return std::string(buffer);
+telaEstudo::telaEstudo(ControladorEstudo& controlador) {
 }
-
 
 int telaEstudo::exibir(Usuario* usuario) {
     ControladorEstudo ctrl(nullptr);
@@ -49,6 +40,9 @@ int telaEstudo::exibir(Usuario* usuario) {
             
             bool sessaoRodando = true;
             while (sessaoRodando) {
+                // Verifica se realmente iniciou (pode ter dado erro)
+                if (!ctrl.temSessaoAtiva()) break;
+
                 std::cout << "\n--- Sessao em Andamento ---" << std::endl;
                 std::cout << "1. Pausar" << std::endl;
                 std::cout << "2. Continuar" << std::endl;
@@ -70,6 +64,9 @@ int telaEstudo::exibir(Usuario* usuario) {
                     ctrl.cancelarSessao();
                     sessaoRodando = false;
                     aguardarEnter();
+                }
+                else {
+                    std::cout << "Opcao invalida." << std::endl;
                 }
             }
         }
