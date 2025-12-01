@@ -29,33 +29,23 @@ OK - Usuario
 OK - Refatorar Loja
 	 OK - Atualização do cabeçalho
 	 OK - Implementar método estático de construção de itens (catálogo) 
-
-Nicolas
-EM PROGRESSO - RepositorioEstudos
+OK - RepositorioEstudos
 	OK - Adaptar cabeçalho 
 	OK - Adaptar .cpp
-	 - Conferir SessaoEstudo
+	OK - Conferir SessaoEstudo
 
 
-Gabriel
-EM PROGRESSO - Loja
-			OK - SessaoEstudo
-			OK - Item (base)
+EM PROGRESSO - 
+		
 
-
-Murilo
-EM PROGRESSO - RepositorioEstudos
-
-
-
-Pedro
-EM PROGRESSO - TelaBase
-
-Aloizio
-Nao sei oque fazer			
-
-A IMPLEMENTAR:
-
-	- Cabeçalhos Telas filhas
+CLASSES:
+	OK - Usuario
+	OK - repositorioBase 
+	OK - repositorioGamificacao
+	OK - repositorioInventario
+	OK - Loja
+	OK - SessaoEstudo
+	OK - Item (IMPLEMENTAR SUBCLASSES AINDA)
+	- Telas
 	- Controladores
 	- Controlador Principal 
