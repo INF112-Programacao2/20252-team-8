@@ -35,11 +35,8 @@ OK - RepositorioEstudos
 	OK - Conferir SessaoEstudo
 
 
-EM PROGRESSO - ControladorInventario
-	- Refatorar ControladorInventario.h
-	- Refatorar TelaBase
-	- Refatorar TelaInventario
-	- Refatorar ControladorInventario.cpp
+EM PROGRESSO - 
+	Controladores
 		
 
 CLASSES:
