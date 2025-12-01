@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 
-int telaLoja::exibir(Usuario* usuario) {
+int TelaLoja::exibir(Usuario* usuario) {
     limparTela();
     
     ControladorLoja ctrl(0); 
