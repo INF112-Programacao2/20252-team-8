@@ -1,6 +1,7 @@
 #ifndef TELA_BASE_H
 #define TELA_BASE_H
 
+#include "Usuario.h"
 #include <string>
 #include <iostream>
 
@@ -28,6 +29,8 @@ public:
     // Lê um número inteiro do teclado com tratamento de erro
     // (Impede loop infinito se o usuário digitar letras)
     int lerOpcao();
+
+    virtual int exibir(Usuario* usuario) = 0;
 };
 
 #endif
