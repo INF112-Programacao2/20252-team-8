@@ -1,79 +1,58 @@
-// Esta linha abaixo faz a biblioteca de som funcionar. É obrigatoria aqui.
-#define MINIAUDIO_IMPLEMENTATION
 #include "ControladorInventario.h"
-#include "Loja.h"
-#include <vector>
 #include <iostream>
 
-ControladorInventario::ControladorInventario(int tempo_inicial) : ControladorLoja(tempo_inicial) {
-    estaTocando = false;
-    
-    // Inicia o sistema de som do miniaudio
-    if (ma_engine_init(NULL, &engine) != MA_SUCCESS) {
-        std::cout << "ERRO CRITICO: Falha ao iniciar sistema de audio!\n";
-    }
-}
-
-ControladorInventario::~ControladorInventario() {
-    pararMusica();
-    ma_engine_uninit(&engine);
-}
-
-void ControladorInventario::pararMusica() {
-    if (estaTocando) {
-        ma_sound_stop(&som);
-        ma_sound_uninit(&som);
-        estaTocando = false;
-        std::cout << "Musica parada.\n";
-    }
-}
-
-void ControladorInventario::tocarMusica(std::string nomeArquivo) {
-    // Se já estiver tocando algo, para antes de começar a nova
-    pararMusica(); 
-
-    std::cout << "Tentando tocar: " << nomeArquivo << "...\n";
-
-    // Carrega e toca o arquivo
-    if (ma_sound_init_from_file(&engine, nomeArquivo.c_str(), 0, NULL, NULL, &som) == MA_SUCCESS) {
-        ma_sound_start(&som);
-        estaTocando = true;
-        std::cout << "Reproduzindo agora!\n";
-    } else {
-        std::cout << "ERRO: Nao foi possivel abrir o arquivo '" << nomeArquivo << "'.\n";
-        std::cout << "Verifique se o arquivo .mp3 esta na mesma pasta do executavel.\n";
-    }
+// Construtor
+// Inicializa os ponteiros e a tela (que é composta)
+ControladorInventario::ControladorInventario(Usuario* usuario, RepositorioInventario* repositorio)
+    : usuario(usuario), RepositorioInventario(repositorio) {
 }
 
 
+// Método Principal
 void ControladorInventario::executar() {
-    while(true) {
-        // 1. Pega os IDs do arquivo
-        std::vector<int> ids = repoInventario->carregarIds();
-        
-        // 2. Transforma IDs em Objetos para mostrar na tela
-        std::vector<Item*> itensParaMostrar;
-        
-        for (int id : ids) {
-            Item* item = Loja::buscarItemPorId(id);
-            if (item != nullptr) {
-                itensParaMostrar.push_back(item);
+    bool sair = false;
+
+    while (!sair) {
+        // 1. Buscar dados atualizados
+        // O repositório carrega a lista de itens que o usuário já comprou
+        std::vector<Item*> itensComprados = repositorio->obterItensComprados();
+
+        // 2. Exibir na Tela
+        // Passamos a lista para a tela desenhar e aguardamos a escolha do usuário
+        // Assumimos que mostrarMenu retorna o índice escolhido ou 0 para voltar
+        int opcao = tela.mostrarMenu(itensComprados);
+
+        // 3. Processar escolha
+        if (opcao == 0) {
+            sair = true; // Voltar ao menu principal
+        } 
+        else {
+            // Ajustamos o índice (Menu é 1..N, Vetor é 0..N-1)
+            int indiceVetor = opcao - 1;
+
+            if (indiceVetor >= 0 && indiceVetor < itensComprados.size()) {
+                equiparItem(indiceVetor);
+            } else {
+                tela.mostrarMensagem("Opcao invalida!");
             }
         }
-
-        // 3. Manda a tela exibir os objetos (nome, tipo, etc)
-        // O método mostrarInventario agora recebe vector<Item*>
-        int escolha = tela.mostrarInventario(itensParaMostrar);
-
-        // ... lógica de equipar item ...
-
-        // 4. LIMPEZA DE MEMÓRIA (Muito Importante!)
-        // Como a Loja deu 'new', o Controlador tem que dar 'delete'
-        // antes de recarregar ou sair, senão vaza memória.
-        for (Item* i : itensParaMostrar) {
-            delete i; 
-        }
-        
-        if (escolha == 0) break;
     }
+}
+
+// Método Auxiliar para Equipar
+void ControladorInventario::equiparItem(int indiceItem) {
+    // Recupera o item específico da lista do repositório
+    std::vector<Item*> itens = repositorio->obterItensComprados();
+    Item* itemSelecionado = itens[indiceItem];
+
+    // Aqui conectamos com a Entidade Usuario
+    // O usuário guarda o estado atual, então avisamos a ele qual item usar
+    // Supondo que a classe Usuario tenha um método 'equiparItem' ou 'setItemAtivo'
+    usuario->equiparItem(itemSelecionado);
+
+    // Feedback visual
+    tela.mostrarMensagem("Voce equipou: " + itemSelecionado->getNome());
+    
+    // Opcional: Se o equipamento for algo permanente, poderia chamar 
+    // repositorio->salvarUsuario(usuario) aqui, mas geralmente salvamos ao sair.
 }
