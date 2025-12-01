@@ -1,4 +1,4 @@
-Tasks - Refatoração do Código (30/11)
+Tasks - Refatoração do Código (01/12)
 
 OK - Atualização do Diagrama de Classes
 OK - Atualização do nome das variáveis e classes segundo Diagrama
@@ -26,11 +26,9 @@ OK - Usuario
 	OK - Tirar o getRepositorio()
 	OK - Mudar o método verificarSubidaDeNivel para controladorGamificacao
 	OK - Conferência final
-
-Nicolas
-EM PROGRESSO - Refatorar Loja
-	 - Atualização do cabeçalho
-	 - Implementar método estático de construção de itens (catálogo) 
+OK - Refatorar Loja
+	 OK - Atualização do cabeçalho
+	 OK - Implementar método estático de construção de itens (catálogo) 
 
 
 
