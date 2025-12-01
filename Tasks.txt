@@ -30,6 +30,7 @@ OK - Refatorar Loja
 	 OK - Atualização do cabeçalho
 	 OK - Implementar método estático de construção de itens (catálogo) 
 
+Nicolas
 
 
 

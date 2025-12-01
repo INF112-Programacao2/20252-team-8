@@ -134,7 +134,7 @@ void SessaoEstudo::continuar() {
     }
 }
 
-void SessaoEstudo::armazenar() {
+void SessaoEstudo::finalizar() {
     if (estadoSessao == 1) {
         // Registrar tempo final antes de pausar
         long long int tempoAtual = time(nullptr);

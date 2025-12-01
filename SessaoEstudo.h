@@ -42,9 +42,7 @@ public:
     void pausar();
     void resetar();
     void continuar();
-    
-    // armazenar disciplina e descrição
-    void armazenar();
+    void finalizar();
     
     // getters
     long long int getSegundos();
