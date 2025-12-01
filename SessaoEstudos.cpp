@@ -57,10 +57,7 @@ void SessaoEstudo::obterDataHoraAtual(std::string& data, std::string& hora) {
 // Gerenciar estado
 void SessaoEstudo::gerenciar() {
     switch(estadoSessao) {
-        if (estadoSessao < 0 || estadoSessao > 2) {
-            throw std::logic_error("Estado da sessão inválido: " + std::to_string(estadoSessao));
-    }
-        case 0:
+      case 0:
             std::cout << "Sessão parada" << std::endl;
             break;
         case 1:
