@@ -1,6 +1,6 @@
 #include "ControladorGamificacao.h"
 #include <iostream>
-#include <cmath> // Para floor
+#include <cmath> 
 
 ControladorGamificacao::ControladorGamificacao(Usuario* usuario, RepositorioGamificacao* repo)
     : usuarioAtual(usuario), repositorio(repo) {

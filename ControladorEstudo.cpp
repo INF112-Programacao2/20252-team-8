@@ -12,8 +12,7 @@ ControladorEstudo::ControladorEstudo(Usuario* usuario,
     : usuario(usuario), 
       repoEstudos(repoEstudos), 
       repoGamificacao(repoGamificacao) {
-    // A 'tela' e a 'sessaoAtual' são instanciadas automaticamente 
-    // pelos seus construtores padrão.
+    // A 'tela' e a 'sessaoAtual' são instanciadas automaticamente pelos seus construtores padrão.
 }
 
 // ==========================================================
