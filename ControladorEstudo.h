@@ -75,9 +75,5 @@ private:
     // Exibe resumo da sessão
     void exibirResumoSessao() const;
 };
+#endif
 
-<<<<<<< HEAD
-#endif
-=======
-#endif
->>>>>>> 9466037ef18971795f9c32fb5cf6d2a3e1994576
