@@ -1,441 +1,150 @@
 #include "ControladorEstudo.h"
-#include "RepositorioEstudos.h"
-#include "RepositorioGamificacao.h"
 #include <iostream>
-#include <iomanip>
-#include <ctime>
-#include <stdexcept>
-#include <sstream>
 
-// ===== CONSTRUTOR E DESTRUTOR =====
-
-ControladorEstudo::ControladorEstudo(ControladorGamificacao* controladorG)
-    : sessaoAtiva(nullptr), controladorGami(controladorG), estado("parado") {
+// ==========================================================
+// CONSTRUTOR
+// ==========================================================
+ControladorEstudo::ControladorEstudo(Usuario* usuario, 
+                                     RepositorioEstudos* repoEstudos, 
+                                     RepositorioGamificacao* repoGami)
+    : usuario(usuario), 
+      repoEstudos(repoEstudos), 
+      repoGamificacao(repoGami) {
+    // A tela é inicializada automaticamente pela composição
+    // A sessaoAtual é inicializada pelo construtor padrão dela
 }
 
-ControladorEstudo::~ControladorEstudo() {
-    if (sessaoAtiva != nullptr) {
-        delete sessaoAtiva;
-        sessaoAtiva = nullptr;
+// ==========================================================
+// LOOP PRINCIPAL (MENU DE ESTUDOS)
+// ==========================================================
+void ControladorEstudo::executar() {
+    while (true) {
+        // 1. Mostra o menu e pega a opção
+        int opcao = tela.mostrarMenuEstudos();
+
+        // 2. Decide para onde ir
+        switch (opcao) {
+            case 1: 
+                iniciarNovaSessao(); 
+                break;
+            case 2: 
+                exibirHistorico(); 
+                break;
+            case 0: 
+                return; // Volta para o Menu Principal
+            default:
+                tela.mostrarErro("Opcao invalida!");
+        }
     }
 }
 
-// ===== MÉTODOS PRINCIPAIS =====
-
-void ControladorEstudo::iniciarSessao() {
-    // Verifica se já existe sessão ativa
-    if (temSessaoAtiva()) {
-        std::cout << "\nERRO: Ja existe uma sessao ativa!" << std::endl;
-        std::cout << "Estado atual: " << estado << std::endl;
-        std::cout << "Use 'pausar', 'continuar' ou 'finalizar' antes de iniciar nova sessao.\n" << std::endl;
-        return;
-    }
+// ==========================================================
+// LÓGICA DE NOVA SESSÃO
+// ==========================================================
+void ControladorEstudo::iniciarNovaSessao() {
+    // 1. Coleta dados iniciais (Disciplina e Descrição)
+    // Aqui poderiamos ter um método na tela, mas vamos fazer simples usando TelaBase
+    tela.limparTela();
+    tela.mostrarCabecalho("NOVA SESSAO DE ESTUDO");
     
-    std::cout << "\n";
-    std::cout << "╔═══════════════════════════════════════╗\n";
-    std::cout << "║        NOVA SESSÃO DE ESTUDO           ║\n";
-    std::cout << "╚═══════════════════════════════════════╝\n";
-    
-    // Coleta dados da sessão
     std::string disciplina, descricao;
     
-    std::cin.ignore(); // Limpa buffer do teclado
-    
-    // Disciplina 
-    while (true) {
-        std::cout << "\n Disciplina: ";
-        std::getline(std::cin, disciplina);
-        
-        if (!disciplina.empty()) {
-            break;
-        }
-        std::cout << "AVISO: A disciplina nao pode ficar em branco!\n";
-    }
-    
-    // Descrição (opcional)
-    std::cout << " Descricao (opcional, pressione Enter para pular): ";
+    std::cout << "Digite a Disciplina (ex: Matematica): ";
+    // Limpeza de buffer básica antes de getline se necessário
+    if (std::cin.peek() == '\n') std::cin.ignore(); 
+    std::getline(std::cin, disciplina);
+
+    std::cout << "Digite uma Descricao (ex: Lista de Exercicios): ";
     std::getline(std::cin, descricao);
-    
+
+    // 2. Configura a sessão na memória
+    sessaoAtual.resetar(); // Garante que está zerada
+    sessaoAtual.setDisciplina(disciplina);
+    sessaoAtual.setDescricao(descricao);
+
+    // 3. Inicia o cronômetro
     try {
-        // Cria nova sessão
-        sessaoAtiva = new SessaoEstudo(0, 0, disciplina, descricao);
-        
-        // Inicia a sessão
-        sessaoAtiva->iniciar();
-        estado = "rodando";
-        
-        std::cout << "\n";
-        std::cout << "╔═══════════════════════════════════════╗\n";
-        std::cout << "║           SESSÃO INICIADA              ║\n";
-        std::cout << "╚═══════════════════════════════════════╝\n";
-        std::cout << " Disciplina: " << disciplina << std::endl;
-        std::cout << " Inicio: " << sessaoAtiva->getDataInicio() 
-                  << " as " << sessaoAtiva->getHorarioInicio() << std::endl;
-        std::cout << "\n Cronometro iniciado! Bons estudos!\n" << std::endl;
-        
-    } catch (const std::exception& e) {
-        std::cout << "\n ERRO CRITICO: Falha ao iniciar sessao: " << e.what() << std::endl;
-        if (sessaoAtiva != nullptr) {
-            delete sessaoAtiva;
-            sessaoAtiva = nullptr;
-        }
-        estado = "parado";
+        sessaoAtual.iniciar();
+        // Entra no loop do cronômetro
+        gerenciarSessaoEmAndamento();
+    } 
+    catch (std::exception& e) {
+        tela.mostrarErro(e.what());
     }
 }
 
-void ControladorEstudo::pausarSessao() {
-    if (!temSessaoAtiva() || estado != "rodando") {
-        std::cout << "\n ERRO: Nao ha sessao rodando para pausar.\n" << std::endl;
-        return;
-    }
-    
-    try {
-        // Pausa a sessão
-        sessaoAtiva->pausar();
-        estado = "pausado";
-        
-        // Mostra tempo parcial
-        long long segundos = sessaoAtiva->getSegundos();
-        
-        std::cout << "\n";
-        std::cout << "╔═══════════════════════════════════════╗\n";
-        std::cout << "║           SESSÃO PAUSADA               ║\n";
-        std::cout << "╚═══════════════════════════════════════╝\n";
-        std::cout << " Sessao pausada com sucesso!\n";
-        std::cout << " Tempo parcial: " << formatarTempo(segundos) << std::endl;
-        std::cout << "\nUse 'continuar' para retomar ou 'finalizar' para encerrar.\n" << std::endl;
-        
-    } catch (const std::exception& e) {
-        std::cout << "\n ERRO: Falha ao pausar sessao: " << e.what() << std::endl;
-    }
-}
+// ==========================================================
+// LOOP DO CRONÔMETRO (SESSÃO ATIVA)
+// ==========================================================
+void ControladorEstudo::gerenciarSessaoEmAndamento() {
+    bool sessaoAtiva = true;
 
-void ControladorEstudo::continuarSessao() {
-    if (!temSessaoAtiva() || estado != "pausado") {
-        std::cout << "\n ERRO: Nao ha sessao pausada para continuar.\n" << std::endl;
-        return;
-    }
-    
-    try {
-        // Continua a sessão
-        sessaoAtiva->continuar();
-        estado = "rodando";
-        
-        std::cout << "\n";
-        std::cout << "╔═══════════════════════════════════════╗\n";
-        std::cout << "║          SESSÃO RETOMADA               ║\n";
-        std::cout << "╚═══════════════════════════════════════╝\n";
-        std::cout << " Cronometro retomado!\n";
-        std::cout << " Disciplina: " << sessaoAtiva->getDisciplina() << std::endl;
-        std::cout << " Tempo ate agora: " << formatarTempo(sessaoAtiva->getSegundos()) << std::endl;
-        std::cout << "\n Continue seus estudos!\n" << std::endl;
-        
-    } catch (const std::exception& e) {
-        std::cout << "\n ERRO: Falha ao continuar sessao: " << e.what() << std::endl;
-    }
-}
+    while (sessaoAtiva) {
+        // 1. Mostra o status atual (Tempo, Estado) e pede ação
+        int acao = tela.mostrarSessaoAtiva(sessaoAtual);
 
-void ControladorEstudo::finalizarSessao(Usuario* usuario) {
-    if (!temSessaoAtiva()) {
-        std::cout << "\n ERRO: Nao ha sessao ativa para finalizar.\n" << std::endl;
-        return;
-    }
-    
-    // Confirmação do usuário
-    std::cout << "\n Voce realmente deseja finalizar esta sessao? (s/n): ";
-    char confirmacao;
-    std::cin >> confirmacao;
-    std::cin.ignore(); // Limpa buffer
-    
-    if (confirmacao != 's' && confirmacao != 'S') {
-        std::cout << "Operacao cancelada.\n" << std::endl;
-        return;
-    }
-    
-    try {
-        // Finaliza a sessão
-        sessaoAtiva->finalizar();
-        
-        // Calcula tempo total
-        long long segundosTotais = sessaoAtiva->getSegundos();
-        
-        // Exibe resumo
-        exibirResumoSessao();
-        
-        // Atualiza gamificação
-        atualizarGamificacao(segundosTotais);
-        
-        // Salva a sessão no repositório
-        salvarSessao(usuario);
-        
-        // Limpa a sessão
-        delete sessaoAtiva;
-        sessaoAtiva = nullptr;
-        estado = "parado";
-        
-        std::cout << "\n Sessao finalizada e salva com sucesso!\n" << std::endl;
-        
-    } catch (const std::exception& e) {
-        std::cout << "\n ERRO: Falha ao finalizar sessao: " << e.what() << std::endl;
-    }
-}
+        // 2. Processa a ação do usuário
+        switch (acao) {
+            case 1: // Pausar / Continuar
+                try {
+                    if (sessaoAtual.getEstado() == EstadoSessao::RODANDO) {
+                        sessaoAtual.pausar();
+                    } else if (sessaoAtual.getEstado() == EstadoSessao::PAUSADO) {
+                        sessaoAtual.continuar();
+                    }
+                } catch (std::exception& e) {
+                    tela.mostrarErro(e.what());
+                }
+                break;
 
-void ControladorEstudo::cancelarSessao() {
-    if (!temSessaoAtiva()) {
-        std::cout << "\n Nao ha sessao ativa para cancelar.\n" << std::endl;
-        return;
-    }
-    
-    std::cout << "\n ATENCAO: Esta acao ira descartar a sessao atual! (s/n): ";
-    char confirmacao;
-    std::cin >> confirmacao;
-    std::cin.ignore();
-    
-    if (confirmacao != 's' && confirmacao != 'S') {
-        std::cout << "Operacao cancelada.\n" << std::endl;
-        return;
-    }
-    
-    // Descarta a sessão
-    delete sessaoAtiva;
-    sessaoAtiva = nullptr;
-    estado = "parado";
-    
-    std::cout << "\n Sessao descartada.\n" << std::endl;
-}
+            case 2: // Finalizar
+                finalizarSessao();
+                sessaoAtiva = false; // Quebra o loop
+                break;
 
-// ===== MÉTODOS DE CONSULTA =====
-
-void ControladorEstudo::mostrarProgresso() const {
-    if (!temSessaoAtiva()) {
-        std::cout << "\n Nenhuma sessao ativa no momento.\n" << std::endl;
-        return;
-    }
-    
-    std::cout << "\n";
-    std::cout << "╔═══════════════════════════════════════╗\n";
-    std::cout << "║          PROGRESSO ATUAL               ║\n";
-    std::cout << "╚═══════════════════════════════════════╝\n";
-    
-    std::cout << " Disciplina: " << sessaoAtiva->getDisciplina() << std::endl;
-    
-    std::string descricao = sessaoAtiva->getDescricao();
-    if (!descricao.empty()) {
-        std::cout << " Descricao: " << descricao << std::endl;
-    }
-    
-    std::cout << " Data inicio: " << sessaoAtiva->getDataInicio() 
-              << " as " << sessaoAtiva->getHorarioInicio() << std::endl;
-    
-    std::cout << " Estado: ";
-    if (estado == "rodando") {
-        std::cout << "EM ANDAMENTO ⏱" << std::endl;
-    } else if (estado == "pausado") {
-        std::cout << "PAUSADO ⏸" << std::endl;
-    }
-    
-    long long segundos = sessaoAtiva->getSegundos();
-    std::cout << " Tempo: " << formatarTempo(segundos) << std::endl;
-    
-    // Barra de progresso simples
-    std::cout << "\n[";
-    int pontos = (segundos / 60) % 50; // 1 ponto a cada minuto, máximo 50
-    for (int i = 0; i < 50; i++) {
-        if (i < pontos) {
-            std::cout << "+";
-        } else {
-            std::cout << "-";
+            default:
+                tela.mostrarErro("Opcao invalida. Digite 1 ou 2.");
         }
     }
-    std::cout << "]\n" << std::endl;
 }
 
-void ControladorEstudo::mostrarEstatisticas() const {
-    std::cout << "\n";
-    std::cout << "╔═══════════════════════════════════════╗\n";
-    std::cout << "║           ESTATÍSTICAS                 ║\n";
-    std::cout << "╚═══════════════════════════════════════╝\n";
-    
-    if (controladorGami != nullptr) {
-        // Exibe dados da gamificação
-        std::cout << " Nivel: " << controladorGami->getNivel() << std::endl;
-        std::cout << " XP Total: " << controladorGami->getXP() << std::endl;
-        std::cout << " Moedas: " << controladorGami->getMoedas() << std::endl;
-        std::cout << " Badge: " << controladorGami->getBadge() << std::endl;
-    } else {
-        std::cout << " Sistema de gamificacao nao disponivel.\n";
-    }
-    std::cout << std::endl;
+// ==========================================================
+// FINALIZAÇÃO E RECOMPENSA
+// ==========================================================
+void ControladorEstudo::finalizarSessao() {
+    // 1. Para o cronômetro definitivamente
+    sessaoAtual.finalizar();
+
+    // 2. Salva no Histórico (Arquivo de Estudos)
+    repoEstudos->adicionarSessao(sessaoAtual);
+
+    // 3. Lógica de Gamificação (Recompensa)
+    // Exemplo: 1 XP a cada segundo + 1 moeda a cada 10 segundos
+    long long tempo = sessaoAtual.getSegundos();
+    int xpGanho = (int)tempo; 
+    int moedasGanhas = (int)(tempo / 10); 
+
+    // Atualiza o objeto Usuario na memória RAM
+    usuario->adicionarXp(xpGanho);
+    usuario->adicionarMoedas(moedasGanhas);
+
+    // 4. Salva o progresso do usuário no disco (Arquivo Gamificação)
+    // IMPORTANTE: Se não salvar aqui, o usuário perde o XP se fechar o jogo.
+    repoGamificacao->salvarUsuario(usuario);
+
+    // 5. Feedback para o usuário
+    tela.limparTela();
+    tela.mostrarMensagem("SESSAO FINALIZADA COM SUCESSO!");
+    std::cout << "Voce estudou por " << tempo << " segundos." << std::endl;
+    std::cout << "Recompensa: +" << xpGanho << " XP | +" << moedasGanhas << " Moedas" << std::endl;
+    tela.esperarEnter();
 }
 
-void ControladorEstudo::mostrarHistorico() const {
-    std::cout << "\n";
-    std::cout << "╔═══════════════════════════════════════╗\n";
-    std::cout << "║           HISTÓRICO                    ║\n";
-    std::cout << "╚═══════════════════════════════════════╝\n";
-    
-    std::cout << " Use a opcao 'mostrarHistoricoCompleto' para ver detalhes.\n" << std::endl;
-}
-
-void ControladorEstudo::mostrarHistoricoCompleto(Usuario* usuario) const {
-    if (usuario == nullptr) {
-        std::cout << "\n ERRO: Usuario nao especificado.\n" << std::endl;
-        return;
-    }
-    
-    try {
-        RepositorioEstudos repo(usuario->getNome());
-        std::vector<SessaoEstudo> historico = repo.obterHistorico();
-        
-        std::cout << "\n";
-        std::cout << "╔═════════════════════════════════════════════════╗\n";
-        std::cout << "║              HISTÓRICO COMPLETO                  ║\n";
-        std::cout << "╚═════════════════════════════════════════════════╝\n";
-        
-        if (historico.empty()) {
-            std::cout << " Nenhuma sessao registrada ainda.\n" << std::endl;
-            return;
-        }
-        
-        std::cout << " Total de sessoes: " << historico.size() << std::endl;
-        std::cout << " Tempo total estudado: " << formatarTempo(repo.getTempoTotal()) << std::endl;
-        std::cout << "\n";
-        std::cout << "═════════════════════════════════════════════════\n";
-        
-        for (size_t i = 0; i < historico.size(); i++) {
-            const SessaoEstudo& sessao = historico[i];
-            
-            std::cout << "\n Sessao #" << (i + 1) << std::endl;
-            std::cout << "   Disciplina: " << sessao.getDisciplina() 
-                      << " (" << formatarTempo(sessao.getSegundos()) << ")\n";
-            
-            std::string desc = sessao.getDescricao();
-            if (!desc.empty() && desc != " ") {
-                std::cout << "   Descricao: " << desc << std::endl;
-            }
-            
-            std::cout << "   Data: " << sessao.getDataInicio();
-            if (!sessao.getDataFinal().empty()) {
-                std::cout << " a " << sessao.getDataFinal();
-            }
-            std::cout << std::endl;
-            
-            std::cout << "   Horario: " << sessao.getHorarioInicio();
-            if (!sessao.getHorarioFinal().empty()) {
-                std::cout << " - " << sessao.getHorarioFinal();
-            }
-            std::cout << std::endl;
-            
-            std::cout << "   Tempo: " << formatarTempo(sessao.getSegundos()) << std::endl;
-            
-            if (i < historico.size() - 1) {
-                std::cout << "   ─────────────────────────────────\n";
-            }
-        }
-        
-        std::cout << "\n═════════════════════════════════════════════════\n" << std::endl;
-        
-    } catch (const std::exception& e) {
-        std::cout << "\n[ERRO] Falha ao carregar historico: " << e.what() << std::endl;
-    }
-}
-
-// ===== MÉTODOS AUXILIARES =====
-
-bool ControladorEstudo::temSessaoAtiva() const {
-    return sessaoAtiva != nullptr && estado != "parado";
-}
-
-std::string ControladorEstudo::getEstado() const {
-    return estado;
-}
-
-SessaoEstudo* ControladorEstudo::getSessaoAtiva() const {
-    return sessaoAtiva;
-}
-
-// ===== MÉTODOS PRIVADOS =====
-
-void ControladorEstudo::salvarSessao(Usuario* usuario) {
-    if (sessaoAtiva == nullptr || usuario == nullptr) {
-        std::cout << "[AVISO] Nao foi possivel salvar a sessao.\n" << std::endl;
-        return;
-    }
-    
-    try {
-        // Cria repositório de estudos
-        RepositorioEstudos repoEstudos(usuario->getNome());
-        
-        // Adiciona a sessão ao repositório
-        repoEstudos.adicionarSessao(*sessaoAtiva);
-        
-        std::cout << " Sessao salva no repositorio: " << usuario->getNome() << "_estudos.txt" << std::endl;
-        
-        // Mostra estatísticas atualizadas
-        std::cout << " Estatisticas atualizadas:" << std::endl;
-        std::cout << "   • Total de sessoes: " << repoEstudos.getQuantidade() << std::endl;
-        std::cout << "   • Tempo total: " << formatarTempo(repoEstudos.getTempoTotal()) << std::endl;
-        std::cout << "   • Tempo em " << sessaoAtiva->getDisciplina() << ": " 
-                  << formatarTempo(repoEstudos.getTempoTotalPorDisciplina(sessaoAtiva->getDisciplina())) << std::endl;
-        
-    } catch (const std::exception& e) {
-        std::cout << "[ERRO] Falha ao salvar sessao no repositorio: " << e.what() << std::endl;
-    }
-}
-
-void ControladorEstudo::atualizarGamificacao(long long segundos) {
-    if (controladorGami != nullptr && segundos > 0) {
-        int minutos = segundos / 60;
-        
-        // Calcula XP baseado no tempo (1 XP por minuto)
-        int xpGanho = minutos;
-        
-        // Adiciona XP via controlador de gamificação
-        controladorGami->adicionarXP(xpGanho);
-        
-        std::cout << " Progresso salvo no sistema de gamificacao!" << std::endl;
-        std::cout << "  +" << xpGanho << " XP ganhos (" << minutos << " minutos de estudo)\n" << std::endl;
-    }
-}
-
-std::string ControladorEstudo::formatarTempo(long long segundosTotais) const {
-    int horas = segundosTotais / 3600;
-    int minutos = (segundosTotais % 3600) / 60;
-    int segundos = segundosTotais % 60;
-    
-    char buffer[50];
-    sprintf(buffer, "%02dh %02dm %02ds", horas, minutos, segundos);
-    return std::string(buffer);
-}
-
-void ControladorEstudo::exibirResumoSessao() const {
-    if (sessaoAtiva == nullptr) {
-        return;
-    }
-    
-    std::cout << "\n";
-    std::cout << "╔═══════════════════════════════════════╗\n";
-    std::cout << "║           RESUMO DA SESSÃO             ║\n";
-    std::cout << "╚═══════════════════════════════════════╝\n";
-    
-    std::cout << " Disciplina: " << sessaoAtiva->getDisciplina() << std::endl;
-    
-    std::string descricao = sessaoAtiva->getDescricao();
-    if (!descricao.empty() && descricao != " ") {
-        std::cout << " Descricao: " << descricao << std::endl;
-    }
-    
-    std::cout << " Inicio: " << sessaoAtiva->getDataInicio() 
-              << " as " << sessaoAtiva->getHorarioInicio() << std::endl;
-    
-    std::string dataFinal = sessaoAtiva->getDataFinal();
-    std::string horaFinal = sessaoAtiva->getHorarioFinal();
-    
-    if (!dataFinal.empty() && dataFinal != " ") {
-        std::cout << " Fim: " << dataFinal << " as " << horaFinal << std::endl;
-    }
-    
-    long long segundos = sessaoAtiva->getSegundos();
-    std::cout << " ⏱ Tempo total: " << formatarTempo(segundos) << std::endl;
-    std::cout << "==========================================\n" << std::endl;
+// ==========================================================
+// HISTÓRICO
+// ==========================================================
+void ControladorEstudo::exibirHistorico() {
+    // Busca dados no disco e manda pra tela
+    std::vector<SessaoEstudo> lista = repoEstudos->obterHistorico();
+    tela.mostrarHistorico(lista);
 }

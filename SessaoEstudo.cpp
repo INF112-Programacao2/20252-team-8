@@ -7,12 +7,12 @@
 
 // construtor default
 SessaoEstudo::SessaoEstudo()
-    : segundos(0), estadoSessao(0), tempoInicial(0),
+    : segundos(0), estadoSessao(parado), tempoInicial(0),
       disciplina(""), descricao("") {}
 
 // construtor parametrizado
-SessaoEstudo::SessaoEstudo(long long int segundos, int estadoSessao, std::string disciplina, std::string descricao)
-    :segundos(segundos), estadoSessao(estadoSessao), disciplina(disciplina), descricao(descricao), tempoInicial(0) {}
+SessaoEstudo::SessaoEstudo(long long int segundos, Estado estado, std::string disciplina, std::string descricao)
+    :segundos(segundos), estadoSessao(estado), disciplina(disciplina), descricao(descricao), tempoInicial(0) {}
 
 // métodos para gerenciar estados
 void SessaoEstudo::sessaoiniciada() {
@@ -74,31 +74,31 @@ void SessaoEstudo::gerenciar() {
 
 // iniciar cronômetro
 void SessaoEstudo::iniciar() {
-    if (estadoSessao == 0) {
+    if (estadoSessao == parado) {
         tempoInicial = time(nullptr);
-        estadoSessao = 1;
+        estadoSessao = rodando;
         
         // Registrar data e hora de início
         obterDataHoraAtual(dataInicio, horarioInicio);
         
         sessaoiniciada();
-    } else if (estadoSessao == 1) {
+    } else if (estadoSessao == rodando) {
         throw std::logic_error("Sessão já está em andamento");
-    } else if (estadoSessao == 2) {
+    } else if (estadoSessao == pausado) {
         throw std::logic_error("Sessão está pausada. Use continuar() em vez de iniciar()");
     }
 }
 
 // Pausar cronômetro
 void SessaoEstudo::pausar() {
-    if (estadoSessao == 1) {
-        long long int tempoAtual = time(nullptr);
+    if (estadoSessao == rodando) {
+        long long int tempoAtual = std::time(nullptr);
         segundos += (tempoAtual - tempoInicial);
-        estadoSessao = 2;
+        estadoSessao = pausado;
         sessaopausada();
-    } else if (estadoSessao == 0) {
+    } else if (estadoSessao == parado) {
         throw std::logic_error("Sessão não está em andamento");
-    } else if (estadoSessao == 2) {
+    } else if (estadoSessao == pausado) {
         throw std::logic_error("Sessão já está pausada");
     }
 }
@@ -107,7 +107,7 @@ void SessaoEstudo::pausar() {
 void SessaoEstudo::resetar() {
     segundos = 0;
     tempoInicial = 0;
-    estadoSessao = 0;
+    estadoSessao = parado;
     
     // Limpar dados de data/hora
     dataInicio = "";
@@ -120,19 +120,19 @@ void SessaoEstudo::resetar() {
 
 // continuar sessão pausada
 void SessaoEstudo::continuar() {
-    if (estadoSessao == 2) {
+    if (estadoSessao == pausado) {
         tempoInicial = time(nullptr);
-        estadoSessao = 1;
+        estadoSessao = rodando;
         std::cout << "Sessão retomada" << std::endl;
-    } else if (estadoSessao == 0) {
+    } else if (estadoSessao == parado) {
         throw std::logic_error("Sessão não está pausada. Use iniciar()");
-    } else if (estadoSessao == 1) {
+    } else if (estadoSessao == rodando) {
         throw std::logic_error("Sessão já está em andamento");
     }
 }
 
 void SessaoEstudo::finalizar() {
-    if (estadoSessao == 1) {
+    if (estadoSessao == rodando) {
         // Registrar tempo final antes de pausar
         long long int tempoAtual = time(nullptr);
         segundos += (tempoAtual - tempoInicial);
@@ -143,13 +143,13 @@ void SessaoEstudo::finalizar() {
     obterDataHoraAtual(dataFinal, horarioFinal);
     
     sessaofinalizada();
-    estadoSessao = 0;
+    estadoSessao = parado;
 }
 
 
 long long int SessaoEstudo::getSegundos() const {
     // Se está rodando, adiciona o tempo decorrido
-    if (estadoSessao == 1) {
+    if (estadoSessao == rodando) {
         long long int tempoAtual = time(nullptr);
         return segundos + (tempoAtual - tempoInicial);
     }
@@ -163,6 +163,7 @@ std::string SessaoEstudo::getDataInicio() const { return dataInicio; }
 std::string SessaoEstudo::getDataFinal() const { return dataFinal; }
 std::string SessaoEstudo::getHorarioInicio() const { return horarioInicio; }
 std::string SessaoEstudo::getHorarioFinal() const { return horarioFinal; }
+SessaoEstudo::Estado SessaoEstudo::getEstado() const {return estadoSessao;}
 
 void SessaoEstudo::setDataInicio(const std::string& d) { dataInicio = d; }
 void SessaoEstudo::setDataFinal(const std::string& d)  { dataFinal = d; }

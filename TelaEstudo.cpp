@@ -20,8 +20,18 @@ int TelaEstudo::mostrarSessaoAtiva(const SessaoEstudo& sessao) {
     int s = totalSeg % 60;
 
     std::cout << "\n      " << h << ":" << m << ":" << s << "\n" << std::endl;
-    std::cout << "Status: " << (int)sessao.getEstado() << std::endl; // Pode melhorar convertendo enum pra string
-    
+    std::cout << "Status: ";
+
+    switch (sessao.getEstado()) {
+        case SessaoEstudo::rodando: 
+            std::cout << "EM ANDAMENTO"; break;
+        case SessaoEstudo::pausado: 
+            std::cout << "PAUSADO"; break;
+        case SessaoEstudo::parado:  
+            std::cout << "PARADO"; break;
+    }
+
+    std::cout << std::endl;
     std::cout << "-------------------------" << std::endl;
     std::cout << "1. Pausar / Continuar" << std::endl;
     std::cout << "2. Finalizar Sessao" << std::endl;

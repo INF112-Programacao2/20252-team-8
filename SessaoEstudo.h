@@ -4,6 +4,13 @@
 #include <string>
 
 class SessaoEstudo {
+public:
+    enum Estado {
+        parado = 0,
+        rodando = 1,
+        pausado = 2
+    };
+    
 private:
     // tempo
     long long int segundos;
@@ -16,7 +23,7 @@ private:
     void obterDataHoraAtual(std::string& data, std::string& hora);
     
     // estado da sessão
-    int estadoSessao; //0 = parado, 1 = rodando, 2 = pausado
+    Estado estadoSessao; //0 = parado, 1 = rodando, 2 = pausado
     
     // metadados
     std::string disciplina;
@@ -32,12 +39,6 @@ public:
     // construtor default 
     SessaoEstudo();
 
-    enum Estado {
-        parado = 0,
-        rodando = 1,
-        pausado = 2
-    };
-    
     // construtor
     SessaoEstudo(long long int segundos, Estado estado, std::string disciplina, std::string descricao);
     
