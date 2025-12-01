@@ -5,14 +5,14 @@
 #include "Usuario.h"
 #include <string>
 
+// --- DEFINIÇÕES (Mudança solicitada) ---
+#define XP_POR_NIVEL 100
+#define RECOMPENSA_MOEDAS 50
+
 class ControladorGamificacao {
 private:
     Usuario* usuarioAtual;
     RepositorioGamificacao* repositorio;
-    
-    // Configurações
-    static constexpr int XP_POR_NIVEL = 100;
-    static constexpr int RECOMPENSA_MOEDAS = 50;
     
     // Método auxiliar para converter nível em nome de badge
     std::string calcularNomeBadge(int nivel);
@@ -30,8 +30,6 @@ public:
     void salvarTudo(); // Força o salvamento de todos os dados
     
     // Getters
-    // IMPORTANTE: Estes getters calculam o estado real, ignorando 
-    // limitações do objeto Usuario se necessário.
     Usuario* getUsuario() const;
     int getXP() const;
     int getNivel() const;      // Calcula nível baseado no XP total
