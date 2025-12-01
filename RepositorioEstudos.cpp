@@ -10,7 +10,7 @@ RepositorioEstudos::RepositorioEstudos(const std::string& nomeUsuario)
 
 
 // Abre arquivo e faz um append com informações da nova sessão
-void RepositorioEstudos::adicionarSessao(const SessaoEstudo& sessao) {
+void RepositorioEstudos::adicionarSessao(SessaoEstudo& sessao) {
     // 1. Prepara as linhas da nova sessão
     std::vector<std::string> dadosSessao;
     
@@ -69,7 +69,7 @@ int RepositorioEstudos::getQuantidade() {
 long long int RepositorioEstudos::getTempoTotalPorDisciplina(const std::string& disciplina) {
     std::vector<SessaoEstudo> sessoes = obterHistorico();
         long long int total = 0;
-        for (const auto& s : sessoes) {
+        for (auto& s : sessoes) {
             // Comparação de string simples
             if (s.getDisciplina() == disciplina) {
                 total += s.getSegundos();
@@ -83,7 +83,7 @@ long long int RepositorioEstudos::getTempoTotalPorDisciplina(const std::string& 
 long long int RepositorioEstudos::getTempoTotal() {
     std::vector<SessaoEstudo> sessoes = obterHistorico();
         long long int total = 0;
-        for (const auto& s : sessoes) {
+        for (auto& s : sessoes) {
             total += s.getSegundos(); // Note que no seu .h getter é const, perfeito
         }
         return total;

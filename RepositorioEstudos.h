@@ -12,7 +12,7 @@ public:
     RepositorioEstudos(const std::string& nomeUsuario);
 
     // Adiciona sessão, atualiza cabeçalho e salva no arquivo
-    void adicionarSessao(const SessaoEstudo& sessao);
+    void adicionarSessao(SessaoEstudo& sessao);
 
     // Retorna o total de sessões
     int getQuantidade();
