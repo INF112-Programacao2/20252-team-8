@@ -40,6 +40,7 @@ EM PROGRESSO:
 	- Adicionar construtor em repositorio inventário     
 	- Adicionar construtor em ControladorLoja ctrlLoja(usuarioAtual, &repoInventario, &repoGamificacao);
 	- Atualizar loja.cpp
+	- Atualizar item consumivel e item audio
 
 CLASSES:
 	OK - Usuario
