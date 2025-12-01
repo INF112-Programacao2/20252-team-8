@@ -57,3 +57,6 @@ int TelaBase::lerOpcao() {
     
     return opcao;
 }
+
+
+int exibir(Usuario* usuario) {}

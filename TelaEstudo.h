@@ -16,6 +16,9 @@ public:
 
     // Lista o histórico passado pelo Repositório
     void mostrarHistorico(const std::vector<SessaoEstudo>& historico);
+
+    virtual int exibir(Usuario* usuario) override;
+
 };
 
 #endif
