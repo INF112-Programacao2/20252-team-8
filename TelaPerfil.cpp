@@ -1,5 +1,4 @@
 #include "TelaPerfil.h"
-#include "ControladorPerfil.h"
 #include "Constantes.h"
 
 #include <iostream>
