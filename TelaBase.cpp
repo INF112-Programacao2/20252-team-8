@@ -1,11 +1,14 @@
 #include "TelaBase.h"
 #include <iostream>
+#include <cstdlib>
 
 void TelaBase::limparTela(){
-    // Imprime 50 linhas vazias para limpar o terminal
-    for(int i = 0; i < 50; i++){
-        std::cout << std::endl;
-    }
+   // Verifica o sistema operacional
+        #ifdef _WIN32
+            std::system("cls");   // Comando do Windows
+        #else
+            std::system("clear"); // Comando do Linux/Mac
+        #endif
 }
 
 void TelaBase::aguardarEnter(){

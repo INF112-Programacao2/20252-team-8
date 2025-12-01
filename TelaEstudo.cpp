@@ -4,6 +4,7 @@
 #include "SessaoEstudo.h"
 #include "RepositorioEstudos.h"
 #include <iostream>
+#include <limits>
 
 
 std::string formatarTempo(long long int totalSegundos) {
@@ -31,75 +32,54 @@ int telaEstudo::exibir(Usuario* usuario) {
         int op;
         std::cin >> op;
         
+        // Tratamento de erro se digitar letra
+        if (std::cin.fail()) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            op = -1; 
+        }
+
         if (op == 0) {
             return TELA_PRINCIPAL;
         }
         
         if (op == 1) {
             // Inicia a sessão
-            ctrl.iniciarSessao(0);
+            ctrl.iniciarSessao();
             
-            // Simulação de espera
-            std::cout << "Pressione ENTER para finalizar a sessao...";
-            std::cin.ignore(); 
-            std::cin.get();
-            
-            // Finaliza
-            ctrl.finalizarSessao(usuario);
-            
-            // Pausa para o usuário ler o resumo
-            std::cout << "\nPressione ENTER para continuar...";
-            std::cin.get();
+            bool sessaoRodando = true;
+            while (sessaoRodando) {
+                std::cout << "\n--- Sessao em Andamento ---" << std::endl;
+                std::cout << "1. Pausar" << std::endl;
+                std::cout << "2. Continuar" << std::endl;
+                std::cout << "3. Finalizar" << std::endl;
+                std::cout << "4. Cancelar" << std::endl;
+                std::cout << "Opcao: ";
+                
+                int opSessao;
+                std::cin >> opSessao;
+
+                if (opSessao == 1) ctrl.pausarSessao();
+                else if (opSessao == 2) ctrl.continuarSessao();
+                else if (opSessao == 3) {
+                    ctrl.finalizarSessao(usuario);
+                    sessaoRodando = false;
+                    aguardarEnter();
+                }
+                else if (opSessao == 4) {
+                    ctrl.cancelarSessao();
+                    sessaoRodando = false;
+                    aguardarEnter();
+                }
+            }
         }
         else if (op == 2) {
-            RepositorioEstudos& repo = ctrl.recuperarHistorico(usuario);
-            
-            mostrarProgressoEstudo(&repo);
-            
-            std::cout << "Pressione ENTER para voltar...";
-            std::cin.ignore();
-            std::cin.get();
+            ctrl.mostrarHistoricoCompleto(usuario);
+            aguardarEnter();
         }
         else {
             std::cout << "Opcao invalida!" << std::endl;
+            aguardarEnter();
         }
     }
-}
-
-void telaEstudo::mostrarProgressoEstudo(RepositorioEstudos* repositorio){
-    limparTela();
-
-    std::cout << "=== PROGRESSO DE ESTUDO ===" << std::endl;
-    std::cout << "Usuario: " << repositorio->getIdUsuario() << std::endl;
-    std::cout << "Total de Sessoes: " << repositorio->getQuantidade() << std::endl;
-    std::cout << "----------------------------" << std::endl;
-
-    int qtd = repositorio->getQuantidade();
-
-    if (qtd == 0) {
-        std::cout << "Nenhuma sessao registrada ainda." << std::endl;
-    } else {
-        // Loop percorrendo o array do repositório
-        for (int i = 0; i < qtd; i++) {
-            // Pede ao repositório o ponteiro para a sessão 'i'
-            SessaoEstudo* sessao = repositorio->getSessao(i);
-            
-            if (sessao != nullptr) {
-                std::cout << "Sessao " << (i + 1) << ":" << std::endl;
-                std::cout << "  Disciplina: " << sessao->getDisciplina() << std::endl;
-                std::cout << "  Duracao:    " << formatarTempo(sessao->getSegundos()) << std::endl;
-                
-                // Mostra data/hora se não estiverem vazias
-                if (!sessao->getDataInicio().empty()) {
-                    std::cout << "  Data:       " << sessao->getDataInicio() << std::endl;
-                }
-                std::cout << "----------------------------" << std::endl;
-            }
-        }
-    }
-
-    // Atualiza e mostra o total
-    repositorio->calcularTempoTotal();
-    std::cout << "TEMPO TOTAL ACUMULADO: " << formatarTempo(repositorio->getTempoTotal()) << std::endl;
-    std::cout << "\n";
 }
