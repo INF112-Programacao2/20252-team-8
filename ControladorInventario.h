@@ -1,43 +1,38 @@
 #ifndef CONTROLADOR_INVENTARIO_H
 #define CONTROLADOR_INVENTARIO_H
 
-#include <vector>
-
-// Dependências de Entidades e Repositórios
 #include "Usuario.h"
 #include "RepositorioInventario.h"
-#include "Item.h" // Necessário para manipular os objetos Item*
-
-// Dependência de Interface (Composição)
-#include "TelaInventario.h"
+#include "TelaInventario.h" // Composição: O controlador "tem" uma tela
+#include "Item.h"
+#include <vector>
+#include <string>
 
 class ControladorInventario {
 private:
-    // --- ASSOCIAÇÕES ---
-    // O usuário atual (caso precisemos validar algo ou equipar item nele)
+    // Associações (objetos que existem fora daqui)
     Usuario* usuario;
-    
-    // O repositório que sabe QUAIS itens (IDs) o usuário tem
-    RepositorioInventario* repoInventario;
+    RepositorioInventario* repositorio;
 
-    // --- COMPOSIÇÃO ---
-    // A tela específica deste controlador
+    // Composição (objeto gerenciado por esta classe)
     TelaInventario tela;
 
+    // Lista polimórfica de itens (pode conter Item ou ItemAudio)
+    std::vector<Item*> itensCarregados;
+
+    // Métodos auxiliares para organizar a memória
+    void limparMemoria();
+    void carregarItensDoRepositorio();
+
 public:
-    // Construtor: Recebe as dependências da main
-    ControladorInventario(Usuario* usuario, RepositorioInventario* repoInventario);
-
-    // Método Principal: Inicia o loop do menu "Meus Itens"
-    void executar();
-
-private:
-    // 1.Busca IDs no repoInventario
-    // 2. Busca os Objetos reais na classe Loja (static)
-    // 3. Passa a lista de objetos para a Tela mostrar
-    void carregarEListarItens();
+    // Construtor recebe os dados externos
+    ControladorInventario(Usuario* usuario, RepositorioInventario* repo);
     
-    void equiparItem(Item* item); 
+    // Destrutor limpa a lista de itens
+    ~ControladorInventario();
+
+    // Loop principal do inventário
+    void executar();
 };
 
 #endif

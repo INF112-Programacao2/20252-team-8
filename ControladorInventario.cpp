@@ -1,114 +1,98 @@
-#include "ControladorGamificacao.h"
+#include "ControladorInventario.h"
+#include "ItemAudio.h" // Necessário para criar itens que tocam som
+#include <iostream>
+#include <sstream> // Necessário para dividir as strings (split)
 
-ControladorGamificacao::ControladorGamificacao(Usuario* usuario, RepositorioGamificacao* repo)
-    : usuarioAtual(usuario), repositorio(repo) {
-    // A 'tela' é criada automaticamente aqui pelo compilador
+ControladorInventario::ControladorInventario(Usuario* usuario, RepositorioInventario* repo)
+    : usuario(usuario), repositorio(repo) {
+    // A tela é inicializada automaticamente
 }
 
-// Mostra o perfil usando a classe de Tela
-void ControladorGamificacao::executar() {
-    tela.mostrarPerfil(usuarioAtual);
+ControladorInventario::~ControladorInventario() {
+    limparMemoria();
 }
 
-void ControladorGamificacao::adicionarXP(int quantidade) {
-    if (!usuarioAtual || quantidade <= 0) return;
-
-    // 1. Atualiza Memória
-    usuarioAtual->adicionarXp(quantidade);
-    
-    // 2. Atualiza Arquivo
-    if (repositorio) {
-        repositorio->setPontos(usuarioAtual->getXp());
+void ControladorInventario::limparMemoria() {
+    for (Item* item : itensCarregados) {
+        delete item; // Deleta cada objeto individualmente
     }
-
-    // 3. Manda a tela mostrar o ganho
-    tela.mostrarGanhoRecursos(quantidade, 0);
-    
-    // 4. Verifica se subiu de nível
-    verificarEvolucao();
+    itensCarregados.clear(); // Limpa o vetor
 }
 
-void ControladorGamificacao::verificarEvolucao() {
-    int xpTotal = usuarioAtual->getXp();
-    // Usa o #define XP_POR_NIVEL
-    int nivelCalculado = xpTotal / XP_POR_NIVEL; 
-    
-    // Pega o nível que está salvo no arquivo para comparar
-    int nivelNoArquivo = repositorio->getNivel();
+void ControladorInventario::carregarItensDoRepositorio() {
+    // 1. Limpa a lista antiga para não duplicar
+    limparMemoria();
 
-    if (nivelCalculado > nivelNoArquivo) {
-        // --- LEVEL UP ---
-        int niveisSubidos = nivelCalculado - nivelNoArquivo;
-        int moedasGanhas = niveisSubidos * RECOMPENSA_MOEDAS;
-        
-        // Dá as moedas
-        adicionarMoedas(moedasGanhas);
+    // 2. Busca dados brutos do repositório
+    // O Repositorio deve retornar linhas tipo: "Violao,Audio,500"
+    std::vector<std::string> dados = repositorio->carregarItens(); 
 
-        // Define a nova badge
-        std::string nomeBadge = calcularNomeBadge(nivelCalculado);
-        std::string badgeAntiga = usuarioAtual->getBadge();
-        usuarioAtual->setBadge(nomeBadge); 
+    for (const std::string& linha : dados) {
+        std::stringstream ss(linha);
+        std::string nome, tipo, valorStr;
 
-        // Salva tudo no arquivo
-        repositorio->setNivel(nivelCalculado);
-        repositorio->setBadge(calcularIdBadge(nivelCalculado));
+        // Separa a string pelas vírgulas
+        std::getline(ss, nome, ',');
+        std::getline(ss, tipo, ',');
+        std::getline(ss, valorStr, ',');
 
-        // Manda a tela exibir os Parabéns
-        // Só mostra badge na tela se ela mudou de fato
-        std::string badgeParaMostrar = (nomeBadge != badgeAntiga) ? nomeBadge : "";
-        tela.mostrarLevelUp(nivelCalculado, moedasGanhas, badgeParaMostrar);
-    }
-}
+        // Remove espaços em branco no início (trim simples), se houver
+        if(!nome.empty() && nome.front() == ' ') nome.erase(0, 1);
+        if(!tipo.empty() && tipo.front() == ' ') tipo.erase(0, 1);
 
-void ControladorGamificacao::adicionarMoedas(int quantidade) {
-    if (!usuarioAtual) return;
+        // Converte valor para inteiro
+        int valor = 0;
+        try { 
+            if (!valorStr.empty()) valor = std::stoi(valorStr); 
+        } catch(...) { valor = 0; }
 
-    usuarioAtual->adicionarMoedas(quantidade);
-    
-    if (repositorio) {
-        repositorio->setMoedas(usuarioAtual->getMoedas());
-    }
-    
-    // Nota: Se a moeda vier do LevelUp, o aviso de LevelUp já mostra o ganho.
-    // Se quiser mostrar ganho avulso (ex: vendeu item), descomente abaixo:
-    // if (quantidade > 0) tela.mostrarGanhoRecursos(0, quantidade);
-}
+        // --- LÓGICA DE CRIAÇÃO (FACTORY) ---
+        Item* novoItem = nullptr;
 
-void ControladorGamificacao::salvarTudo() {
-    if (repositorio && usuarioAtual) {
-        repositorio->setPontos(usuarioAtual->getXp());
-        repositorio->setMoedas(usuarioAtual->getMoedas());
+        if (tipo == "Audio" || tipo == "Musica") {
+            // Se for do tipo Audio, cria ItemAudio e define o caminho do arquivo
+            std::string caminho = "assets/" + nome + ".mp3";
+            novoItem = new ItemAudio(nome, valor, caminho);
+        } 
+        else {
+            // Se for qualquer outro tipo, cria Item comum
+            novoItem = new Item(nome, tipo, valor);
+        }
+
+        // Adiciona na lista se foi criado com sucesso
+        if (novoItem) {
+            itensCarregados.push_back(novoItem);
+        }
     }
 }
 
-// --- Auxiliares ---
+void ControladorInventario::executar() {
+    bool sair = false;
+    while (!sair) {
+        // 1. Carrega (ou recarrega) os itens do arquivo
+        carregarItensDoRepositorio();
 
-std::string ControladorGamificacao::calcularNomeBadge(int nivel) {
-    if (nivel >= 20) return "Lenda";
-    if (nivel >= 10) return "Veterano";
-    if (nivel >= 5)  return "Estudante";
-    if (nivel >= 2)  return "Calouro";
-    return "Iniciante";
+        // 2. Chama a Tela para mostrar a lista
+        // A tela retorna 0 para Voltar ou o número do item escolhido
+        int opcao = tela.mostrarInventario(itensCarregados);
+
+        if (opcao == 0) {
+            sair = true;
+        } 
+        else {
+            // Ajusta o índice (o menu começa em 1, o vetor em 0)
+            int indice = opcao - 1; 
+            
+            if (indice >= 0 && indice < itensCarregados.size()) {
+                // 3. Polimorfismo: Chama usar()
+                // Se for ItemAudio, vai tocar música. Se for Item, vai mostrar texto.
+                itensCarregados[indice]->usar();
+                
+                // Pausa para o usuário ver o resultado
+                tela.esperarEnter();
+            } else {
+                tela.mostrarErro("Opcao invalida.");
+            }
+        }
+    }
 }
-
-int ControladorGamificacao::calcularIdBadge(int nivel) {
-    if (nivel >= 20) return 4; 
-    if (nivel >= 10) return 3; 
-    if (nivel >= 5)  return 2; 
-    if (nivel >= 1)  return 1; 
-    return 0;
-}
-
-// --- Getters ---
-
-Usuario* ControladorGamificacao::getUsuario() const { return usuarioAtual; }
-int ControladorGamificacao::getXP() const { return usuarioAtual ? usuarioAtual->getXp() : 0; }
-
-// Calcula nível dinamicamente (XP / 100)
-int ControladorGamificacao::getNivel() const {
-    if (!usuarioAtual) return 0;
-    return usuarioAtual->getXp() / XP_POR_NIVEL;
-}
-
-int ControladorGamificacao::getMoedas() const { return usuarioAtual ? usuarioAtual->getMoedas() : 0; }
-std::string ControladorGamificacao::getBadge() const { return usuarioAtual ? usuarioAtual->getBadge() : ""; }
