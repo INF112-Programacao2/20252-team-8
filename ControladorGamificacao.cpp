@@ -26,14 +26,13 @@ void ControladorGamificacao::adicionarXP(int quantidade) {
 }
 
 void ControladorGamificacao::verificarEvolucao() {
-    // Calculamos o nível real baseado no XP total acumulado
-    // Ex: 250 XP / 100 = Nível 2
+    // Calculamos o nível real baseado no XP total acumulado / 100
     int xpTotal = usuarioAtual->getXp();
+    
+    // O #define XP_POR_NIVEL é trocado por 100 aqui
     int nivelCalculado = xpTotal / XP_POR_NIVEL;
     
-    // O nível salvo no objeto Usuario (usuarioAtual->getNivel()) 
-    // pode estar desatualizado pois não temos 'setNivel'. 
-    // Então comparamos com o nível que está salvo no ARQUIVO via repositorio.
+    // Compara com o nível salvo no ARQUIVO
     int nivelNoArquivo = repositorio->getNivel();
 
     if (nivelCalculado > nivelNoArquivo) {
@@ -44,19 +43,19 @@ void ControladorGamificacao::verificarEvolucao() {
         std::cout << "   PARABENS! Voce subiu para o Nivel " << nivelCalculado << "!\n";
         std::cout << "=========================================\n";
 
-        // Recompensa em Moedas
+        // Recompensa em Moedas (usa o #define RECOMPENSA_MOEDAS)
         int moedasGanhas = niveisSubidos * RECOMPENSA_MOEDAS;
         adicionarMoedas(moedasGanhas);
 
-        // Atualiza Badge na memória e no arquivo
+        // Atualiza Badge na memória
         std::string nomeBadge = calcularNomeBadge(nivelCalculado);
-        usuarioAtual->setBadge(nomeBadge); // Usuario.h permite setBadge
+        usuarioAtual->setBadge(nomeBadge); 
 
         // --- SALVANDO NO ARQUIVO ---
-        // Como não podemos dar 'setNivel' no Usuario RAM, salvamos direto no arquivo
+        // Salva direto no repositorio pois Usuario não tem setNivel
         repositorio->setNivel(nivelCalculado);
         
-        // Salvamos a badge usando o índice (assumindo que repo usa int para badge)
+        // Salva badge no repositorio
         repositorio->setBadge(calcularIdBadge(nivelCalculado));
     }
 }
@@ -82,7 +81,6 @@ void ControladorGamificacao::salvarTudo() {
     if (repositorio && usuarioAtual) {
         repositorio->setPontos(usuarioAtual->getXp());
         repositorio->setMoedas(usuarioAtual->getMoedas());
-        // O nível já é salvo automaticamente no verificarEvolucao
     }
 }
 
@@ -97,11 +95,11 @@ std::string ControladorGamificacao::calcularNomeBadge(int nivel) {
 }
 
 int ControladorGamificacao::calcularIdBadge(int nivel) {
-    // Mapeia o nível para o ID que o RepositorioGamificacao.cpp espera (switch case)
-    if (nivel >= 20) return 4; // Formando/Lenda
-    if (nivel >= 10) return 3; // Veterano
-    if (nivel >= 5)  return 2; // Estudante
-    if (nivel >= 1)  return 1; // Calouro
+    // Mapeia o nível para o ID que o RepositorioGamificacao.cpp espera
+    if (nivel >= 20) return 4; 
+    if (nivel >= 10) return 3; 
+    if (nivel >= 5)  return 2; 
+    if (nivel >= 1)  return 1; 
     return 0;
 }
 
@@ -116,9 +114,7 @@ int ControladorGamificacao::getXP() const {
 }
 
 int ControladorGamificacao::getNivel() const {
-    // TRUQUE: Como não podemos atualizar o nível dentro do objeto Usuario (falta setNivel),
-    // nós calculamos o nível "real" dividindo o XP total por 100.
-    // Assim a TelaLoja sempre recebe o nível correto, mesmo que o objeto Usuario esteja "atrasado".
+    // Calcula nível baseado no XP total dividido por 100 (definido no header)
     if (!usuarioAtual) return 0;
     return usuarioAtual->getXp() / XP_POR_NIVEL;
 }
