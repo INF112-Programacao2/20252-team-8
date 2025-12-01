@@ -242,9 +242,9 @@ void ControladorEstudo::mostrarProgresso() const {
     int pontos = (segundos / 60) % 50; // 1 ponto a cada minuto, máximo 50
     for (int i = 0; i < 50; i++) {
         if (i < pontos) {
-            std::cout << "█";
+            std::cout << "+";
         } else {
-            std::cout << "░";
+            std::cout << "-";
         }
     }
     std::cout << "]\n" << std::endl;

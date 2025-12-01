@@ -1,42 +1,39 @@
-#ifndef CONTROLADORGAMIFICACAO_H
-#define CONTROLADORGAMIFICACAO_H
+#ifndef CONTROLADOR_GAMIFICACAO_H
+#define CONTROLADOR_GAMIFICACAO_H
 
-#include <string>
+#include "RepositorioGamificacao.h"
+#include "Usuario.h"
 
 class ControladorGamificacao {
-protected:
-    int _tempo_de_estudo;
-    int pontos;
+private:
+    Usuario* usuarioAtual;
+    RepositorioGamificacao* repositorio;
     
-    // Variáveis de XP e nível 
-    int xp;
-    int nivel;
-    int moedas;
-    std::string badge;
+    // Configurações de progressão
+    static constexpr int XP_POR_NIVEL = 100;
+    static constexpr int MOEDAS_POR_NIVEL = 10;
     
-    // Variáveis de controle de badges
-    bool badge1, badge2, badge3, badge4;
-    bool nivel1, nivel2, nivel3, nivel4;
-
+    void calcularProgressao(); // Recalcula nível baseado no XP
+    
 public:
-    ControladorGamificacao(int tempo_inicial);
-    ~ControladorGamificacao();
-
-    void atualizarStatus(); 
-    void mostrarBadges();   
-    int getPontos();
+    ControladorGamificacao(Usuario* usuario, RepositorioGamificacao* repo);
     
-    // Método para verificar se subiu de nível
-    void verificarSubidaNivel();
+    // Métodos principais
+    void exibirPerfil();
+    void adicionarXP(int quantidade);
+    void adicionarMoedas(int quantidade);
+    void atualizarBadge(int badgeIdx);
     
-    // Getters para as novas variáveis
-    int getXp() const;
+    // Métodos de atualização
+    void sincronizarComRepositorio();
+    void salvarEstado();
+    
+    // Getters
+    Usuario* getUsuario() const;
+    int getXP() const;
     int getNivel() const;
     int getMoedas() const;
     std::string getBadge() const;
-    
-    // Métodos para adicionar XP e tempo
-    void adicionarXp(int quantidade);
-    void adicionarTempoEstudo(int minutos);
 };
+
 #endif
