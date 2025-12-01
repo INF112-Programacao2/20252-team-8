@@ -56,3 +56,7 @@ bool ControladorLoja::comprarMusica(int indice) {
         return false;
     }
 }
+
+void ControladorLoja::executar(){
+    
+}

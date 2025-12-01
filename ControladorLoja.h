@@ -19,5 +19,6 @@ public:
     
     bool comprarMusica(int indice); 
     std::vector<Musica>& getMusicas(); 
+    void executar();
 };
 #endif
