@@ -38,7 +38,7 @@ OK - RepositorioEstudos
 EM PROGRESSO - Controladores e telas
 	- teste
 	- Testes implementados
-		
+	- ControladorGamificacao -> Murilo
 
 CLASSES:
 	OK - Usuario
