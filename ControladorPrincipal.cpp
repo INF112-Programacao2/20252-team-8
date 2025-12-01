@@ -1,47 +1,67 @@
 #include "ControladorPrincipal.h"
-#include "Constantes.h"
-#include "TelaPrincipal.h"
-#include "TelaPerfil.h"
-#include "TelaLoja.h"
-#include "TelaInventario.h"
-#include "TelaEstudo.h"
-#include <iostream>
 
-ControladorPrincipal::ControladorPrincipal(Usuario* u) {
-    this->usuario = u;
+// Agora sim precisamos incluir os headers completos para usar os métodos
+#include "ControladorEstudo.h"
+#include "ControladorLoja.h"
+#include "ControladorInventario.h"
+#include "ControladorGamificacao.h"
+
+// Construtor: Inicializa ponteiros como nullptr por segurança
+ControladorPrincipal::ControladorPrincipal() 
+    : ctrlEstudo(nullptr), ctrlLoja(nullptr), 
+      ctrlInventario(nullptr), ctrlGamificacao(nullptr) {
 }
 
-void ControladorPrincipal::iniciar() {
-    int proximaTela = TELA_PRINCIPAL;
+// Setters
+void ControladorPrincipal::setControladorEstudo(ControladorEstudo* ctrl) {
+    this->ctrlEstudo = ctrl;
+}
+void ControladorPrincipal::setControladorLoja(ControladorLoja* ctrl) {
+    this->ctrlLoja = ctrl;
+}
+void ControladorPrincipal::setControladorInventario(ControladorInventario* ctrl) {
+    this->ctrlInventario = ctrl;
+}
+void ControladorPrincipal::setControladorGamificacao(ControladorGamificacao* ctrl) {
+    this->ctrlGamificacao = ctrl;
+}
 
-    while (proximaTela != TELA_SAIR) {
-        
-        TelaBase* telaAtual = nullptr;
+// Lógica de Roteamento
+void ControladorPrincipal::executar() {
+    bool rodando = true;
 
-        // Fábrica de telas
-        if (proximaTela == TELA_PRINCIPAL) {
-            telaAtual = new telaPrincipal();
-        } 
-        else if (proximaTela == TELA_PERFIL) {
-            telaAtual = new telaPerfil();
-        }
-        else if (proximaTela == TELA_LOJA) {
-            telaAtual = new telaLoja();
-        }
-        else if (proximaTela == TELA_INVENTARIO) {
-            telaAtual = new telaInventario();
-        }
-        else if (proximaTela == TELA_ESTUDO) {
-            telaAtual = new telaEstudo();
-        }
+    while (rodando) {
+        int opcao = tela.mostrarMenuPrincipal();
 
-        // Executa e depois deleta
-        if (telaAtual != nullptr) {
-            proximaTela = telaAtual->exibir(usuario);
-            delete telaAtual;
-        } else {
-            std::cout << "Erro fatal: Tela nao encontrada." << std::endl;
-            proximaTela = TELA_SAIR;
+        switch (opcao) {
+            case 1: // Estudos
+                if (ctrlEstudo) ctrlEstudo->executar();
+                else tela.mostrarErro("Controlador de Estudo nao configurado!");
+                break;
+
+            case 2: // Loja
+                if (ctrlLoja) ctrlLoja->executar();
+                else tela.mostrarErro("Controlador de Loja nao configurado!");
+                break;
+
+            case 3: // Inventário
+                if (ctrlInventario) ctrlInventario->executar();
+                else tela.mostrarErro("Controlador de Inventario nao configurado!");
+                break;
+
+            case 4: // Gamificação (Perfil)
+                if (ctrlGamificacao) ctrlGamificacao->executar();
+                else tela.mostrarErro("Controlador de Gamificacao nao configurado!");
+                break;
+
+            case 0: // Sair
+                tela.limparTela();
+                tela.mostrarMensagem("Saindo... Bons estudos!");
+                rodando = false;
+                break;
+
+            default:
+                tela.mostrarErro("Opcao invalida!");
         }
     }
 }
