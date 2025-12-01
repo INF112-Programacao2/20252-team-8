@@ -98,7 +98,7 @@ void ControladorEstudo::gerenciarSessaoEmAndamento() {
             case 1: // Alternar Pausa
                 try {
                     // Se rodando -> Pausa
-                    if (sessaoAtual.getEstado() == "rodando") {
+                    if (sessaoAtual.getEstado() == Estado::) {
                         sessaoAtual.pausar();
                     } 
                     // Se pausado -> Continua
