@@ -56,3 +56,7 @@ void TelaEstudo::mostrarHistorico(const std::vector<SessaoEstudo>& historico) {
     std::cin.ignore();
     std::cin.get();
 }
+
+int TelaEstudo::exibir(Usuario* usuario){
+    
+}

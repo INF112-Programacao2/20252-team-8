@@ -1,28 +1,32 @@
 #include "ControladorEstudo.h"
 #include <iostream>
+#include <string>
 
 // ==========================================================
 // CONSTRUTOR
 // ==========================================================
+// Inicializa os ponteiros recebidos da main na lista de inicialização.
 ControladorEstudo::ControladorEstudo(Usuario* usuario, 
                                      RepositorioEstudos* repoEstudos, 
-                                     RepositorioGamificacao* repoGami)
+                                     RepositorioGamificacao* repoGamificacao)
     : usuario(usuario), 
       repoEstudos(repoEstudos), 
-      repoGamificacao(repoGami) {
-    // A tela é inicializada automaticamente pela composição
-    // A sessaoAtual é inicializada pelo construtor padrão dela
+      repoGamificacao(repoGamificacao) {
+    // A 'tela' e a 'sessaoAtual' são instanciadas automaticamente 
+    // pelos seus construtores padrão.
 }
 
 // ==========================================================
-// LOOP PRINCIPAL (MENU DE ESTUDOS)
+// MÉTODO PRINCIPAL (LOOP DO MENU)
 // ==========================================================
 void ControladorEstudo::executar() {
-    while (true) {
-        // 1. Mostra o menu e pega a opção
+    bool rodando = true;
+
+    while (rodando) {
+        // 1. Mostra o menu de opções (Novo Estudo, Histórico, Voltar)
         int opcao = tela.mostrarMenuEstudos();
 
-        // 2. Decide para onde ir
+        // 2. Redireciona para a lógica correta
         switch (opcao) {
             case 1: 
                 iniciarNovaSessao(); 
@@ -31,41 +35,47 @@ void ControladorEstudo::executar() {
                 exibirHistorico(); 
                 break;
             case 0: 
-                return; // Volta para o Menu Principal
+                rodando = false; // Sai do loop e retorna ao Menu Principal
+                break;
             default:
-                tela.mostrarErro("Opcao invalida!");
+                tela.mostrarErro("Opcao invalida! Tente novamente.");
         }
     }
 }
 
 // ==========================================================
-// LÓGICA DE NOVA SESSÃO
+// LÓGICA DE INÍCIO DE SESSÃO
 // ==========================================================
 void ControladorEstudo::iniciarNovaSessao() {
-    // 1. Coleta dados iniciais (Disciplina e Descrição)
-    // Aqui poderiamos ter um método na tela, mas vamos fazer simples usando TelaBase
+    // 1. Prepara a tela
     tela.limparTela();
     tela.mostrarCabecalho("NOVA SESSAO DE ESTUDO");
     
+    // 2. Coleta dados do usuário
     std::string disciplina, descricao;
     
-    std::cout << "Digite a Disciplina (ex: Matematica): ";
-    // Limpeza de buffer básica antes de getline se necessário
+    std::cout << "Digite a Disciplina (ex: Calculo I): ";
+    // Limpa buffer se necessário para evitar pular o getline
     if (std::cin.peek() == '\n') std::cin.ignore(); 
     std::getline(std::cin, disciplina);
 
-    std::cout << "Digite uma Descricao (ex: Lista de Exercicios): ";
+    std::cout << "Digite uma Descricao (ex: Lista de Integrais): ";
     std::getline(std::cin, descricao);
 
-    // 2. Configura a sessão na memória
-    sessaoAtual.resetar(); // Garante que está zerada
+    // Validação simples
+    if (disciplina.empty()) {
+        tela.mostrarErro("A disciplina nao pode ser vazia!");
+        return;
+    }
+
+    // 3. Configura o objeto Sessao na memória
+    sessaoAtual.resetar(); // Garante estado limpo
     sessaoAtual.setDisciplina(disciplina);
     sessaoAtual.setDescricao(descricao);
 
-    // 3. Inicia o cronômetro
+    // 4. Tenta iniciar e entra no loop do cronômetro
     try {
-        sessaoAtual.iniciar();
-        // Entra no loop do cronômetro
+        sessaoAtual.iniciar(); // Marca hora inicial e muda estado para RODANDO
         gerenciarSessaoEmAndamento();
     } 
     catch (std::exception& e) {
@@ -74,22 +84,25 @@ void ControladorEstudo::iniciarNovaSessao() {
 }
 
 // ==========================================================
-// LOOP DO CRONÔMETRO (SESSÃO ATIVA)
+// LOOP DO CRONÔMETRO (Sessão Ativa)
 // ==========================================================
 void ControladorEstudo::gerenciarSessaoEmAndamento() {
     bool sessaoAtiva = true;
 
     while (sessaoAtiva) {
-        // 1. Mostra o status atual (Tempo, Estado) e pede ação
+        // 1. A tela mostra o tempo correndo e retorna a ação do usuário
+        // (1 = Pausar/Continuar, 2 = Finalizar)
         int acao = tela.mostrarSessaoAtiva(sessaoAtual);
 
-        // 2. Processa a ação do usuário
         switch (acao) {
-            case 1: // Pausar / Continuar
+            case 1: // Alternar Pausa
                 try {
-                    if (sessaoAtual.getEstado() == EstadoSessao::RODANDO) {
+                    // Se rodando -> Pausa
+                    if (sessaoAtual.getEstado() == "rodando") {
                         sessaoAtual.pausar();
-                    } else if (sessaoAtual.getEstado() == EstadoSessao::PAUSADO) {
+                    } 
+                    // Se pausado -> Continua
+                    else if (sessaoAtual.getEstado() == "pausado") {
                         sessaoAtual.continuar();
                     }
                 } catch (std::exception& e) {
@@ -99,52 +112,63 @@ void ControladorEstudo::gerenciarSessaoEmAndamento() {
 
             case 2: // Finalizar
                 finalizarSessao();
-                sessaoAtiva = false; // Quebra o loop
+                sessaoAtiva = false; // Quebra este loop e volta para o menu de estudos
                 break;
 
             default:
-                tela.mostrarErro("Opcao invalida. Digite 1 ou 2.");
+                // Se digitou algo errado, apenas ignora e atualiza a tela
+                break; 
         }
     }
 }
 
 // ==========================================================
-// FINALIZAÇÃO E RECOMPENSA
+// FINALIZAÇÃO E RECOMPENSA (Coração do Sistema)
 // ==========================================================
 void ControladorEstudo::finalizarSessao() {
-    // 1. Para o cronômetro definitivamente
+    // 1. Encerra a contagem de tempo na Entidade
     sessaoAtual.finalizar();
 
-    // 2. Salva no Histórico (Arquivo de Estudos)
+    // 2. Persistência: Salva os dados no arquivo de histórico
+    // O RepositorioEstudos vai ler os dados da sessaoAtual e gravar no .txt
     repoEstudos->adicionarSessao(sessaoAtual);
 
-    // 3. Lógica de Gamificação (Recompensa)
-    // Exemplo: 1 XP a cada segundo + 1 moeda a cada 10 segundos
-    long long tempo = sessaoAtual.getSegundos();
-    int xpGanho = (int)tempo; 
-    int moedasGanhas = (int)(tempo / 10); 
+    // 3. Lógica de Recompensa (Gamificação)
+    // Regra simples: 1 segundo = 1 XP (para testes)
+    // Regra moeda: 1 moeda a cada 10 segundos
+    long long tempoTotal = sessaoAtual.getSegundos();
+    
+    int xpGanho = static_cast<int>(tempoTotal); 
+    int moedasGanhas = static_cast<int>(tempoTotal / 10); 
 
-    // Atualiza o objeto Usuario na memória RAM
+    // 4. Atualiza o Usuário (Na Memória RAM)
     usuario->adicionarXp(xpGanho);
     usuario->adicionarMoedas(moedasGanhas);
 
-    // 4. Salva o progresso do usuário no disco (Arquivo Gamificação)
-    // IMPORTANTE: Se não salvar aqui, o usuário perde o XP se fechar o jogo.
+    // 5. Persistência: Salva o progresso do usuário no arquivo dele
+    // CRUCIAL: Se não salvar aqui, o XP é perdido ao fechar o jogo
     repoGamificacao->salvarUsuario(usuario);
 
-    // 5. Feedback para o usuário
+    // 6. Feedback Visual
     tela.limparTela();
     tela.mostrarMensagem("SESSAO FINALIZADA COM SUCESSO!");
-    std::cout << "Voce estudou por " << tempo << " segundos." << std::endl;
-    std::cout << "Recompensa: +" << xpGanho << " XP | +" << moedasGanhas << " Moedas" << std::endl;
+    std::cout << "Tempo Total: " << tempoTotal << " segundos." << std::endl;
+    std::cout << "---------------------------------" << std::endl;
+    std::cout << "Recompensas:" << std::endl;
+    std::cout << "[+] " << xpGanho << " XP" << std::endl;
+    std::cout << "[+] " << moedasGanhas << " Moedas" << std::endl;
+    std::cout << "---------------------------------" << std::endl;
+    
     tela.esperarEnter();
 }
 
 // ==========================================================
-// HISTÓRICO
+// EXIBIÇÃO DE HISTÓRICO
 // ==========================================================
 void ControladorEstudo::exibirHistorico() {
-    // Busca dados no disco e manda pra tela
-    std::vector<SessaoEstudo> lista = repoEstudos->obterHistorico();
-    tela.mostrarHistorico(lista);
+    // 1. Busca os dados no disco
+    std::vector<SessaoEstudo> historico = repoEstudos->obterHistorico();
+
+    // 2. Passa os dados para a tela formatar
+    tela.mostrarHistorico(historico);
 }

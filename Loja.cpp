@@ -14,13 +14,13 @@ Item* Loja::buscarItemPorId(int id) {
         // --- COSMÉTICOS (IDs 100 a 199) ---
         case 100: 
             // id, nome, preço, tipo/local
-            return new ItemConsumivel(100, "Bone Vermelho", 50, "cabeca");
+            //return new ItemConsumivel(100, "Bone Vermelho", 50, "cabeca");
         
         case 101: 
-            return new ItemConsumivel(101, "Oculos Escuros", 75, "rosto");
+            //return new ItemConsumivel(101, "Oculos Escuros", 75, "rosto");
         
         case 102:
-            return new ItemConsumivel(102, "Camisa Dev C++", 120, "tronco");
+            //return new ItemConsumivel(102, "Camisa Dev C++", 120, "tronco");
 
         // --- ÁUDIO / MÚSICA (IDs 200 a 299) ---
         case 200: 
