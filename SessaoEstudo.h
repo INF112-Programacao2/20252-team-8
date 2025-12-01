@@ -45,13 +45,13 @@ public:
     void finalizar();
     
     // getters
-    long long int getSegundos();
-    std::string getDisciplina();
-    std::string getDescricao();
-    std::string getDataInicio();
-    std::string getDataFinal();
-    std::string getHorarioInicio();
-    std::string getHorarioFinal();
+    long long int getSegundos() const;
+    std::string getDisciplina() const;
+    std::string getDescricao() const;
+    std::string getDataInicio() const;
+    std::string getDataFinal() const;
+    std::string getHorarioInicio() const;
+    std::string getHorarioFinal() const;
 
     void setDataInicio(const std::string& data);
 };

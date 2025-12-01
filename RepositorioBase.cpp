@@ -46,7 +46,7 @@ RepositorioBase::RepositorioBase(const std::string& nomeRepo, bool isCaminho) {
 
 
 // Lê todo o conteúdo do arquivo e retorna um vetor de strings, onde cada elemento é uma linha.
-std::vector<std::string> RepositorioBase::LerLinhasDoArquivo() {
+std::vector<std::string> RepositorioBase::LerLinhasDoArquivo() const{
     std::vector<std::string> linhas;
     std::ifstream ifs(this->caminhoArquivo);
 

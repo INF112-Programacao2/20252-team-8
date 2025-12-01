@@ -10,7 +10,7 @@ RepositorioEstudos::RepositorioEstudos(const std::string& nomeUsuario)
 
 
 // Abre arquivo e faz um append com informações da nova sessão
-void RepositorioEstudos::adicionarSessao(SessaoEstudo& sessao) {
+void RepositorioEstudos::adicionarSessao(const SessaoEstudo& sessao) {
     // 1. Prepara as linhas da nova sessão
     std::vector<std::string> dadosSessao;
     
@@ -26,7 +26,7 @@ void RepositorioEstudos::adicionarSessao(SessaoEstudo& sessao) {
 
 
 // Le repositorio e retorna vector de sessões de estudo
-std::vector<SessaoEstudo> RepositorioEstudos::obterHistorico() {
+std::vector<SessaoEstudo> RepositorioEstudos::obterHistorico() const {
     std::vector<SessaoEstudo> historico;
     std::vector<std::string> linhas = LerLinhasDoArquivo();
     
@@ -49,10 +49,14 @@ std::vector<SessaoEstudo> RepositorioEstudos::obterHistorico() {
             
             // Quando lemos a última info, criamos o objeto e adicionamos ao vetor
             SessaoEstudo s(tempo, 0, disc, desc);
-            
             s.setDataInicio(data);
-            
             historico.push_back(s);
+
+            // --- LIMPEZA PARA A PRÓXIMA ITERAÇÃO ---
+            disc = "";
+            desc = "";
+            tempo = 0;
+            data = "";
         }
     }
     return historico;
@@ -60,13 +64,13 @@ std::vector<SessaoEstudo> RepositorioEstudos::obterHistorico() {
 
 
 // Retorna número de sessões
-int RepositorioEstudos::getQuantidade() {
+int RepositorioEstudos::getQuantidade() const{
     return obterHistorico().size();
 }
 
 
 // Retorna o tempo total de estudos de uma disciplina específica
-long long int RepositorioEstudos::getTempoTotalPorDisciplina(const std::string& disciplina) {
+long long int RepositorioEstudos::getTempoTotalPorDisciplina(const std::string& disciplina) const {
     std::vector<SessaoEstudo> sessoes = obterHistorico();
         long long int total = 0;
         for (auto& s : sessoes) {
@@ -80,7 +84,7 @@ long long int RepositorioEstudos::getTempoTotalPorDisciplina(const std::string& 
 
 
 // Retorna tempo total
-long long int RepositorioEstudos::getTempoTotal() {
+long long int RepositorioEstudos::getTempoTotal() const {
     std::vector<SessaoEstudo> sessoes = obterHistorico();
         long long int total = 0;
         for (auto& s : sessoes) {

@@ -12,19 +12,19 @@ public:
     RepositorioEstudos(const std::string& nomeUsuario);
 
     // Adiciona sessão, atualiza cabeçalho e salva no arquivo
-    void adicionarSessao(SessaoEstudo& sessao);
+    void adicionarSessao(const SessaoEstudo& sessao);
 
     // Retorna o total de sessões
-    int getQuantidade();
+    int getQuantidade() const;
 
     // Lê o arquivo e retorna o vetor de sessões 
-    std::vector<SessaoEstudo> obterHistorico();
+    std::vector<SessaoEstudo> obterHistorico() const;
 
     // Retorna tempo total geral
-    long long int getTempoTotal();
+    long long int getTempoTotal() const;
 
     // Retorna o tempo total de estudos de uma disciplina específica
-    long long int getTempoTotalPorDisciplina(const std::string& disciplina);
+    long long int getTempoTotalPorDisciplina(const std::string& disciplina) const;
     
 };
 
