@@ -58,5 +58,5 @@ void TelaEstudo::mostrarHistorico(const std::vector<SessaoEstudo>& historico) {
 }
 
 int TelaEstudo::exibir(Usuario* usuario){
-    
+    return mostrarMenuEstudos();
 }

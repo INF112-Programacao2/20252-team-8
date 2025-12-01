@@ -12,7 +12,6 @@ public:
     // Construtor
     RepositorioInventario(const std::string& nome);
 
-    // --- ESTE É O MÉTODO QUE O ERRO DIZ ESTAR FALTANDO ---
     std::vector<std::string> carregarItens();
 
     // Método para salvar novos itens

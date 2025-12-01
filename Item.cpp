@@ -8,6 +8,5 @@ std::string Item::getTipo() const { return tipo; }
 int Item::getValor() const { return valor; }
 
 void Item::usar() {
-    // Comportamento padrão: apenas avisa que usou
     std::cout << ">> Voce utilizou o item: " << nome << std::endl;
 }

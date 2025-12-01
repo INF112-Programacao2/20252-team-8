@@ -1,14 +1,8 @@
 #include "Loja.h"
-
-// É necessário incluir as classes filhas de Item para poder instanciá-las
 #include "ItemConsumivel.h"
 #include "ItemAudio.h"
 
-// ==========================================================
 // FÁBRICA DE ITENS (MÉTODO ESTÁTICO)
-// ==========================================================
-// Aqui definimos TODOS os itens que existem no jogo.
-// Se você quiser criar um novo item, adicione um case aqui.
 Item* Loja::buscarItemPorId(int id) {
     switch (id) {
         // --- COSMÉTICOS (IDs 100 a 199) ---
@@ -33,17 +27,13 @@ Item* Loja::buscarItemPorId(int id) {
         case 202: 
             //return new ItemAudio(202, "Piano Suave", 80, "piano.mp3");
 
-        // --- CONSUMÍVEIS / OUTROS (Exemplo futuro) ---
-        // case 300: return new ItemConsumivel(...);
 
         default: 
             return nullptr; // ID não existe
     }
 }
 
-// ==========================================================
 // CONSTRUTOR
-// ==========================================================
 Loja::Loja() {
     // Aqui decidimos quais itens do catálogo vão aparecer na vitrine inicial.
     // Usamos o próprio método estático para criar os objetos.
@@ -59,21 +49,16 @@ Loja::Loja() {
     this->vitrine.push_back(buscarItemPorId(202));
 }
 
-// ==========================================================
 // DESTRUTOR
-// ==========================================================
 Loja::~Loja() {
-    // Como a vitrine guarda PONTEIROS criados com 'new',
-    // precisamos deletar um por um para não vazar memória.
+    // Como a vitrine guarda PONTEIROS criados com 'new', precisamos deletar um por um para não vazar memória.
     for (Item* item : this->vitrine) {
         delete item;
     }
     this->vitrine.clear();
 }
 
-// ==========================================================
 // GETTER
-// ==========================================================
 std::vector<Item*> Loja::getItensParaVenda() const {
     return this->vitrine;
 }

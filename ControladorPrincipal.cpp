@@ -1,12 +1,9 @@
 #include "ControladorPrincipal.h"
-
-// Agora sim precisamos incluir os headers completos para usar os métodos
 #include "ControladorEstudo.h"
 #include "ControladorLoja.h"
 #include "ControladorInventario.h"
 #include "ControladorGamificacao.h"
 
-// Construtor: Inicializa ponteiros como nullptr por segurança
 ControladorPrincipal::ControladorPrincipal() 
     : ctrlEstudo(nullptr), ctrlLoja(nullptr), 
       ctrlInventario(nullptr), ctrlGamificacao(nullptr) {
