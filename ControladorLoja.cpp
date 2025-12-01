@@ -1,9 +1,13 @@
 #include "ControladorLoja.h"
+#include "RepositorioInventario.h"
+#include "RepositorioGamificacao.h"
+#include "Usuario.h"
 #include <iostream>
 
 // Chama o construtor do pai com ':', o resto é feito dentro das chaves
-ControladorLoja::ControladorLoja(Usuario* usuario, RepositorioGamificacao* repo) 
-    : ControladorGamificacao(usuario, repo) {
+ControladorLoja::ControladorLoja(Usuario* usuario, RepositorioInventario* repoInv, RepositorioGamificacao* repo) 
+    : repo(repo), repoInv(repoInv), usuario(usuario)
+    {
     
     // --- ADICIONANDO AS 10 MÚSICAS ---
     musicas.push_back(Musica("Study Calm Lo-Fi", "lofi-study-calm-peaceful-chill-hop-112191.mp3", 300));
@@ -36,18 +40,18 @@ bool ControladorLoja::comprarMusica(int indice) {
     }
 
     // 3. Verifica se tem moedas suficientes (usando getMoedas() herdado)
-    int moedasAtuais = getMoedas();
+    int moedasAtuais = repo->getMoedas();
     int precoMusica = musicas[indice].valor;
     
     if (moedasAtuais >= precoMusica) {
         // Desconta moedas usando o método herdado (passa valor negativo)
-        adicionarMoedas(-precoMusica);
+        repo->setMoedas(moedasAtuais - precoMusica);
         
         // Marca como comprada
         musicas[indice].comprada = true;
         
         std::cout << "SUCESSO! Voce comprou: " << musicas[indice].nome << "\n";
-        std::cout << "Saldo restante: " << getMoedas() << " moedas\n";
+        std::cout << "Saldo restante: " << repo->getMoedas() << " moedas\n";
         return true;
     } else {
         std::cout << "Saldo insuficiente. Voce precisa de " << precoMusica << " moedas.\n";
