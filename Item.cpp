@@ -1,31 +1,13 @@
-#include "item.h" 
+#include "Item.h"
 
-Item::Item() 
-: id(""),
-  nome(""), 
-  descricao(""), 
-  valor(0) 
-{}
+Item::Item(std::string nome, std::string tipo, int valor) 
+    : nome(nome), tipo(tipo), valor(valor) {}
 
-Item::Item(const std::string& id, const std::string& nome, const std::string& descricao, int valor)
-    : id(id), 
-    nome(nome), 
-    descricao(descricao), 
-    valor(valor) 
-    {}
+std::string Item::getNome() const { return nome; }
+std::string Item::getTipo() const { return tipo; }
+int Item::getValor() const { return valor; }
 
-std::string Item::getId() const {
-    return this->id;
-}
-
-std::string Item::getNome() const {
-    return this->nome;
-}
-
-std::string Item::getDescricao() const {
-    return this->descricao;
-}
-
-int Item::getValor() const {
-    return this->valor;
+void Item::usar() {
+    // Comportamento padrão: apenas avisa que usou
+    std::cout << ">> Voce utilizou o item: " << nome << std::endl;
 }

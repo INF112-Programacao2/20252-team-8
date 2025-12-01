@@ -1,56 +1,37 @@
-#include <string>
-#include <vector>
-#include <fstream>
-#include <algorithm>
-#include <iostream>
 #include "RepositorioInventario.h"
+#include <fstream>
+#include <iostream>
 
-// ==========================================================
-// CONSTRUTOR
-// ==========================================================
-RepositorioInventario::RepositorioInventario(const std::string& nomeUsuario)
-    : RepositorioBase(nomeUsuario + "_inventario.txt", true) {}
-
-
-// ==========================================================
-// ADICIONAR ITEM
-// ==========================================================
-void RepositorioInventario::adicionarItem(int id) {
-    if (possuiItem(id)) {
-        std::cout << "Item ja esta no inventario." << std::endl;
-        return;
-    }
-
-    // Adiciona o ID no final do arquivo (Modo Append = true)
-    std::vector<std::string> linha = { std::to_string(id) };
-    this->escreverLinhasNoArquivo(linha, true);
+RepositorioInventario::RepositorioInventario() {
+    this->caminhoArquivo = "inventario.txt";
 }
 
+// --- IMPLEMENTAÇÃO DO MÉTODO QUE FALTAVA ---
+std::vector<std::string> RepositorioInventario::carregarItens() {
+    std::vector<std::string> linhas;
+    std::ifstream arquivo(this->caminhoArquivo);
 
-// ==========================================================
-// VERIFICAR POSSE
-// ==========================================================
-bool RepositorioInventario::possuiItem(int id) {
-    std::vector<std::string> linhas = LerLinhasDoArquivo();
-    
-    for (const auto& linha : linhas) {
-        try {
-            if (std::stoi(linha) == id) return true;
-        } catch (...) { continue; }
+    if (arquivo.is_open()) {
+        std::string linha;
+        while (std::getline(arquivo, linha)) {
+            if (!linha.empty()) {
+                linhas.push_back(linha);
+            }
+        }
+        arquivo.close();
+    } else {
+        // Se não existir, cria um vazio
+        std::ofstream novoArquivo(this->caminhoArquivo);
+        novoArquivo.close();
     }
-    return false;
+
+    return linhas;
 }
 
-
-// Le repositorio e retorna IDs brutos dos Itens
-std::vector<int> RepositorioInventario::carregarIds() {
-    std::vector<int> ids;
-    std::vector<std::string> linhas = LerLinhasDoArquivo();
-
-    for (const auto& linha : linhas) {
-        try {
-            if(!linha.empty()) ids.push_back(std::stoi(linha));
-        } catch(...) {}
+void RepositorioInventario::adicionarItem(const std::string& dadosItem) {
+    std::ofstream arquivo(this->caminhoArquivo, std::ios::app);
+    if (arquivo.is_open()) {
+        arquivo << dadosItem << "\n";
+        arquivo.close();
     }
-    return ids;
 }

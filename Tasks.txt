@@ -38,7 +38,11 @@ OK - RepositorioEstudos
 EM PROGRESSO - Controladores e telas
 	- teste
 	- Testes implementados
+<<<<<<< HEAD
 	- Alterando telas e sessao estudo no modelo do teste
+=======
+	- ControladorGamificacao -> Murilo
+>>>>>>> 6f0e72ab77fab84b7a3039e748b26fb8cc2d22e7
 
 CLASSES:
 	OK - Usuario

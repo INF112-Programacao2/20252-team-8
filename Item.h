@@ -1,23 +1,27 @@
 #ifndef ITEM_H
 #define ITEM_H
-#include <string> 
+
+#include <string>
+#include <iostream>
 
 class Item {
-private:
-    std::string id;
+protected:
     std::string nome;
-    std::string descricao;
-    int valor;  //Custo do item 
+    std::string tipo;
+    int valor;
 
 public:
-    //Necessario para o vector para criar "slots" vazios quando o vetor eh pre-alocado
-    Item(); 
+    Item(std::string nome, std::string tipo, int valor);
+    
+    // Destrutor virtual obrigatório para herança
+    virtual ~Item() {}
 
-    Item(const std::string& id, const std::string& nome, const std::string& descricao, int valor);
-
-    std::string getId() const;
     std::string getNome() const;
-    std::string getDescricao() const;
+    std::string getTipo() const;
     int getValor() const;
+
+    // Método virtual: permite que as subclasses tenham comportamentos diferentes
+    virtual void usar();
 };
+
 #endif

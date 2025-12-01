@@ -2,6 +2,10 @@
 #define TELA_PERFIL_H
 
 #include "TelaBase.h"
+#include <string>
+
+
+class Usuario;
 
 class telaPerfil : public TelaBase {
 public:
