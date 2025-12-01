@@ -1,54 +1,31 @@
 #ifndef REPOSITORIO_ESTUDOS_H
 #define REPOSITORIO_ESTUDOS_H
 
+#include "RepositorioBase.h"
 #include "SessaoEstudo.h"
 #include <string>
-#include <fstream>
+#include <vector>
 
-class RepositorioEstudos {
-private:
-    long long int tempoTotal = 0;  //para o período, representa as horas os segundos totais
-    std::string DataInicio;  //data de início de uma sessão
-    std::string DataFim;  //data final de uma sessão
-    std::string HoraInicio; //horario de início de uma sessão
-    std::string HoraFinal; //horario final de uma sessão
-    std::string idUsuario;  //ID do usuário associado ao histórico
-    SessaoEstudo* sessoes;  // ponteiro para um array dinâmico de SessaoEstudo
-    int quantidade;  // quantidade atual de sessões armazenadas
-    int capacidade; // tamanho máximo atual do array
-
+class RepositorioEstudos : public RepositorioBase {
 public:
-    //construtor
-    RepositorioEstudos(std::string idUsuario);
-    //destrutor
-    ~RepositorioEstudos();
+    // Construtor: Recebe o nome do usuário para criar "nome_estudos.txt"
+    RepositorioEstudos(const std::string& nomeUsuario);
 
-    //adiciona uma nova sessão
+    // Adiciona sessão, atualiza cabeçalho e salva no arquivo
     void adicionarSessao(const SessaoEstudo& sessao);
 
-    //retorna o total de sessões
+    // Retorna o total de sessões
     int getQuantidade() const;
 
-    //retorna ponteiro para uma sessão específica
-    SessaoEstudo* getSessao(int i) const;
+    // Lê o arquivo e retorna o vetor de sessões 
+    std::vector<SessaoEstudo> obterHistorico();
 
-    //calcula tempo total estudado
-    void calcularTempoTotal();
-
-    //define período
-    void definirPeriodo(std::string dataInicio, std::string dataFim, std::string horaInicio, std::string horaFim);
-
-    //retorna tempo total
+    // Retorna tempo total geral
     long long int getTempoTotal() const;
 
-    //retorna ID do usuário
-    std::string getIdUsuario() const;
-
-    //retorna o tempo total de estudos de uma disciplina específica
+    // Retorna o tempo total de estudos de uma disciplina específica
     long long int getTempoTotalPorDisciplina(const std::string& disciplina) const;
     
-    //gera arquivo de histórico
-    void gerarArquivoHistorico();
 };
 
 #endif

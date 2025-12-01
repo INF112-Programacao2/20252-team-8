@@ -63,16 +63,6 @@ void RepositorioEstudos::calcularTempoTotal() {
     std::cout << "Tempo total calculado: " << tempoTotal << " segundos" << std::endl;
 }
 
-//define período
-void RepositorioEstudos::definirPeriodo(std::string dataInicio, std::string dataFim, std::string horaInicio, std::string horaFim) {
-    this->DataInicio = dataInicio;
-    this->DataFim = dataFim;
-    this->HoraInicio = horaInicio;
-    this->HoraFinal = horaFim;
-    std::cout << "Período definido: " << dataInicio << " " << horaInicio << " até " << dataFim << " " << horaFim << std::endl;
-}
-
-// Métodos get:
 
 //retorna número de sessões
 int RepositorioEstudos::getQuantidade() const {

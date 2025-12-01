@@ -31,7 +31,12 @@ OK - Refatorar Loja
 	 OK - Implementar método estático de construção de itens (catálogo) 
 
 Nicolas
-
+EM PROGRESSO - RepositorioEstudos
+	- Adaptar cabeçalho 
+	-
+	-
+	-
+	-
 
 
 Gabriel
