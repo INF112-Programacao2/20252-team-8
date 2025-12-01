@@ -17,7 +17,7 @@ int TelaLoja::mostrarVitrine(const std::vector<Item*>& itens, const Usuario& usu
             // Ex: [1] Bone (50 moedas) - Cosmetico
             std::cout << "[" << (i + 1) << "] " 
                       << item->getNome() 
-                      << " (" << item->getPreco() << "$) - " 
+                      << " (" << item->getValor() << "$) - " 
                       << item->getTipo() << std::endl;
         }
     }
