@@ -7,7 +7,7 @@
 
 class Usuario;
 
-class telaPerfil : public TelaBase {
+class TelaPerfil : public TelaBase {
 public:
     int exibir(Usuario* usuario) override;
 };

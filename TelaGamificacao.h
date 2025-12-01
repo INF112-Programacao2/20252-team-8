@@ -13,9 +13,6 @@ public:
     // Avisos rápidos (Pop-ups de texto)
     void mostrarGanhoRecursos(int xp, int moedas);
     void mostrarLevelUp(int novoNivel, int moedasGanhas, const std::string& novaBadge);
-
-    // IMPLEMENTAÇÃO DO MÉTODO VIRTUAL PURO DA TelaBase
-    virtual int exibir(Usuario* usuario) override;
 };
 
 #endif
