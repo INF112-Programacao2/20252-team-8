@@ -1,7 +1,4 @@
 #include "ControladorLoja.h"
-#include "RepositorioInventario.h"
-#include "RepositorioGamificacao.h"
-#include "Usuario.h"
 #include <iostream>
 
 // Chama o construtor do pai com ':', o resto é feito dentro das chaves

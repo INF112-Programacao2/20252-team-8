@@ -1,6 +1,9 @@
 #ifndef CONTROLADORLOJA_H
 #define CONTROLADORLOJA_H
 
+#include "Usuario.h"
+#include "RepositorioInventario.h"
+#include "RepositorioGamificacao.h"
 #include "Musica.h"
 #include <vector>
 
