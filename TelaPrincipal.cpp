@@ -2,7 +2,7 @@
 #include "Constantes.h"
 #include <iostream>
 
-int telaPrincipal::exibir(Usuario* usuario) {
+int TelaPrincipal::exibir(Usuario* usuario) {
     limparTela();
     std::cout << "=== STUDY TRACKER ===" << std::endl;
     std::cout << "Bem-vindo, " << usuario->getNome() << "!" << std::endl;

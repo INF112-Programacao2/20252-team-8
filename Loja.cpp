@@ -25,13 +25,13 @@ Item* Loja::buscarItemPorId(int id) {
         // --- ÁUDIO / MÚSICA (IDs 200 a 299) ---
         case 200: 
             // id, nome, preço, nome_arquivo
-            return new ItemAudio(200, "Lofi Beats", 100, "lofi_study.mp3");
+            //return new ItemAudio(200, "Lofi Beats", 100, "lofi_study.mp3"); 
         
         case 201: 
-            return new ItemAudio(201, "Rock Classico", 150, "rock_bg.mp3");
+            //return new ItemAudio(201, "Rock Classico", 150, "rock_bg.mp3");
 
         case 202: 
-            return new ItemAudio(202, "Piano Suave", 80, "piano.mp3");
+            //return new ItemAudio(202, "Piano Suave", 80, "piano.mp3");
 
         // --- CONSUMÍVEIS / OUTROS (Exemplo futuro) ---
         // case 300: return new ItemConsumivel(...);

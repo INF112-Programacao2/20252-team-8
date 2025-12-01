@@ -12,8 +12,7 @@ ControladorEstudo::ControladorEstudo(Usuario* usuario,
     : usuario(usuario), 
       repoEstudos(repoEstudos), 
       repoGamificacao(repoGamificacao) {
-    // A 'tela' e a 'sessaoAtual' são instanciadas automaticamente 
-    // pelos seus construtores padrão.
+    // A 'tela' e a 'sessaoAtual' são instanciadas automaticamente pelos seus construtores padrão.
 }
 
 // ==========================================================
@@ -98,11 +97,11 @@ void ControladorEstudo::gerenciarSessaoEmAndamento() {
             case 1: // Alternar Pausa
                 try {
                     // Se rodando -> Pausa
-                    if (sessaoAtual.getEstado() == Estado::) {
+                    if (sessaoAtual.getEstado() == SessaoEstudo::rodando) {
                         sessaoAtual.pausar();
                     } 
                     // Se pausado -> Continua
-                    else if (sessaoAtual.getEstado() == "pausado") {
+                    else if (sessaoAtual.getEstado() == SessaoEstudo::pausado) {
                         sessaoAtual.continuar();
                     }
                 } catch (std::exception& e) {
