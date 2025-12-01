@@ -29,6 +29,22 @@ RepositorioBase::RepositorioBase(const std::string& nomeUsuario) {
 }
 
 
+// Construtor (recebe nome do arquivo para gerar txt)
+RepositorioBase::RepositorioBase(const std::string& nomeRepo, bool isCaminho) {
+    this->caminhoArquivo = nomeRepo;
+
+    // Apenas garante que o arquivo exista (append mode cria se não existir)
+    std::ofstream arquivo(this->caminhoArquivo, std::ios::app);
+    
+    if (!arquivo.is_open()) {
+        throw std::runtime_error("ERRO: Nao foi possivel criar/abrir o arquivo: " + nomeRepo);
+    }
+
+    arquivo.close();
+
+}
+
+
 // Lê todo o conteúdo do arquivo e retorna um vetor de strings, onde cada elemento é uma linha.
 std::vector<std::string> RepositorioBase::LerLinhasDoArquivo() {
     std::vector<std::string> linhas;

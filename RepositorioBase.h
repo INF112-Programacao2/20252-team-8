@@ -9,8 +9,12 @@ protected:
     std::string caminhoArquivo;
 
 public:
-    // Construtor que recebe um caminho de arquivo existente
+    // Construtor 1: Para Gamificação - Gera "nome_repositorio.txt"
     RepositorioBase(const std::string& nomeUsuario);
+
+    // Construtor 2: Novo (Para Inventário e Estudos) - Recebe "nome_inventario.txt"
+    // Bool diferencia assinatura do método
+    RepositorioBase(const std::string& nomeRepo, bool isCaminho);
 
     // Métodos de leitura e escrita
     std::vector<std::string> LerLinhasDoArquivo();

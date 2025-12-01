@@ -1,6 +1,8 @@
 // Esta linha abaixo faz a biblioteca de som funcionar. É obrigatoria aqui.
 #define MINIAUDIO_IMPLEMENTATION
 #include "ControladorInventario.h"
+#include "Loja.h"
+#include <vector>
 #include <iostream>
 
 ControladorInventario::ControladorInventario(int tempo_inicial) : ControladorLoja(tempo_inicial) {
@@ -40,5 +42,38 @@ void ControladorInventario::tocarMusica(std::string nomeArquivo) {
     } else {
         std::cout << "ERRO: Nao foi possivel abrir o arquivo '" << nomeArquivo << "'.\n";
         std::cout << "Verifique se o arquivo .mp3 esta na mesma pasta do executavel.\n";
+    }
+}
+
+
+void ControladorInventario::executar() {
+    while(true) {
+        // 1. Pega os IDs do arquivo
+        std::vector<int> ids = repoInventario->carregarIds();
+        
+        // 2. Transforma IDs em Objetos para mostrar na tela
+        std::vector<Item*> itensParaMostrar;
+        
+        for (int id : ids) {
+            Item* item = Loja::buscarItemPorId(id);
+            if (item != nullptr) {
+                itensParaMostrar.push_back(item);
+            }
+        }
+
+        // 3. Manda a tela exibir os objetos (nome, tipo, etc)
+        // O método mostrarInventario agora recebe vector<Item*>
+        int escolha = tela.mostrarInventario(itensParaMostrar);
+
+        // ... lógica de equipar item ...
+
+        // 4. LIMPEZA DE MEMÓRIA (Muito Importante!)
+        // Como a Loja deu 'new', o Controlador tem que dar 'delete'
+        // antes de recarregar ou sair, senão vaza memória.
+        for (Item* i : itensParaMostrar) {
+            delete i; 
+        }
+        
+        if (escolha == 0) break;
     }
 }

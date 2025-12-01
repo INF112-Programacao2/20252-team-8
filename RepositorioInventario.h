@@ -1,15 +1,13 @@
-#ifndef REPOSITORIO_INVENTARIO_H
-#define REPOSITORIO_INVENTARIO_H
-
-#include <string>
-#include <vector>
 #include "RepositorioBase.h"
-#include "Item.h"
+#include <vector>
 
 class RepositorioInventario : public RepositorioBase {
-    public:
-    // Este método vai no arquivo, lê os IDs e retorna os objetos só quando pedirem
-        std::vector <Item> getItensUsuario();        
+public:
+    RepositorioInventario(const std::string& nomeUsuario);
+    
+    void adicionarItem(int id);
+    bool possuiItem(int id);
+    
+    // Retorna apenas os IDs brutos
+    std::vector<int> carregarIds(); 
 };
-
-#endif

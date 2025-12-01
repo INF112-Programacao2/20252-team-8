@@ -1,10 +1,11 @@
 #ifndef CONTROLADORINVENTARIO_H
 #define CONTROLADORINVENTARIO_H
 
-#include "ControladorLoja.h"
+#include "Loja.h"
+#include "RepositorioInventario.h"
 #include "miniaudio.h" 
 
-class ControladorInventario : public ControladorLoja {
+class ControladorInventario {
 private:
     ma_engine engine;
     ma_sound som;
@@ -16,5 +17,6 @@ public:
 
     void tocarMusica(std::string nomeArquivo);
     void pararMusica();
+    void executar();
 };
 #endif

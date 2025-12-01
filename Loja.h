@@ -34,5 +34,7 @@ public:
 
     // Carregar do arquivo
     bool carregarLoja(const std::string& nomeArquivo);
+
+    static Item* buscarItemPorId(int id); // Fábrica estática
 };
 #endif

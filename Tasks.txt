@@ -20,15 +20,18 @@ OK - Adequação de repositorioGamificacao
 			OK - Usuario
 Nicolas
 EM PROGRESSO - repositorioInventario
+	OK - Atualização de construtor Base (para repoInventario e repoEstudos)
+	OK - Implementação de construtor Base
+	OK - Adaptação para que retorne apenas IDs brutos
 	- 
-	-
-	-
-	-
 	-
 
 EM PROGRESSO - Usuario
 	OK - Tirar o getRepositorio()
 	OK - Mudar o método verificarSubidaDeNivel para controladorGamificacao
+
+EM PROGRESSO - Refatorar Loja
+	 - Implementar método estático de construção de itens (catálogo) 
 
 
 Gabriel
