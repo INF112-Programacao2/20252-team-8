@@ -3,11 +3,16 @@
 
 #include "TelaBase.h"
 #include "Usuario.h"
+#include <string>
 
 class TelaGamificacao : public TelaBase {
 public:
-    // Recebe o usuário como referência constante (apenas leitura)
-    int mostrarPerfil(const Usuario& usuario);
+    // Exibe o perfil completo (Menu principal da gamificação)
+    void mostrarPerfil(Usuario* usuario);
+
+    // Avisos rápidos (Pop-ups de texto)
+    void mostrarGanhoRecursos(int xp, int moedas);
+    void mostrarLevelUp(int novoNivel, int moedasGanhas, const std::string& novaBadge);
 };
 
 #endif
