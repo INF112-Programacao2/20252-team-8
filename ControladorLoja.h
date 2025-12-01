@@ -10,7 +10,7 @@ protected:
     std::vector<Musica> musicas; 
 
 public:
-    ControladorLoja(int tempo_inicial);
+    ControladorLoja(Usuario* usuario, RepositorioGamificacao* repo);
     
     bool comprarMusica(int indice); 
     std::vector<Musica>& getMusicas(); 
