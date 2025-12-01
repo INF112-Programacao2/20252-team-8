@@ -17,5 +17,8 @@ public:
     void atualizarStatus(); 
     void mostrarBadges();   
     int getPontos();
+    
+    // Método para verificar se subiu de nível
+    void verificarSubidaNivel();
 };
 #endif

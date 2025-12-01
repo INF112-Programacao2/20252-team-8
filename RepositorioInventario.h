@@ -8,7 +8,8 @@
 
 class RepositorioInventario : public RepositorioBase {
     public:
-        std::vector <Item> carregarCatalogo();        
+    // Este método vai no arquivo, lê os IDs e retorna os objetos só quando pedirem
+        std::vector <Item> getItensUsuario();        
 };
 
 #endif

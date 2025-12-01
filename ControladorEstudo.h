@@ -26,6 +26,7 @@ public:
 
     SessaoEstudo* getSessaoAtiva();
     std::string getEstado() const;
+    
 };
 
 #endif

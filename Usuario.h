@@ -2,23 +2,21 @@
 #define USUARIO_H
 
 #include <string>
-#include "RepositorioEstudos.h"
 
 class Usuario {
 private:
-    std::string nome;
+    const std::string nome;
     int moedas;
     int xp;
     int nivel;
     std::string badge;
-    RepositorioEstudos repositorio;
 
 public:
     // Construtor usado na main
-    Usuario(const std::string nome);
+    Usuario(const std::string& nome);
 
     // Construtor usado pelo Repositorio
-    Usuario (std::string nome, int nivel, int pontos, int moedas, std::string badge);
+    Usuario (std::string& nome, int nivel, int pontos, int moedas, std::string& badge);
 
     // Getters
     std::string getNome() const;
@@ -30,13 +28,8 @@ public:
     // Setters / Modificadores
     void adicionarXp(int quantidade);
     void adicionarMoedas(int quantidade);
-    bool gastarMoedas(int quantidade);
-    void setBadge (std::string badge);
-    
-    RepositorioEstudos& getRepositorio();
-
-    // Método para verificar se subiu de nível
-    void verificarSubidaNivel();
+    bool gastarMoedas(int quantidade);  // Retorna true se conseguiu gastar, false se não tinha saldo
+    void setBadge (std::string& badge);
 
 };
 

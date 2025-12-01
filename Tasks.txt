@@ -26,6 +26,10 @@ EM PROGRESSO - repositorioInventario
 	-
 	-
 
+EM PROGRESSO - Usuario
+	OK - Tirar o getRepositorio()
+	OK - Mudar o método verificarSubidaDeNivel para controladorGamificacao
+
 
 Gabriel
 EM PROGRESSO - Loja

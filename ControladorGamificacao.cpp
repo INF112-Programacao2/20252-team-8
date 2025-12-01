@@ -107,3 +107,36 @@ void ControladorGamificacao::mostrarBadges() {
 int ControladorGamificacao::getPontos() {
     return pontos;
 }
+
+
+//verifica se subiu de nível (100 XP por nível)
+void ControladorGamificacao::verificarSubidaNivel() {
+    int xpNecessario = nivel * 100;  //cada nível precisa de mais XP
+    
+    bool subiu = false;
+
+    while (xp >= xpNecessario) {
+        xp -= xpNecessario;  //reduz o XP gasto no nível
+        nivel++;              //sobe de nível
+        moedas += 50;         //recompensa por subir de nível
+        xpNecessario = nivel * 100; // Recalcula para o próximo loop
+        subiu = true;
+    }
+
+    if (subiu) {
+        std::cout << "\n***********************************" << std::endl;
+        std::cout << " Parabens! Voce subiu para o nivel " << nivel << "!" << std::endl;
+        std::cout << " +50 moedas de recompensa!" << std::endl;
+        
+        // Atualiza badge
+        std::string badgeAntiga = badge;
+        if (nivel >= 10) badge = "Mestre";
+        else if (nivel >= 5) badge = "Avancado";
+        else if (nivel >= 3) badge = "Intermediario";
+
+        if (badge != badgeAntiga) {
+             std::cout << " NOVA BADGE DESBLOQUEADA: " << badge << std::endl;
+        }
+        std::cout << "***********************************\n" << std::endl;
+    }    
+}
