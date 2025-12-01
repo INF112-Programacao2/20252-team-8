@@ -17,7 +17,7 @@ OK - Adequação de repositorioGamificacao
 			OK - Conferência final do repositorioGamificacao
 			OK - Atualizar classe construtor Usuario para englobar badge
 			OK - Atualizar método carregarUsuario()
-
+			OK - Usuario
 Nicolas
 EM PROGRESSO - repositorioInventario
 	- 
@@ -40,11 +40,12 @@ EM PROGRESSO - RepositorioEstudos
 
 Pedro
 EM PROGRESSO - TelaBase
-			
+
+Aloizio
+Nao sei oque fazer			
 
 A IMPLEMENTAR:
 
-	- Usuario
 	- Cabeçalhos Telas filhas
 	- Controladores
 	- Controlador Principal 
