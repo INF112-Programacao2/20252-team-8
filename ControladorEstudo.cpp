@@ -1,6 +1,8 @@
 #include "ControladorEstudo.h"
 #include <iostream>
 #include <string>
+#include "ItemAudio.h"
+#include <vector>
 
 // ==========================================================
 // CONSTRUTOR
