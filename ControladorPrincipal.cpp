@@ -61,7 +61,7 @@ void ControladorPrincipal::executar() {
                 break;
 
             default:
-                tela.mostrarErro("Opcao invalida!");
+                break;
         }
     }
 }

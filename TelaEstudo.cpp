@@ -1,5 +1,6 @@
 #include "TelaEstudo.h"
 #include <iostream>
+#include <iomanip>
 
 int TelaEstudo::mostrarMenuEstudos() {
     mostrarCabecalho("MONITOR DE ESTUDOS");
@@ -19,7 +20,10 @@ int TelaEstudo::mostrarSessaoAtiva(const SessaoEstudo& sessao) {
     int m = (totalSeg % 3600) / 60;
     int s = totalSeg % 60;
 
-    std::cout << "\n      " << h << ":" << m << ":" << s << "\n" << std::endl;
+    std::cout << "\n          " 
+              << std::setfill('0') << std::setw(2) << h << ":"
+              << std::setfill('0') << std::setw(2) << m << ":"
+              << std::setfill('0') << std::setw(2) << s << "\n" << std::endl;
     std::cout << "Status: ";
 
     switch (sessao.getEstado()) {
@@ -46,10 +50,20 @@ int TelaEstudo::mostrarSessaoAtiva(const SessaoEstudo& sessao) {
 void TelaEstudo::mostrarHistorico(const std::vector<SessaoEstudo>& historico) {
     mostrarCabecalho("HISTORICO DE ESTUDOS");
     
-    for (const auto& s : historico) {
-        std::cout << "Data: " << s.getDataInicio() 
-                  << " | " << s.getDisciplina() 
-                  << " | " << s.getSegundos() << "s" << std::endl;
+    if (historico.empty()) {
+        mostrarMensagem("Nenhuma sessao registrada ainda.");
+    } else {
+        for (size_t i = 0; i < historico.size(); i++) {
+            const auto& s = historico[i];
+            std::cout << "[" << (i + 1) << "] " 
+                      << s.getDataInicio() << " - " 
+                      << s.getDisciplina() << " (" 
+                      << s.getSegundos() << "s)" << std::endl;
+            
+            if (!s.getDescricao().empty()) {
+                std::cout << "    Desc: " << s.getDescricao() << std::endl;
+            }
+        }
     }
     
     std::cout << "\nPressione ENTER para voltar...";
