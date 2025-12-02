@@ -4,10 +4,9 @@
 #include "Usuario.h"
 #include "RepositorioEstudos.h"
 #include "RepositorioGamificacao.h"
-
 #include "TelaEstudo.h"
 #include "SessaoEstudo.h"
-
+#include "miniaudio.h"
 class ControladorEstudo {
 private:
     // Poteiros para os objetos principais do sistema (Injeção de Dependência)
@@ -24,6 +23,10 @@ private:
     // Mantemos na memória para controlar o cronômetro
     SessaoEstudo sessaoAtual;
 
+    // Motor de Áudio
+    ma_engine engine;
+    bool audioInicializado;
+
 public:
     
     ControladorEstudo(Usuario* usuario, RepositorioEstudos* repoEstudos, RepositorioGamificacao* repoGamificacao);
@@ -31,6 +34,11 @@ public:
     // Método Principal
     // Inicia o loop do menu de estudos (Chamado pelo ControladorPrincipal)
     void executar();
+
+    void tocarMusicaFundo(std::string caminhoArquivo);
+    void pararMusica();
+
+    ~ControladorEstudo();
 
 private:
     // --- Métodos Auxiliares  ---
@@ -47,6 +55,7 @@ private:
 
     // 4. Busca dados no repoEstudos e manda a tela exibir
     void exibirHistorico();
+
 };
 
 #endif
