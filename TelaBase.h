@@ -30,7 +30,7 @@ public:
     // (Impede loop infinito se o usuário digitar letras)
     int lerOpcao();
 
-    virtual int exibir(Usuario* usuario) = 0;
+    virtual int exibir(Usuario* usuario);
 };
 
 #endif
