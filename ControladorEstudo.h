@@ -38,6 +38,8 @@ public:
     void tocarMusicaFundo(std::string caminhoArquivo);
     void pararMusica();
 
+    ~ControladorEstudo();
+
 private:
     // --- Métodos Auxiliares  ---
 
