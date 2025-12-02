@@ -62,7 +62,7 @@ int main() {
     // ------------------------------------------------------------
     // Cada controlador precisa saber QUEM é o usuário e ONDE salvar os dados.
     
-    ControladorEstudo ctrlEstudo(usuarioAtual, &repoEstudos, &repoGamificacao);
+    ControladorEstudo ctrlEstudo(usuarioAtual, &repoEstudos, &repoGamificacao, &repoInventario);
     // Nota: Passamos repoGamificacao para o estudo porque estudar gera XP!
 
     ControladorInventario ctrlInventario(usuarioAtual, &repoInventario);

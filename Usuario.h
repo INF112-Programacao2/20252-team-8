@@ -2,7 +2,6 @@
 #define USUARIO_H
 
 #include <string>
-
 class Usuario {
 private:
     const std::string nome;

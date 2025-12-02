@@ -1,8 +1,5 @@
 #include "ItemAudio.h"
 #include <iostream>
-
-// Define a implementação da biblioteca de áudio (apenas neste arquivo)
-#define MINIAUDIO_IMPLEMENTATION
 #include "miniaudio.h" 
 
 ItemAudio::ItemAudio(std::string nome, int valor, std::string caminhoArquivo)

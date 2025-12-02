@@ -3,22 +3,89 @@
 #include <string>
 #include "ItemAudio.h"
 #include <vector>
+#include "Item.h"
+#include <sstream>
 
 // ==========================================================
 // CONSTRUTOR
 // ==========================================================
 // Inicializa os ponteiros recebidos da main na lista de inicialização.
 ControladorEstudo::ControladorEstudo(Usuario* usuario, 
-                                     RepositorioEstudos* repoEstudos, 
-                                     RepositorioGamificacao* repoGamificacao)
+                                    RepositorioEstudos* repoEstudos, 
+                                    RepositorioGamificacao* repoGamificacao,
+                                    RepositorioInventario* repoInventario)
     : usuario(usuario), 
       repoEstudos(repoEstudos), 
-      repoGamificacao(repoGamificacao) {
+      repoGamificacao(repoGamificacao),
+      repoInventario(repoInventario),
+      audioInicializado(false) {
     // A 'tela' e a 'sessaoAtual' são instanciadas automaticamente pelos seus construtores padrão.
     if (ma_engine_init(NULL, &engine) == MA_SUCCESS) {
         audioInicializado = true;
     } else {
-        std::cerr << "[AVISO] Falha ao iniciar sistema de audio." << std::endl;
+        std::cout << "AVISO: Sistema de audio nao pode ser iniciado.\n";
+    }
+}
+
+// --- Destrutor ---
+ControladorEstudo::~ControladorEstudo() {
+    if (audioInicializado) {
+        ma_engine_uninit(&engine);
+    }
+}
+
+void ControladorEstudo::selecionarMusica() {
+    caminhoMusicaEscolhida = ""; // Reseta escolha anterior
+
+    // 1. Carrega itens do repositório
+    std::vector<std::string> itens = repoInventario->carregarItens();
+    std::vector<std::pair<std::string, std::string>> musicasDisponiveis;
+
+    // 2. Filtra apenas itens do tipo "Audio"
+    for (const auto& linha : itens) {
+        std::stringstream ss(linha);
+        std::string nome, tipo, valor, arquivo;
+        
+        std::getline(ss, nome, ',');
+        std::getline(ss, tipo, ',');
+        std::getline(ss, valor, ',');
+        std::getline(ss, arquivo, ',');
+
+        // Remove espaços extras (trim)
+        if(!tipo.empty() && tipo.front() == ' ') tipo.erase(0, 1);
+        if(!nome.empty() && nome.front() == ' ') nome.erase(0, 1);
+        if(!arquivo.empty() && arquivo.front() == ' ') arquivo.erase(0, 1);
+
+        if (tipo == "Audio") {
+            // Garante que o caminho esteja correto (adiciona assets/ se faltar)
+            if (arquivo.find("assets/") == std::string::npos) {
+                arquivo = "assets/" + arquivo;
+            }
+            musicasDisponiveis.push_back({nome, arquivo});
+        }
+    }
+
+    // 3. Se não tiver músicas, avisa e volta
+    if (musicasDisponiveis.empty()) {
+        return; // Usuário estuda em silêncio
+    }
+
+    // 4. Menu de escolha
+    tela.limparTela();
+    std::cout << "=== TRILHA SONORA ===\n";
+    std::cout << "[0] Silencio\n";
+    for (size_t i = 0; i < musicasDisponiveis.size(); i++) {
+        std::cout << "[" << (i+1) << "] " << musicasDisponiveis[i].first << "\n";
+    }
+    
+    std::cout << ">> Escolha uma musica: ";
+    int op;
+    std::cin >> op;
+    std::cin.ignore(); // Limpa buffer
+
+    if (op > 0 && op <= (int)musicasDisponiveis.size()) {
+        caminhoMusicaEscolhida = musicasDisponiveis[op-1].second;
+        std::cout << "Musica selecionada: " << musicasDisponiveis[op-1].first << "\n";
     }
 }
 
@@ -74,14 +141,7 @@ void ControladorEstudo::iniciarNovaSessao() {
         return;
     }
 
-    // PERGUNTA SOBRE MÚSICA ANTES DE INICIAR
-    std::cout << "Deseja ouvir musica Lofi durante a sessao? (s/n): ";
-    char resp;
-    std::cin >> resp;
-    if (resp == 's' || resp == 'S') {
-        // Caminho fixo ou vindo de um item
-        tocarMusicaFundo("assets/lofi.mp3"); 
-    }
+    selecionarMusica();
 
     // 3. Configura o objeto Sessao na memória
     sessaoAtual.resetar(); // Garante estado limpo
@@ -97,7 +157,6 @@ void ControladorEstudo::iniciarNovaSessao() {
         tela.mostrarErro(e.what());
     }
 
-    pararMusica();
 }
 
 // ==========================================================
@@ -105,6 +164,19 @@ void ControladorEstudo::iniciarNovaSessao() {
 // ==========================================================
 void ControladorEstudo::gerenciarSessaoEmAndamento() {
     bool sessaoAtiva = true;
+    bool tocandoAgora = false;
+
+    if (audioInicializado && !caminhoMusicaEscolhida.empty()) {
+        ma_result result = ma_sound_init_from_file(&engine, caminhoMusicaEscolhida.c_str(), 0, NULL, NULL, &musicaFundo);
+        
+        if (result == MA_SUCCESS) {
+            ma_sound_set_looping(&musicaFundo, MA_TRUE); // Loop infinito
+            ma_sound_start(&musicaFundo); // O som começa em outra thread!
+            tocandoAgora = true;
+        } else {
+            tela.mostrarErro("Nao foi possivel carregar o arquivo: " + caminhoMusicaEscolhida);
+        }
+    }
 
     while (sessaoAtiva) {
         // 1. A tela mostra o tempo correndo e retorna a ação do usuário
@@ -136,6 +208,11 @@ void ControladorEstudo::gerenciarSessaoEmAndamento() {
                 // Se digitou algo errado, apenas ignora e atualiza a tela
                 break; 
         }
+    }
+    
+    if (tocandoAgora) {
+        ma_sound_stop(&musicaFundo);
+        ma_sound_uninit(&musicaFundo); // Libera memória específica desse som
     }
 }
 
@@ -188,28 +265,4 @@ void ControladorEstudo::exibirHistorico() {
 
     // 2. Passa os dados para a tela formatar
     tela.mostrarHistorico(historico);
-}
-
-ControladorEstudo::~ControladorEstudo() {
-    if (audioInicializado) {
-        ma_engine_uninit(&engine);
-    }
-}
-
-void ControladorEstudo::tocarMusicaFundo(std::string caminhoArquivo) {
-    if (!audioInicializado) return;
-    
-    // Toca o som em loop (se a biblioteca permitir) ou play normal
-    // O miniaudio toca em uma thread separada, então não trava o código
-    ma_engine_play_sound(&engine, caminhoArquivo.c_str(), NULL);
-}
-
-void ControladorEstudo::pararMusica() {
-    // O miniaudio simples não tem "stop all" fácil sem grupos, 
-    // mas podemos reiniciar a engine ou parar sons específicos.
-    // Para simplificar: Desliga e liga a engine.
-    if (audioInicializado) {
-        ma_engine_uninit(&engine);
-        ma_engine_init(NULL, &engine);
-    }
 }

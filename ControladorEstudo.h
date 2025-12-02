@@ -4,6 +4,7 @@
 #include "Usuario.h"
 #include "RepositorioEstudos.h"
 #include "RepositorioGamificacao.h"
+#include "RepositorioInventario.h"
 #include "TelaEstudo.h"
 #include "SessaoEstudo.h"
 #include "miniaudio.h"
@@ -14,6 +15,7 @@ private:
     Usuario* usuario;
     RepositorioEstudos* repoEstudos;
     RepositorioGamificacao* repoGamificacao; 
+    RepositorioInventario* repoInventario;
 
     // Instância da Tela (Composição)
     // Criada automaticamente quando o controlador nasce
@@ -23,20 +25,21 @@ private:
     // Mantemos na memória para controlar o cronômetro
     SessaoEstudo sessaoAtual;
 
-    // Motor de Áudio
+    // --- Variáveis de Controle de Áudio ---
     ma_engine engine;
+    ma_sound musicaFundo; // Objeto que controla o som tocando
     bool audioInicializado;
+    std::string caminhoMusicaEscolhida;
+
+    void selecionarMusica();
 
 public:
     
-    ControladorEstudo(Usuario* usuario, RepositorioEstudos* repoEstudos, RepositorioGamificacao* repoGamificacao);
+    ControladorEstudo(Usuario* usuario, RepositorioEstudos* repoEstudos, RepositorioGamificacao* repoGamificacao, RepositorioInventario* repoInventario);
 
     // Método Principal
     // Inicia o loop do menu de estudos (Chamado pelo ControladorPrincipal)
     void executar();
-
-    void tocarMusicaFundo(std::string caminhoArquivo);
-    void pararMusica();
 
     ~ControladorEstudo();
 
