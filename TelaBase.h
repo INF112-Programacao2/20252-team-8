@@ -32,10 +32,6 @@ public:
 
     virtual int exibir(Usuario* usuario);
 
-protected:
-    // Métodos para Linux
-    int kbhit();
-    char getch();
 };
 
 #endif

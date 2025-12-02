@@ -1,7 +1,6 @@
 #include "TelaEstudo.h"
 #include <iostream>
 #include <iomanip>
-#include <unistd.h>
 
 int TelaEstudo::mostrarMenuEstudos() {
     mostrarCabecalho("MONITOR DE ESTUDOS");
@@ -40,16 +39,6 @@ int TelaEstudo::mostrarSessaoAtiva(const SessaoEstudo& sessao) {
     std::cout << "-------------------------" << std::endl;
     std::cout << "1. Pausar / Continuar" << std::endl;
     std::cout << "2. Finalizar Sessao" << std::endl;
-
-    if (kbhit()) {
-            char tecla = getch(); // Lê o que foi apertado
-            
-            if (tecla == '1') return 1; // Retorna para o controlador Pausar
-            if (tecla == '2') return 2; // Retorna para o controlador Finalizar
-        }
-
-    // Espera 1 segundo para atualizar o relógio (não trava a música pois é outra thread)
-    sleep(1);
     
     // Aqui usamos uma leitura simples para não travar o loop do controlador se possível,
     // ou bloqueamos esperando ação do usuário.
