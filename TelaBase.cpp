@@ -70,3 +70,8 @@ TelaBase::~TelaBase(){
     
 >>>>>>> a1c52ce425c8e3ec7309d33489faaba80f1b52e5
 }
+int TelaBase::exibir(Usuario* usuario) {
+    // Implementação padrão caso a tela filha não tenha a sua própria.
+    // Retorna 0 (geralmente usado para "Sair" ou "Voltar")
+    return 0; 
+}
