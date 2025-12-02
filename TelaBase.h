@@ -9,7 +9,7 @@ class TelaBase {
 public:
     // Destrutor Virtual: Essencial quando usamos herança!
     // Garante que o destrutor das filhas seja chamado corretamente.
-    virtual ~TelaBase() {}
+    virtual ~TelaBase();
 
     // Limpa o console (funciona em Windows e Linux/Mac)
     void limparTela();
