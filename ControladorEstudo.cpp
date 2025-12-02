@@ -13,6 +13,11 @@ ControladorEstudo::ControladorEstudo(Usuario* usuario,
       repoEstudos(repoEstudos), 
       repoGamificacao(repoGamificacao) {
     // A 'tela' e a 'sessaoAtual' são instanciadas automaticamente pelos seus construtores padrão.
+    if (ma_engine_init(NULL, &engine) == MA_SUCCESS) {
+        audioInicializado = true;
+    } else {
+        std::cerr << "[AVISO] Falha ao iniciar sistema de audio." << std::endl;
+    }
 }
 
 // ==========================================================
@@ -67,6 +72,15 @@ void ControladorEstudo::iniciarNovaSessao() {
         return;
     }
 
+    // PERGUNTA SOBRE MÚSICA ANTES DE INICIAR
+    std::cout << "Deseja ouvir musica Lofi durante a sessao? (s/n): ";
+    char resp;
+    std::cin >> resp;
+    if (resp == 's' || resp == 'S') {
+        // Caminho fixo ou vindo de um item
+        tocarMusicaFundo("assets/lofi.mp3"); 
+    }
+
     // 3. Configura o objeto Sessao na memória
     sessaoAtual.resetar(); // Garante estado limpo
     sessaoAtual.setDisciplina(disciplina);
@@ -80,6 +94,8 @@ void ControladorEstudo::iniciarNovaSessao() {
     catch (std::exception& e) {
         tela.mostrarErro(e.what());
     }
+
+    pararMusica();
 }
 
 // ==========================================================
@@ -170,4 +186,28 @@ void ControladorEstudo::exibirHistorico() {
 
     // 2. Passa os dados para a tela formatar
     tela.mostrarHistorico(historico);
+}
+
+ControladorEstudo::~ControladorEstudo() {
+    if (audioInicializado) {
+        ma_engine_uninit(&engine);
+    }
+}
+
+void ControladorEstudo::tocarMusicaFundo(std::string caminhoArquivo) {
+    if (!audioInicializado) return;
+    
+    // Toca o som em loop (se a biblioteca permitir) ou play normal
+    // O miniaudio toca em uma thread separada, então não trava o código
+    ma_engine_play_sound(&engine, caminhoArquivo.c_str(), NULL);
+}
+
+void ControladorEstudo::pararMusica() {
+    // O miniaudio simples não tem "stop all" fácil sem grupos, 
+    // mas podemos reiniciar a engine ou parar sons específicos.
+    // Para simplificar: Desliga e liga a engine.
+    if (audioInicializado) {
+        ma_engine_uninit(&engine);
+        ma_engine_init(NULL, &engine);
+    }
 }
