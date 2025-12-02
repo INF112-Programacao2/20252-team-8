@@ -5,6 +5,7 @@
 #include "RepositorioInventario.h"
 #include "RepositorioGamificacao.h"
 #include "Musica.h"
+#include "TelaLoja.h"
 #include <vector>
 
 class ControladorLoja {
@@ -13,6 +14,8 @@ private:
     RepositorioGamificacao* repo;
     RepositorioInventario* repoInv;
     std::vector<Musica> musicas; 
+
+    TelaLoja tela;
 
 public:
     ControladorLoja(Usuario* usuario, RepositorioInventario* repoInv, RepositorioGamificacao* repo);

@@ -126,3 +126,9 @@ int ControladorGamificacao::getMoedas() const {
 std::string ControladorGamificacao::getBadge() const {
     return usuarioAtual ? usuarioAtual->getBadge() : "";
 }
+
+void ControladorGamificacao::executar() {
+    if (usuarioAtual != nullptr) {
+        tela.mostrarPerfil(usuarioAtual);
+    }
+}

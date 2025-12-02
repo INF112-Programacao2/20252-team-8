@@ -27,3 +27,7 @@ int TelaLoja::mostrarVitrine(const std::vector<Item*>& itens, const Usuario& usu
 
     return lerOpcao();
 }
+
+int TelaLoja::exibir(Usuario* usuario){
+    return 1;
+}

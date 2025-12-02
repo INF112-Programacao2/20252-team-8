@@ -1,5 +1,6 @@
 #include "ControladorLoja.h"
 #include <iostream>
+#include <limits>
 
 // Chama o construtor do pai com ':', o resto é feito dentro das chaves
 ControladorLoja::ControladorLoja(Usuario* usuario, RepositorioInventario* repoInv, RepositorioGamificacao* repo) 
@@ -58,5 +59,62 @@ bool ControladorLoja::comprarMusica(int indice) {
 }
 
 void ControladorLoja::executar(){
-    
+    bool rodando = true;
+
+    while (rodando) {
+        tela.limparTela();
+        std::cout << "========================================" << std::endl;
+        std::cout << "           LOJA DE MUSICAS              " << std::endl;
+        std::cout << "========================================" << std::endl;
+        std::cout << "SEU SALDO: " << usuario->getMoedas() << " moedas" << std::endl;
+        std::cout << "----------------------------------------" << std::endl;
+
+        // Lista as músicas manualmente
+        if (musicas.empty()) {
+            std::cout << "(Nenhuma musica disponivel)" << std::endl;
+        } else {
+            for (size_t i = 0; i < musicas.size(); i++) {
+                std::cout << "[" << (i + 1) << "] " << musicas[i].nome 
+                          << " (" << musicas[i].valor << "$)";
+                
+                if (musicas[i].comprada) {
+                    std::cout << " [COMPRADO]";
+                }
+                std::cout << std::endl;
+            }
+        }
+
+        std::cout << "\nDigite o numero da musica para COMPRAR" << std::endl;
+        std::cout << "Ou 0 para Voltar" << std::endl;
+        std::cout << ">> Escolha: ";
+
+        int opcao;
+        std::cin >> opcao;
+
+        // Tratamento básico de erro de entrada
+        if (std::cin.fail()) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            opcao = -1;
+        }
+
+        if (opcao == 0) {
+            rodando = false; // Sai do loop e volta pro menu principal
+        }
+        else if (opcao > 0 && (size_t)opcao <= musicas.size()) {
+            // Tenta comprar (o índice do vetor é opcao - 1)
+            bool sucesso = comprarMusica(opcao - 1);
+            
+            if (!sucesso) {
+                // Se falhou (saldo insuficiente ou já tem), pausa para ler o erro
+                tela.esperarEnter();
+            } else {
+                // Se funcionou, mostra mensagem e espera
+                tela.esperarEnter();
+            }
+        }
+        else {
+            tela.mostrarErro("Opcao invalida!");
+        }
+    }
 }

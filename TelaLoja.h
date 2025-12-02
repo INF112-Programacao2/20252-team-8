@@ -10,6 +10,7 @@ class TelaLoja : public TelaBase {
 public:
     // Retorna o índice do item escolhido ou 0 para voltar
     int mostrarVitrine(const std::vector<Item*>& itens, const Usuario& usuario);
+    int exibir(Usuario* usuario) override;
 };
 
 #endif
