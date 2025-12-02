@@ -1,22 +1,21 @@
 #ifndef LOJA_H
 #define LOJA_H
 
-#include <vector>
 #include "Item.h"
+#include <vector>
+
 class Loja {
 private:
-    std::vector<Item*> vitrine;        // Lista de itens que se pode comprar
+    // Voltamos para o nome que você usa: vitrine
+    std::vector<Item> vitrine;
 
 public:
-    // Construtor: Aqui se preenche a 'vitrine' com os itens disponíveis para compra
     Loja();
+    std::vector<Item> getItens();
+    void adicionarItem(const Item& item);
 
-    // Destrutor: Importante para limpar a memória dos itens da vitrine ao fechar o programa
-    ~Loja();
-
-    // Método usado pelo ControladorLoja para pegar a lista e mostrar na Tela
-    std::vector<Item*> getItensParaVenda() const;
-
-    static Item* buscarItemPorId(int id); // Fábrica estática
+    // Método estático (Fábrica)
+    static Item* buscarItemPorId(int id);
 };
+
 #endif
