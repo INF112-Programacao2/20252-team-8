@@ -3,6 +3,7 @@
 #include "ControladorLoja.h"
 #include "ControladorInventario.h"
 #include "ControladorGamificacao.h"
+#include "Constantes.h"
 
 ControladorPrincipal::ControladorPrincipal() 
     : ctrlEstudo(nullptr), ctrlLoja(nullptr), 
@@ -32,26 +33,27 @@ void ControladorPrincipal::executar() {
         int opcao = tela.exibir(usuario);
 
         switch (opcao) {
-            case 1: // Estudos
+            case TELA_ESTUDO: // Estudos
                 if (ctrlEstudo) ctrlEstudo->executar();
                 else tela.mostrarErro("Controlador de Estudo nao configurado!");
                 break;
 
-            case 2: // Loja
+            case TELA_LOJA: // Loja
                 if (ctrlLoja) ctrlLoja->executar();
                 else tela.mostrarErro("Controlador de Loja nao configurado!");
                 break;
 
-            case 3: // Inventário
+            case TELA_INVENTARIO: // Inventário
                 if (ctrlInventario) ctrlInventario->executar();
                 else tela.mostrarErro("Controlador de Inventario nao configurado!");
                 break;
 
-            case 4: // Gamificação (Perfil)
+            case TELA_PERFIL: // Gamificação (Perfil)
                 if (ctrlGamificacao) ctrlGamificacao->executar();
                 else tela.mostrarErro("Controlador de Gamificacao nao configurado!");
                 break;
 
+            case TELA_SAIR:
             case 0: // Sair
                 tela.limparTela();
                 tela.mostrarMensagem("Saindo... Bons estudos!");
