@@ -1,4 +1,0 @@
-Moedas: 1
-Pontos: 13
-Nivel: 0
-Badges: NULL

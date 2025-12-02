@@ -8,16 +8,16 @@ ControladorLoja::ControladorLoja(Usuario* usuario, RepositorioInventario* repoIn
     {
     
     // --- ADICIONANDO AS 10 MÚSICAS ---
-    musicas.push_back(Musica("Study Calm Lo-Fi", "lofi-study-calm-peaceful-chill-hop-112191.mp3", 300));
-    musicas.push_back(Musica("Sad Lo-Fi", "lofi-lofi-song-2-432220.mp3", 700));
-    musicas.push_back(Musica("Chill Night Lo-Fi", "good-night-lofi-cozy-chill-music-160166.mp3", 1200));
-    musicas.push_back(Musica("Morning Coffee", "morning-coffee.mp3", 150));
-    musicas.push_back(Musica("Rainy Day", "rainy-day.mp3", 200));
-    musicas.push_back(Musica("Focus Beats", "focus-beats.mp3", 250));
-    musicas.push_back(Musica("Piano Study", "piano-study.mp3", 350));
-    musicas.push_back(Musica("Synthwave Chill", "synthwave.mp3", 400));
-    musicas.push_back(Musica("Library Ambience", "library.mp3", 100));
-    musicas.push_back(Musica("Deep Focus", "deep-focus.mp3", 500));
+        musicas.push_back(Musica("Background Vibe I", "lofi-background-music-326931 (1).mp3", 180));
+        musicas.push_back(Musica("Pure Lofi Flow", "lofi-lofi-music-412319.mp3", 200));
+        musicas.push_back(Musica("Background Vibe II", "lofi-background-music-314199.mp3", 190));
+        musicas.push_back(Musica("Study Calm Peaceful", "lofi-study-calm-peaceful-chill-hop-112191 (1).mp3", 210));
+        musicas.push_back(Musica("Rainy City", "rainy-lofi-city-lofi-music-332746.mp3", 240));
+        musicas.push_back(Musica("Background Vibe III", "lofi-background-music-336230.mp3", 220));
+        musicas.push_back(Musica("Good Night Cozy", "good-night-lofi-cozy-chill-music-160166 (1).mp3", 300));
+        musicas.push_back(Musica("Lofi Girl Ambient", "lofi-girl-lofi-ambient-music-365952.mp3", 205));
+        musicas.push_back(Musica("Deep Ambient Lofi", "ambient-lofi-lofi-music-344112.mp3", 200));
+        musicas.push_back(Musica("Chill Lofi Girl", "lofi-lofi-chill-lofi-girl-438671.mp3", 195));
 }
 
 std::vector<Musica>& ControladorLoja::getMusicas() {

@@ -1,8 +1,0 @@
---- SESSAO ---
-Disciplina: Matematica
-Descricao: Bolsonaro
-Tempo: 13
-DataInicio: 01/12/25
-DataFinal: 01/12/25
-HoraInicio: 21:34:23
-HoraFinal: 21:34:36
