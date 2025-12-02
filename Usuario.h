@@ -26,6 +26,7 @@ public:
     std::string getBadge() const;
 
     // Setters / Modificadores
+    void setMoedas(int novasMoedas);
     void adicionarXp(int quantidade);
     void adicionarMoedas(int quantidade);
     bool gastarMoedas(int quantidade);  // Retorna true se conseguiu gastar, false se não tinha saldo

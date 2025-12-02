@@ -51,6 +51,11 @@ void Usuario::adicionarMoedas(int quantidade) {
     }
 }
 
+//sets
+void Usuario::setMoedas(int novasMoedas) {
+    this->moedas = novasMoedas;
+}
+
 // Gasta moedas se tiver suficiente
 bool Usuario::gastarMoedas(int quantidade) {
     if (quantidade > 0 && this->moedas >= quantidade) {

@@ -34,7 +34,7 @@ RepositorioGamificacao::RepositorioGamificacao(const std::string& nomeUsuario) :
 
         // ORDEM PADRÃO DE DADOS:
         std::vector<std::string> linhasParaAdicionar = {
-            "Moedas: 0",
+            "Moedas: 5000",
             "Pontos: 0",
             "Nivel: 0",
             "Badges: NULL"

@@ -1,7 +1,7 @@
 #include "ControladorInventario.h"
-#include "ItemAudio.h" // Necessário para criar itens que tocam som
+#include "ItemAudio.h"
 #include <iostream>
-#include <sstream> // Necessário para dividir as strings (split)
+#include <sstream>
 
 ControladorInventario::ControladorInventario(Usuario* usuario, RepositorioInventario* repo)
     : usuario(usuario), repositorio(repo) {
@@ -24,35 +24,50 @@ void ControladorInventario::carregarItensDoRepositorio() {
     limparMemoria();
 
     // 2. Busca dados brutos do repositório
-    // O Repositorio deve retornar linhas tipo: "Violao,Audio,500"
     std::vector<std::string> dados = repositorio->carregarItens(); 
 
     for (const std::string& linha : dados) {
         std::stringstream ss(linha);
-        std::string nome, tipo, valorStr;
+        std::string nome, tipo, valorStr, arquivoMusica;
 
-        // Separa a string pelas vírgulas
+        // Separa a string pelas vírgulas (formato: Nome,Tipo,Valor,Arquivo)
         std::getline(ss, nome, ',');
         std::getline(ss, tipo, ',');
         std::getline(ss, valorStr, ',');
+        
+        // Tenta ler o nome do arquivo da música (pode não existir para itens antigos)
+        if (!ss.eof()) {
+            std::getline(ss, arquivoMusica, ',');
+        }
 
-        // Remove espaços em branco no início (trim simples), se houver
+        // Remove espaços em branco no início
         if(!nome.empty() && nome.front() == ' ') nome.erase(0, 1);
         if(!tipo.empty() && tipo.front() == ' ') tipo.erase(0, 1);
+        if(!arquivoMusica.empty() && arquivoMusica.front() == ' ') 
+            arquivoMusica.erase(0, 1);
 
         // Converte valor para inteiro
         int valor = 0;
         try { 
             if (!valorStr.empty()) valor = std::stoi(valorStr); 
-        } catch(...) { valor = 0; }
+        } catch(...) { 
+            valor = 0; 
+        }
 
         // --- LÓGICA DE CRIAÇÃO (FACTORY) ---
         Item* novoItem = nullptr;
 
-        if (tipo == "Audio" || tipo == "Musica") {
-            // Se for do tipo Audio, cria ItemAudio e define o caminho do arquivo
-            std::string caminho = "assets/" + nome + ".mp3";
-            novoItem = new ItemAudio(nome, valor, caminho);
+        if (tipo == "Audio") {
+            // Para músicas, usa o caminho direto do arquivo
+            std::string caminhoCompleto;
+            if (!arquivoMusica.empty()) {
+                // As músicas da loja já tem o nome do arquivo
+                caminhoCompleto = "assets/" + arquivoMusica;
+            } else {
+                // Para itens de áudio antigos
+                caminhoCompleto = "assets/" + nome + ".mp3";
+            }
+            novoItem = new ItemAudio(nome, valor, caminhoCompleto);
         } 
         else {
             // Se for qualquer outro tipo, cria Item comum
@@ -73,7 +88,6 @@ void ControladorInventario::executar() {
         carregarItensDoRepositorio();
 
         // 2. Chama a Tela para mostrar a lista
-        // A tela retorna 0 para Voltar ou o número do item escolhido
         int opcao = tela.mostrarInventario(itensCarregados);
 
         if (opcao == 0) {
@@ -85,7 +99,6 @@ void ControladorInventario::executar() {
             
             if (indice >= 0 && indice < itensCarregados.size()) {
                 // 3. Polimorfismo: Chama usar()
-                // Se for ItemAudio, vai tocar música. Se for Item, vai mostrar texto.
                 itensCarregados[indice]->usar();
                 
                 // Pausa para o usuário ver o resultado

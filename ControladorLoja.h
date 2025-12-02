@@ -17,6 +17,9 @@ private:
 
     TelaLoja tela;
 
+    // Método para salvar música no inventário
+    void salvarMusicaNoInventario(const Musica& musica);
+
 public:
     ControladorLoja(Usuario* usuario, RepositorioInventario* repoInv, RepositorioGamificacao* repo);
     
@@ -24,4 +27,5 @@ public:
     std::vector<Musica>& getMusicas(); 
     void executar();
 };
+
 #endif
