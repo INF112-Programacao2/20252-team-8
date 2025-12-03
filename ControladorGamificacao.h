@@ -6,7 +6,7 @@
 #include "TelaGamificacao.h" // Inclui a tela para poder usá-la
 #include <string>
 
-// Definições (Sem constexpr, como você pediu)
+// Definições
 #define XP_POR_NIVEL 100
 #define RECOMPENSA_MOEDAS 50
 
