@@ -1,7 +1,7 @@
 TASKS - POLIMENTO
 
 - Rodar o código diversas vezes e anotar os erros
-- Criar make_file
+OK - Criar make_file
 - Atualizar comentários
 
 -ERROS ENCONTRADOS:
@@ -12,4 +12,4 @@ TASKS - POLIMENTO
 	- Se apertar 5 no menu inicial, o programa fecha
 	- É necessário apertar Enter duas vezes para reproduzir/parar a música no inventário
 	- Histórico de Estudos não exibe sessões registradas
-	
+	- Diversos warning ao compilar arquivo usando o Makefile
