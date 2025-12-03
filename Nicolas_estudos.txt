@@ -1,0 +1,48 @@
+--- SESSAO ---
+Disciplina: Calculo I
+Descricao: Integrais
+Tempo: 6
+DataInicio: 01/12/25
+DataFinal: 01/12/25
+HoraInicio: 23:10:02
+HoraFinal: 23:10:09
+--- SESSAO ---
+Disciplina: 1
+Descricao: 2
+Tempo: 19
+DataInicio: 02/12/25
+DataFinal: 02/12/25
+HoraInicio: 07:26:40
+HoraFinal: 07:26:59
+--- SESSAO ---
+Disciplina: Calculo I
+Descricao: Integrais
+Tempo: 43
+DataInicio: 02/12/25
+DataFinal: 02/12/25
+HoraInicio: 07:28:00
+HoraFinal: 07:28:43
+--- SESSAO ---
+Disciplina: Calculo I
+Descricao: Integrais
+Tempo: 5
+DataInicio: 02/12/25
+DataFinal: 02/12/25
+HoraInicio: 07:31:55
+HoraFinal: 07:32:00
+--- SESSAO ---
+Disciplina: Calculo I
+Descricao: Integrais
+Tempo: 8
+DataInicio: 03/12/25
+DataFinal: 03/12/25
+HoraInicio: 10:05:26
+HoraFinal: 10:05:36
+--- SESSAO ---
+Disciplina: teste
+Descricao: 
+Tempo: 3
+DataInicio: 03/12/25
+DataFinal: 03/12/25
+HoraInicio: 10:07:15
+HoraFinal: 10:07:18

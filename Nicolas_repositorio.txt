@@ -1,0 +1,4 @@
+Moedas: 200
+Pontos: 741
+Nivel: 0
+Badges: NULL

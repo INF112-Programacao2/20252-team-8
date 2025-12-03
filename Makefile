@@ -1,0 +1,64 @@
+# ==========================================
+# Configurações do Compilador e Flags
+# ==========================================
+
+# Compilador a ser usado
+CXX = g++
+
+# Flags de compilação:
+# -Wall: Mostra avisos de código 
+# -g: Adiciona símbolos de debug (gdb/valgrind)
+CXXFLAGS = -Wall -g
+
+# Bibliotecas necessárias 
+# Necessárias para o miniaudio funcionar corretamente no Linux/Unix
+LIBS = -lpthread -ldl -lm
+
+# Nome do executável final
+TARGET = AppEstudos
+
+# ==========================================
+# Arquivos do Projeto
+# ==========================================
+
+# A função wildcard pega todos os arquivos .cpp da pasta atual automaticamente
+SRCS = $(wildcard *.cpp)
+
+# Cria a lista de objetos (.o) trocando a extensão dos fontes
+OBJS = $(SRCS:.cpp=.o)
+
+# ==========================================
+# Regras de Compilação
+# ==========================================
+
+# Regra padrão: executada quando se digita apenas 'make'
+all: $(TARGET)
+
+# Fase de Linkagem: Junta todos os objetos (.o) e bibliotecas para criar o executável
+$(TARGET): $(OBJS)
+	@echo "Linkando o executavel: $(TARGET)..."
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJS) $(LIBS)
+	@echo "Sucesso! Execute com: ./$(TARGET) ou make run"
+
+# Fase de Compilação: Transforma cada .cpp em um .o individualmente
+%.o: %.cpp
+	@echo "Compilando: $<"
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# ==========================================
+# Utilitários
+# ==========================================
+
+# Regra para limpar arquivos compilados
+# Uso: make clean
+clean:
+	@echo "Limpando arquivos temporarios..."
+	rm -f $(OBJS) $(TARGET)
+
+# Regra para compilar e rodar imediatamente
+# Uso: make run
+run: all
+	@echo "Executando o programa..."
+	./$(TARGET)
+
+.PHONY: all clean run
