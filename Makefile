@@ -7,11 +7,11 @@ CXX = g++
 
 # Flags de compilação:
 # -std=c++17: Usa uma versão moderna do C++
-# -Wall: Mostra avisos de código (ajuda a evitar bugs)
-# -g: Adiciona símbolos de debug (útil se precisares usar gdb/valgrind)
+# -Wall: Mostra avisos de código 
+# -g: Adiciona símbolos de debug (gdb/valgrind)
 CXXFLAGS = -std=c++17 -Wall -g
 
-# Bibliotecas necessárias (Baseado no teu comando: -lpthread -ldl -lm)
+# Bibliotecas necessárias
 # Necessárias para o miniaudio funcionar corretamente no Linux/Unix
 LIBS = -lpthread -ldl -lm
 
@@ -42,7 +42,6 @@ $(TARGET): $(OBJS)
 	@echo "Sucesso! Execute com: ./$(TARGET) ou make run"
 
 # Fase de Compilação: Transforma cada .cpp em um .o individualmente
-# Se você alterar apenas um arquivo, ele só recompila esse arquivo (mais rápido)
 %.o: %.cpp
 	@echo "Compilando: $<"
 	$(CXX) $(CXXFLAGS) -c $< -o $@
@@ -51,7 +50,7 @@ $(TARGET): $(OBJS)
 # Utilitários
 # ==========================================
 
-# Regra para limpar arquivos compilados (útil para recompilar do zero)
+# Regra para limpar arquivos compilados 
 # Uso: make clean
 clean:
 	@echo "Limpando arquivos temporarios..."
