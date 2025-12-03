@@ -20,10 +20,10 @@ RepositorioBase::RepositorioBase(const std::string& nomeUsuario) {
             throw std::runtime_error("ERRO: Não foi possível criar o arquivo.");
         }
         else {
-            std::cout << "\nRepositório criado com sucesso!\n";
+            std::cout << "\nRepositorio criado com sucesso!\n";
         }
     
-        arquivo << "REPOSITÓRIO USUÁRIO: " << nomeUsuario << std::endl;
+        arquivo << "REPOSITORIO USUÁRIO: " << nomeUsuario << std::endl;
         arquivo.close();
     }
 }

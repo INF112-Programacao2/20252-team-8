@@ -19,18 +19,18 @@ void SessaoEstudo::sessaoiniciada() {
     if (disciplina.empty()) {
         throw std::logic_error("Não é possível iniciar sessão sem disciplina");
     }
-    std::cout << "Sessão iniciada para: " << disciplina << std::endl;
+    std::cout << "Sessao iniciada para: " << disciplina << std::endl;
 }
 
 void SessaoEstudo::sessaopausada() {
-    std::cout << "Sessão pausada" << std::endl;
+    std::cout << "Sessao pausada" << std::endl;
 }
 
 void SessaoEstudo::sessaofinalizada() {
      if (segundos < 0) {
         throw std::logic_error("Tempo de sessão inválido");
     }
-    std::cout << "Sessão finalizada. Tempo total: " << segundos << " segundos" << std::endl;
+    std::cout << "Sessao finalizada. Tempo total: " << segundos << " segundos" << std::endl;
 }
 
 // Função auxiliar para obter data e hora 
@@ -58,16 +58,16 @@ void SessaoEstudo::obterDataHoraAtual(std::string& data, std::string& hora) {
 void SessaoEstudo::gerenciar() {
     switch(estadoSessao) {
       case 0:
-            std::cout << "Sessão parada" << std::endl;
+            std::cout << "Sessao parada" << std::endl;
             break;
         case 1:
-            std::cout << "Sessão em andamento..." << std::endl;
+            std::cout << "Sessao em andamento..." << std::endl;
             break;
         case 2:
-            std::cout << "Sessão pausada" << std::endl;
+            std::cout << "Sessao pausada" << std::endl;
             break;
         default:
-            throw std::logic_error("Estado inválido não detectado");
+            throw std::logic_error("Estado invalido nao detectado");
 
     }
 }
@@ -83,9 +83,9 @@ void SessaoEstudo::iniciar() {
         
         sessaoiniciada();
     } else if (estadoSessao == rodando) {
-        throw std::logic_error("Sessão já está em andamento");
+        throw std::logic_error("Sessao ja está em andamento");
     } else if (estadoSessao == pausado) {
-        throw std::logic_error("Sessão está pausada. Use continuar() em vez de iniciar()");
+        throw std::logic_error("Sessao esta pausada. Use continuar() em vez de iniciar()");
     }
 }
 
@@ -97,9 +97,9 @@ void SessaoEstudo::pausar() {
         estadoSessao = pausado;
         sessaopausada();
     } else if (estadoSessao == parado) {
-        throw std::logic_error("Sessão não está em andamento");
+        throw std::logic_error("Sessao não esta em andamento");
     } else if (estadoSessao == pausado) {
-        throw std::logic_error("Sessão já está pausada");
+        throw std::logic_error("Sessao ja está pausada");
     }
 }
 
@@ -115,7 +115,7 @@ void SessaoEstudo::resetar() {
     horarioInicio = "";
     horarioFinal = "";
     
-    std::cout << "Sessão resetada" << std::endl;
+    std::cout << "Sessao resetada" << std::endl;
 }
 
 // continuar sessão pausada
@@ -123,11 +123,11 @@ void SessaoEstudo::continuar() {
     if (estadoSessao == pausado) {
         tempoInicial = time(nullptr);
         estadoSessao = rodando;
-        std::cout << "Sessão retomada" << std::endl;
+        std::cout << "Sessao retomada" << std::endl;
     } else if (estadoSessao == parado) {
-        throw std::logic_error("Sessão não está pausada. Use iniciar()");
+        throw std::logic_error("Sessao nao esta pausada. Use iniciar()");
     } else if (estadoSessao == rodando) {
-        throw std::logic_error("Sessão já está em andamento");
+        throw std::logic_error("Sessao ja esta em andamento");
     }
 }
 
