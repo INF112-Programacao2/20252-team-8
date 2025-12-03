@@ -10,8 +10,8 @@ Usuario::Usuario(const std::string& nome)
 }
 
 // Construtor usado pelo Repositorio - carrega usuário existente
-Usuario::Usuario(std::string& nome, int nivel, int xp, int moedas, std::string& badge) 
-    : nome(nome), nivel(nivel), xp(xp), moedas(moedas), badge(badge)
+Usuario::Usuario(std::string& nome, int nivel, int xp, int moedas, const std::string& badge) 
+    : nome(nome), nivel(nivel), xp(xp), moedas(moedas), badge(badge.empty() || badge == "NULL" ? "Iniciante" : badge)
 {
 }
 

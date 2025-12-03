@@ -3,10 +3,11 @@ TASKS - POLIMENTO
 - Rodar o código diversas vezes e anotar os erros
 OK - Criar make_file
 - Atualizar comentários
+OK - - Badge como "NULL"
+
 
 -ERROS ENCONTRADOS:
 
-	- Badge como "NULL"
 	- Verificar se Badge irá se atualizar
 	- Música deve parar ao pausar a sessão ou ao finalizar (atualmente só para quando volta para o menu de estudos)
 	- Se apertar 5 no menu inicial, o programa fecha
