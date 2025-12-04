@@ -39,6 +39,7 @@ int TelaEstudo::mostrarSessaoAtiva(const SessaoEstudo& sessao) {
     std::cout << "-------------------------" << std::endl;
     std::cout << "1. Pausar / Continuar" << std::endl;
     std::cout << "2. Finalizar Sessao" << std::endl;
+    std::cout << "3. Trocar Musica" << std::endl;
     
     // Aqui usamos uma leitura simples para não travar o loop do controlador se possível,
     // ou bloqueamos esperando ação do usuário.
