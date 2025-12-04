@@ -30,7 +30,7 @@ public:
     void adicionarMoedas(int quantidade);
     bool gastarMoedas(int quantidade);  // Retorna true se conseguiu gastar, false se não tinha saldo
     void setBadge (std::string& badge);
-
+    void setNivel(int novoNivel);
 };
 
 #endif

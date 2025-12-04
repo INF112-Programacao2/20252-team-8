@@ -71,3 +71,8 @@ void Usuario::setBadge(std::string& badge) {
         this->badge = badge;
     }
 }
+void Usuario::setNivel(int novoNivel) {
+    if (novoNivel >= 1) { // Garante que o nível não seja 0 ou negativo
+        this->nivel = novoNivel;
+    }
+}
