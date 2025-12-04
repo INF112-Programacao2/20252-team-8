@@ -24,13 +24,21 @@ void ItemAudio::usar() {
     
     if (result != MA_SUCCESS) {
         std::cout << "[ERRO] Nao foi possivel tocar o arquivo: " << this->caminhoArquivo << std::endl;
-    } else {
+  } else {
         std::cout << "(Pressione ENTER para parar a musica...)" << std::endl;
-        // Pausa simples para ouvir o som
-        if (std::cin.peek() == '\n') std::cin.ignore();
-        std::cin.get();
+        
+        std::cin.clear();
+        
+        std::string dummy;
+        std::getline(std::cin, dummy);
+        
+        // SEGURANÇA EXTRA: 
+        // Se a música parar instantaneamente sem você apertar nada, 
+        // significa que sobrou um 'Enter' do menu anterior. 
+        // Nesse caso, DESCOMENTE a linha abaixo para forçar uma segunda leitura:
+        
+        // if (dummy.empty()) std::getline(std::cin, dummy);
     }
-
     // Desliga o motor de áudio
     ma_engine_uninit(&engine);
 }

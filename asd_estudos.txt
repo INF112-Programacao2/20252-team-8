@@ -1,0 +1,40 @@
+--- SESSAO ---
+Disciplina: as
+Descricao: da
+Tempo: 14
+DataInicio: 04/12/25
+DataFinal: 04/12/25
+HoraInicio: 17:24:47
+HoraFinal: 17:25:15
+--- SESSAO ---
+Disciplina: asd
+Descricao: das
+Tempo: 6
+DataInicio: 04/12/25
+DataFinal: 04/12/25
+HoraInicio: 17:25:29
+HoraFinal: 17:25:35
+--- SESSAO ---
+Disciplina: q
+Descricao: w
+Tempo: 2
+DataInicio: 04/12/25
+DataFinal: 04/12/25
+HoraInicio: 17:25:49
+HoraFinal: 17:25:54
+--- SESSAO ---
+Disciplina: 12q
+Descricao: 2w
+Tempo: 13
+DataInicio: 04/12/25
+DataFinal: 04/12/25
+HoraInicio: 17:26:05
+HoraFinal: 17:26:33
+--- SESSAO ---
+Disciplina: as
+Descricao: sd
+Tempo: 28
+DataInicio: 04/12/25
+DataFinal: 04/12/25
+HoraInicio: 17:30:07
+HoraFinal: 17:30:44

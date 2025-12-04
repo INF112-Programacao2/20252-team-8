@@ -15,7 +15,7 @@ public:
     Usuario(const std::string& nome);
 
     // Construtor usado pelo Repositorio
-    Usuario (std::string& nome, int nivel, int pontos, int moedas, const std::string& badge);
+    Usuario (const std::string& nome, int nivel, int pontos, int moedas, const std::string& badge);
 
     // Getters
     std::string getNome() const;
