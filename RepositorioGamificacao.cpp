@@ -37,7 +37,7 @@ RepositorioGamificacao::RepositorioGamificacao(const std::string& nomeUsuario) :
             "Moedas: 5000",
             "Pontos: 0",
             "Nivel: 0",
-            "Badges: NULL"
+            "Badges: Iniciante"
         };
 
         this->escreverLinhasNoArquivo(linhasParaAdicionar, true);
@@ -91,15 +91,20 @@ Usuario* RepositorioGamificacao::carregarUsuario(){
 void RepositorioGamificacao::salvarUsuario(Usuario* usuario) {
     if (!usuario) return;      // Para o caso de ponteiro nulo
 
-    // 1. Ler badge atual do arquivo
-    std::string badgeSalva = "NULL";
+        // 1. Ler badge atual do arquivo
+    std::string badgeSalva = "Iniciante"; 
     std::vector<std::string> linhasAtuais = LerLinhasDoArquivo();
     for(const auto& linha : linhasAtuais) {
         if(linha.find("Badges: ") != std::string::npos) {
             badgeSalva = linha.substr(8);
+            
+            // Trata NULL ou vazio
+            if (badgeSalva == "NULL" || badgeSalva.empty()) {
+                badgeSalva = "Iniciante";
+            }
             break;
         }
-    }
+}
 
     //2. Montar novo conteúdo no mesmo padrão
     std::vector<std::string> novosDados;
@@ -120,10 +125,16 @@ std::string RepositorioGamificacao::getBadge() {
     for (const auto& linha : linhas) {
         if (linha.find("Badges: ") != std::string::npos) {
             std::string badgeNoArquivo = linha.substr(8);
+            
+            // Trata NULL ou vazio
+            if (badgeNoArquivo == "NULL" || badgeNoArquivo.empty()) {
+                return "Iniciante";
+            }
+            
             return badgeNoArquivo;
         }
     }
-    return "NULL";
+    return "Iniciante";
 }
 
 
