@@ -123,7 +123,6 @@ void SessaoEstudo::continuar() {
     if (estadoSessao == pausado) {
         tempoInicial = time(nullptr);
         estadoSessao = rodando;
-        std::cout << "Sessao retomada" << std::endl;
     } else if (estadoSessao == parado) {
         throw std::logic_error("Sessao nao esta pausada. Use iniciar()");
     } else if (estadoSessao == rodando) {
