@@ -1,1 +1,3 @@
 Rainy Day,Audio,200,rainy-day.mp3
+Chill Night Lo-Fi,Audio,1200,good-night-lofi-cozy-chill-music-160166.mp3
+Morning Coffee,Audio,150,morning-coffee.mp3

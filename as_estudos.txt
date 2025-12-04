@@ -1,0 +1,8 @@
+--- SESSAO ---
+Disciplina: 1a
+Descricao: ed
+Tempo: 2
+DataInicio: 04/12/25
+DataFinal: 04/12/25
+HoraInicio: 18:26:08
+HoraFinal: 18:26:10
