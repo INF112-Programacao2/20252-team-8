@@ -6,6 +6,7 @@ OK - Criar make_file
 OK - Badge como "NULL"
 OK - Se apertar 5 no menu inicial, o programa fecha
 OK - Histórico de Estudos não exibe sessões registradas
+OK - Música deve parar ao pausar a sessão ou ao finalizar (atualmente só para quando volta para o menu de estudos)
 
 -ERROS ENCONTRADOS:
 
