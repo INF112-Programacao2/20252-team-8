@@ -48,6 +48,7 @@ int TelaEstudo::mostrarSessaoAtiva(const SessaoEstudo& sessao) {
 }
 
 void TelaEstudo::mostrarHistorico(const std::vector<SessaoEstudo>& historico) {
+    limparTela();
     mostrarCabecalho("HISTORICO DE ESTUDOS");
     
     if (historico.empty()) {

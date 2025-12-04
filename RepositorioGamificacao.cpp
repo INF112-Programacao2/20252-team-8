@@ -56,7 +56,7 @@ Usuario* RepositorioGamificacao::carregarUsuario(){
     int moedas = 0;
     int xp = 0;
     int nivel = 0;
-    std::string badge = "NULL";
+    std::string badge = "Iniciante";
 
     for (const std::string& linha : linhas) {
         try {

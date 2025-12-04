@@ -17,7 +17,7 @@ SessaoEstudo::SessaoEstudo(long long int segundos, Estado estado, std::string di
 // métodos para gerenciar estados
 void SessaoEstudo::sessaoiniciada() {
     if (disciplina.empty()) {
-        throw std::logic_error("Não é possível iniciar sessão sem disciplina");
+        throw std::logic_error("Nao e possivel iniciar sessao sem disciplina");
     }
     std::cout << "Sessao iniciada para: " << disciplina << std::endl;
 }
@@ -28,7 +28,7 @@ void SessaoEstudo::sessaopausada() {
 
 void SessaoEstudo::sessaofinalizada() {
      if (segundos < 0) {
-        throw std::logic_error("Tempo de sessão inválido");
+        throw std::logic_error("Tempo de sessao invalido");
     }
     std::cout << "Sessao finalizada. Tempo total: " << segundos << " segundos" << std::endl;
 }
