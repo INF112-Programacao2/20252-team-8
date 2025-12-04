@@ -1,5 +1,4 @@
-REPOSITORIO USUÁRIO: as
-Moedas: 5000
-Pontos: 0
+Moedas: 3650
+Pontos: 2
 Nivel: 0
 Badges: Iniciante
