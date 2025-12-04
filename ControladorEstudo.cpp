@@ -189,10 +189,19 @@ void ControladorEstudo::gerenciarSessaoEmAndamento() {
                     // Se rodando -> Pausa
                     if (sessaoAtual.getEstado() == SessaoEstudo::rodando) {
                         sessaoAtual.pausar();
+                        if(tocandoAgora){
+                            ma_sound_stop(&musicaFundo);
+                            tocandoAgora = false;
+                        }
                     } 
                     // Se pausado -> Continua
                     else if (sessaoAtual.getEstado() == SessaoEstudo::pausado) {
                         sessaoAtual.continuar();
+                        if(!tocandoAgora){
+                            ma_sound_set_looping(&musicaFundo, MA_TRUE); // Loop infinito
+                            ma_sound_start(&musicaFundo); // O som começa em outra thread!
+                            tocandoAgora = true;
+                        }
                     }
                 } catch (std::exception& e) {
                     tela.mostrarErro(e.what());
