@@ -180,7 +180,7 @@ void ControladorEstudo::gerenciarSessaoEmAndamento() {
 
     while (sessaoAtiva) {
         // 1. A tela mostra o tempo correndo e retorna a ação do usuário
-        // (1 = Pausar/Continuar, 2 = Finalizar)
+        // (1 = Pausar/Continuar, 2 = Finalizar, 3 = Trocar Musica)
         int acao = tela.mostrarSessaoAtiva(sessaoAtual);
 
         switch (acao) {
@@ -213,6 +213,37 @@ void ControladorEstudo::gerenciarSessaoEmAndamento() {
                 sessaoAtiva = false; // Quebra este loop e volta para o menu de estudos
                 break;
 
+            case 3: // Trocar Musica
+                // Pausa o timer para o aluno escolher com calma
+                if (sessaoAtual.getEstado() == SessaoEstudo::rodando) {
+                    sessaoAtual.pausar();
+                }
+
+                // Para e Limpa a música atual
+                if (tocandoAgora) {
+                    ma_sound_stop(&musicaFundo);
+                    ma_sound_uninit(&musicaFundo);
+                    tocandoAgora = false;
+                }
+
+                // Abre o menu de seleção novamente
+                selecionarMusica();
+
+                // Se escolheu algo novo, carrega e toca
+                if (!caminhoMusicaEscolhida.empty()) {
+                    ma_result res = ma_sound_init_from_file(&engine, caminhoMusicaEscolhida.c_str(), 0, NULL, NULL, &musicaFundo);
+                    if (res == MA_SUCCESS) {
+                        ma_sound_set_looping(&musicaFundo, MA_TRUE);
+                        ma_sound_start(&musicaFundo);
+                        tocandoAgora = true;
+                    } else {
+                        tela.mostrarErro("Erro ao carregar nova musica.");
+                    }
+                }
+
+                // Retoma o estudo automaticamente
+                sessaoAtual.continuar();
+                break;
             default:
                 // Se digitou algo errado, apenas ignora e atualiza a tela
                 break; 
