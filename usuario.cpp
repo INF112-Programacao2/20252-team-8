@@ -39,8 +39,17 @@ std::string Usuario::getBadge() const {
 
 // Adiciona XP 
 void Usuario::adicionarXp(int quantidade) {
-    if (quantidade > 0) {
-        this->xp += quantidade;
+    this->xp += quantidade;
+
+    // MODO FÁCIL (TESTE): Meta = Nivel * 10
+    int xpNecessario = this->nivel * 10;
+
+    // Loop while: Permite subir múltiplos níveis de uma vez se ganhar muito XP
+    while (this->xp >= xpNecessario) {
+        this->xp = this->xp - xpNecessario; // O que sobra fica para o próximo nível
+        this->nivel++;                      // Sobe o nível
+        
+        xpNecessario = this->nivel * 10;    // Recalcula a nova meta
     }
 }
 

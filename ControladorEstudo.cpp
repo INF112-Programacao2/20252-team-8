@@ -261,14 +261,14 @@ void ControladorEstudo::gerenciarSessaoEmAndamento() {
 // FINALIZAÇÃO E RECOMPENSA (Coração do Sistema)
 // ==========================================================
 void ControladorEstudo::finalizarSessao() {
-    // 1. Encerra a contagem de tempo na Entidade
+    // Encerra a contagem de tempo na Entidade
     sessaoAtual.finalizar();
 
-    // 2. Persistência: Salva os dados no arquivo de histórico
+    // Persistência: Salva os dados no arquivo de histórico
     // O RepositorioEstudos vai ler os dados da sessaoAtual e gravar no .txt
     repoEstudos->adicionarSessao(sessaoAtual);
 
-    // 3. Lógica de Recompensa (Gamificação)
+    // Lógica de Recompensa (Gamificação)
     // Regra simples: 1 segundo = 1 XP (para testes)
     // Regra moeda: 1 moeda a cada 10 segundos
     long long tempoTotal = sessaoAtual.getSegundos();
@@ -276,15 +276,21 @@ void ControladorEstudo::finalizarSessao() {
     int xpGanho = static_cast<int>(tempoTotal); 
     int moedasGanhas = static_cast<int>(tempoTotal / 10); 
 
-    // 4. Atualiza o Usuário (Na Memória RAM)
+    // Guarda o nível antes de ganhar os pontos
+    int nivelAntes = usuario->getNivel();
+
+    // Atualiza o Usuário (Na Memória RAM)
     usuario->adicionarXp(xpGanho);
     usuario->adicionarMoedas(moedasGanhas);
 
-    // 5. Persistência: Salva o progresso do usuário no arquivo dele
+    // Persistência: Salva o progresso do usuário no arquivo dele
     // CRUCIAL: Se não salvar aqui, o XP é perdido ao fechar o jogo
     repoGamificacao->salvarUsuario(usuario);
 
-    // 6. Feedback Visual
+    // Pega o nível depois
+    int nivelDepois = usuario->getNivel();
+
+    // Feedback Visual
     tela.limparTela();
     tela.mostrarMensagem("SESSAO FINALIZADA COM SUCESSO!");
     std::cout << "Tempo Total: " << tempoTotal << " segundos." << std::endl;
@@ -292,8 +298,17 @@ void ControladorEstudo::finalizarSessao() {
     std::cout << "Recompensas:" << std::endl;
     std::cout << "[+] " << xpGanho << " XP" << std::endl;
     std::cout << "[+] " << moedasGanhas << " Moedas" << std::endl;
-    std::cout << "---------------------------------" << std::endl;
-    
+
+    // Verifica se subiu de nivel
+    if (nivelDepois > nivelAntes) {
+        std::cout << "\n========================================\n";
+        std::cout << "           PARABENS! LEVEL UP!          \n";
+        std::cout << "========================================\n";
+        std::cout << "Voce alcancou o Nivel " << nivelDepois << "!\n";
+        std::cout << "Nova Badge: " << usuario->getBadge() << "\n"; // Mostra a patente atualizada
+        std::cout << "========================================\n";
+    }
+
     tela.esperarEnter();
 }
 

@@ -16,14 +16,34 @@ void TelaGamificacao::mostrarPerfil(Usuario* usuario) {
     std::cout << "Moedas: " << usuario->getMoedas() << " $" << std::endl;
     
     // --- BARRA DE PROGRESSO DINÂMICA ---
-    // Calcula quanto falta para o próximo nível (0 a 99)
-    int xpNesteNivel = usuario->getXp() % 100; 
-    
+    // Define a meta
+    int nivelAtual = (usuario->getNivel() > 0) ? usuario->getNivel() : 1; // Proteção contra nível 0
+    int metaDoNivel = nivelAtual * 10;
+
+    // Pega o XP atual
+    int xpAtual = usuario->getXp();
+
     // Configura tamanho da barra
     int tamanhoBarra = 20; 
-    int qtdPreenchida = (xpNesteNivel * tamanhoBarra) / 100;
 
-    std::cout << "\nProximo Nivel:" << std::endl;
+    // 4. Regra de 3 para saber quantos tracinhos pintar
+    // Proteção: Se meta for 0, evita divisão por zero
+    int qtdPreenchida = 0;
+    if (metaDoNivel > 0) {
+        qtdPreenchida = (xpAtual * tamanhoBarra) / metaDoNivel;
+    }
+    
+    // Garante que a barra não estoure o visual (trava em 20)
+    if (qtdPreenchida > tamanhoBarra) qtdPreenchida = tamanhoBarra;
+
+    // 5. Calcula porcentagem para texto (0 a 100%)
+    int porcentagemTexto = 0;
+
+    if (metaDoNivel > 0) {
+        porcentagemTexto = (xpAtual * 100) / metaDoNivel;
+    }
+
+    std::cout << "\nProximo Nivel (Meta: " << metaDoNivel << " XP):" << std::endl;
     std::cout << "[";
     
     // Loop para desenhar a barra
@@ -34,7 +54,7 @@ void TelaGamificacao::mostrarPerfil(Usuario* usuario) {
             std::cout << " "; // Parte vazia
     }
     
-    std::cout << "] " << xpNesteNivel << "%" << std::endl;
+    std::cout << "] " << porcentagemTexto << "%" << std::endl;
     // -----------------------------------
 
     std::cout << "\n----------------------------------------" << std::endl;
