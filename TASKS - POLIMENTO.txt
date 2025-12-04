@@ -14,3 +14,4 @@ OK - Histórico de Estudos não exibe sessões registradas
 	- É necessário apertar Enter duas vezes para reproduzir/parar a música no inventário
 	- Diversos warning ao compilar arquivo usando o Makefile
 	- Adicionar opção de trocar de música durante a sessão
+	- Nível não atualiza junto quando a barra de xp chega em 100%
