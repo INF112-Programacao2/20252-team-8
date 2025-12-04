@@ -5,12 +5,12 @@ OK - Criar make_file
 - Atualizar comentários
 OK - Badge como "NULL"
 OK - Se apertar 5 no menu inicial, o programa fecha
+OK - Histórico de Estudos não exibe sessões registradas
 
 -ERROS ENCONTRADOS:
 
 	- Verificar se Badge irá se atualizar
 	- Música deve parar ao pausar a sessão ou ao finalizar (atualmente só para quando volta para o menu de estudos)
 	- É necessário apertar Enter duas vezes para reproduzir/parar a música no inventário
-	- Histórico de Estudos não exibe sessões registradas
 	- Diversos warning ao compilar arquivo usando o Makefile
 	- Adicionar opção de trocar de música durante a sessão
