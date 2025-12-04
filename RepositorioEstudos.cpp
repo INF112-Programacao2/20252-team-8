@@ -33,39 +33,35 @@ std::vector<SessaoEstudo> RepositorioEstudos::obterHistorico() const {
     std::vector<SessaoEstudo> historico;
     std::vector<std::string> linhas = LerLinhasDoArquivo();
     
-    // 1. Variáveis temporárias para TODAS as informações
+    // Variáveis temporárias
     std::string disc = "", desc = "";
     std::string dataIni = "", dataFim = "";
     std::string horaIni = "", horaFim = "";
     long long int tempo = 0;
     
     for (const auto& linha : linhas) {
-            if (linha.find("Disciplina: ") != std::string::npos) {
-        disc = linha.substr(linha.find(": ") + 2);
-            }
-            else if (linha.find("Descricao: ") != std::string::npos) {
-                desc = linha.substr(linha.find(": ") + 2);
-            }
-            else if (linha.find("Tempo: ") != std::string::npos) {
-                tempo = std::stoll(linha.substr(linha.find(": ") + 2));
-            }
-            else if (linha.find("DataInicio: ") != std::string::npos) {
-                dataIni = linha.substr(linha.find(": ") + 2);
-            }
-            else if (linha.find("DataFinal: ") != std::string::npos) {
-                dataFim = linha.substr(linha.find(": ") + 2);
-            }
-            else if (linha.find("HoraInicio: ") != std::string::npos) {
-                horaIni = linha.substr(linha.find(": ") + 2);
-            }
-            else if (linha.find("HoraFinal: ") != std::string::npos) {
-                horaFim = linha.substr(linha.find(": ") + 2);
-            }
-
-        // 2. O gatilho: HoraFinal é o último dado salvo, então criamos o objeto aqui
+        if (linha.find("Disciplina: ") != std::string::npos) {
+            disc = linha.substr(linha.find(": ") + 2);
+        }
+        else if (linha.find("Descricao: ") != std::string::npos) {
+            desc = linha.substr(linha.find(": ") + 2);
+        }
+        else if (linha.find("Tempo: ") != std::string::npos) {
+            tempo = std::stoll(linha.substr(linha.find(": ") + 2));
+        }
+        else if (linha.find("DataInicio: ") != std::string::npos) {
+            dataIni = linha.substr(linha.find(": ") + 2);
+        }
+        else if (linha.find("DataFinal: ") != std::string::npos) {
+            dataFim = linha.substr(linha.find(": ") + 2);
+        }
+        else if (linha.find("HoraInicio: ") != std::string::npos) {
+            horaIni = linha.substr(linha.find(": ") + 2);
+        }
         else if (linha.find("HoraFinal: ") != std::string::npos) {
-            horaFim = linha.substr(11); // "HoraFinal: " tem 11 chars
+            horaFim = linha.substr(linha.find(": ") + 2);
             
+            // AGORA CRIA O OBJETO (último campo encontrado)
             SessaoEstudo s(tempo, SessaoEstudo::Estado::parado, disc, desc);
             s.setDataInicio(dataIni);
             s.setDataFinal(dataFim);
@@ -73,8 +69,7 @@ std::vector<SessaoEstudo> RepositorioEstudos::obterHistorico() const {
             s.setHoraFinal(horaFim);
             historico.push_back(s);
 
-
-            // 3. Limpeza das variáveis para a próxima iteração
+            // Limpa variáveis para próxima sessão
             disc = ""; desc = ""; 
             dataIni = ""; dataFim = "";
             horaIni = ""; horaFim = "";
