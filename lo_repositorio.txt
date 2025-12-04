@@ -1,4 +1,0 @@
-Moedas: 5000
-Pontos: 6
-Nivel: 0
-Badges: Iniciante

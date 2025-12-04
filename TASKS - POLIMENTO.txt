@@ -9,11 +9,11 @@ OK - Histórico de Estudos não exibe sessões registradas
 OK - Música deve parar ao pausar a sessão ou ao finalizar (atualmente só para quando volta para o menu de estudos)
 OK - Adicionar opção de trocar de música durante a sessão
 OK - Algumas musicas nao tocam
-OK-  É necessário apertar Enter duas vezes para reproduzir/parar a música no inventário
-
+OK - É necessário apertar Enter duas vezes para reproduzir/parar a música no inventário
+OK - Nível não atualiza junto quando a barra de xp chega em 100%
 
 -ERROS ENCONTRADOS:
 
 	- Verificar se Badge irá se atualizar
 	- Diversos warning ao compilar arquivo usando o Makefile
-	- Nível não atualiza junto quando a barra de xp chega em 100%
+	- Muitas funções inuteis, polir as classes

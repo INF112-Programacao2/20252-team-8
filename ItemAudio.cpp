@@ -32,12 +32,6 @@ void ItemAudio::usar() {
         std::string dummy;
         std::getline(std::cin, dummy);
         
-        // SEGURANÇA EXTRA: 
-        // Se a música parar instantaneamente sem você apertar nada, 
-        // significa que sobrou um 'Enter' do menu anterior. 
-        // Nesse caso, DESCOMENTE a linha abaixo para forçar uma segunda leitura:
-        
-        // if (dummy.empty()) std::getline(std::cin, dummy);
     }
     // Desliga o motor de áudio
     ma_engine_uninit(&engine);

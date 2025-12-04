@@ -1,8 +1,0 @@
---- SESSAO ---
-Disciplina: ad
-Descricao: ad
-Tempo: 9
-DataInicio: 04/12/25
-DataFinal: 04/12/25
-HoraInicio: 17:06:20
-HoraFinal: 17:06:42
