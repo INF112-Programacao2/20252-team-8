@@ -28,41 +28,33 @@ void ControladorGamificacao::adicionarXP(int quantidade) {
 void ControladorGamificacao::verificarEvolucao() {
     // 1. Recalcula o nível baseado no XP atual
     int xpTotal = usuarioAtual->getXp();
-    int nivelCalculado = xpTotal / XP_POR_NIVEL; // ou 100
+    int nivelCalculado = xpTotal / XP_POR_NIVEL; 
     
     // 2. Pega o nível que estava salvo antes
     int nivelNoArquivo = repositorio->getNivel();
 
     if (nivelCalculado > nivelNoArquivo) {
-        // ====================================================
-        // PASSO CRUCIAL: ATUALIZAR TUDO ANTES DE DAR O PRINT
-        // ====================================================
         
-        // 1. Define a nova badge na memória (objeto Usuario)
-        std::string nomeBadge = calcularNomeBadge(nivelCalculado);
-        usuarioAtual->setBadge(nomeBadge); 
+        std::string nomeBadgeNova = calcularNomeBadge(nivelCalculado); // Ex: "Estudante"
+        int idBadgeNova = calcularIdBadge(nivelCalculado);
 
-        // 2. Salva o novo Nível e Badge no arquivo (Persistência)
+        usuarioAtual->setNivel(nivelCalculado);
+        usuarioAtual->setBadge(nomeBadgeNova); 
+
         if (repositorio) {
             repositorio->setNivel(nivelCalculado);
-            repositorio->setBadge(calcularIdBadge(nivelCalculado));
+            repositorio->setBadge(idBadgeNova);
         }
 
-        // ====================================================
-        // AGORA SIM: MOSTRAR NA TELA (COM OS DADOS JÁ NOVOS)
-        // ====================================================
-        
         std::cout << "\n=========================================\n";
         std::cout << "   PARABENS! LEVEL UP!\n";
         std::cout << "=========================================\n";
         std::cout << "Voce alcancou o Nivel " << nivelCalculado << "!\n";
-        
-        // Agora vai funcionar, porque atualizamos na linha acima!
-        std::cout << "Nova Badge: " << usuarioAtual->getBadge() << "\n"; 
+
+        std::cout << "Nova Badge: " << nomeBadgeNova << "\n"; 
         
         std::cout << "=========================================\n";
 
-        // Recompensa em Moedas
         int niveisSubidos = nivelCalculado - nivelNoArquivo;
         int moedasGanhas = niveisSubidos * RECOMPENSA_MOEDAS;
         adicionarMoedas(moedasGanhas);
@@ -123,8 +115,6 @@ int ControladorGamificacao::getXP() const {
 }
 
 int ControladorGamificacao::getNivel() const {
-    // CORREÇÃO: Retorna o nível que já está salvo no objeto Usuario
-    // em vez de tentar adivinhar dividindo o XP atual por 100.
     if (usuarioAtual) {
         return usuarioAtual->getNivel(); 
     }
@@ -142,26 +132,20 @@ std::string ControladorGamificacao::getBadge() const {
 void ControladorGamificacao::executar() {
     if (usuarioAtual != nullptr) {
         
-        // --- AUTO-CORREÇÃO DE BADGE ---
-        // 1. Pega o nível real (agora corrigido, vai retornar 5)
         int nivelReal = getNivel(); 
         
-        // 2. Calcula qual badge ele deveria ter (Nivel 5 = Estudante)
         std::string badgeEsperada = calcularNomeBadge(nivelReal);
 
-        // 3. Se a badge atual for diferente, corrige e salva!
         if (usuarioAtual->getBadge() != badgeEsperada) {
             std::cout << "[Debug] Corrigindo Badge antiga (" << usuarioAtual->getBadge() 
                       << ") para nova (" << badgeEsperada << ")...\n";
             
             usuarioAtual->setBadge(badgeEsperada);
             
-            // Garante que salva no arquivo também
             if (repositorio) {
                 repositorio->setBadge(calcularIdBadge(nivelReal));
             }
         }
-        // ------------------------------
 
         tela.mostrarPerfil(usuarioAtual);
     }
