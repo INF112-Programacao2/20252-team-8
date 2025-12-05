@@ -1,115 +1,173 @@
-# Study Tracker - Projeto de Programação
+# 📚 Study Tracker - Monitor de Estudos Gamificado
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow.svg)
+![Language](https://img.shields.io/badge/language-C%2B%2B17-blue.svg)
+![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20Windows%20(MinGW)-lightgrey.svg)
+![Status](https://img.shields.io/badge/status-funcional-success.svg)
 
-> Status: Em Desenvolvimento 🚧
+> **Status:** Versão CLI (Linha de Comando) Funcional 🚀
 
-O **Study Tracker** é uma aplicação desktop desenvolvida como parte da disciplina de Programação II - INF 112, com o objetivo de ajudar estudantes a monitorar, analisar e gamificar suas horas de estudo. A ferramenta busca criar um ambiente motivador e produtivo, incorporando elementos sociais e de recompensa para incentivar a consistência nos estudos.
+O **Study Tracker** é uma aplicação desktop via terminal desenvolvida como parte da disciplina de **Programação II - INF 112**. O objetivo é ajudar estudantes a monitorar, analisar e gamificar suas horas de estudo. A ferramenta busca criar um ambiente motivador, transformando o tempo de estudo em pontos (XP) e recompensas virtuais.
 
-## Índice
+---
 
-- [Descrição do Projeto](#1-descrição-do-projeto)
-- [Funcionalidades](#2-funcionalidades)
-- [Arquitetura do Sistema](#3-arquitetura-do-sistema)
-- [Tecnologias Planejadas](#4-tecnologias-planejadas)
-- [Como Começar](#5-como-começar)
-- [Contribuidores](#6-contribuidores)
-- [Licença](#7-licença)
+## 📋 Índice
 
-## 1. Descrição do Projeto
+- [Descrição do Projeto](#-descrição-do-projeto)
+- [Funcionalidades](#-funcionalidades)
+- [Arquitetura do Sistema](#-arquitetura-do-sistema)
+- [Tecnologias Utilizadas](#-tecnologias-utilizadas)
+- [Estrutura de Arquivos](#-estrutura-de-arquivos)
+- [Como Compilar e Executar](#-como-compilar-e-executar)
+- [Contribuidores](#-contribuidores)
 
-Muitos estudantes enfrentam dificuldades para manter a disciplina e visualizar seu progresso ao longo do tempo. O Study Tracker resolve esse problema oferecendo uma plataforma centralizada onde o usuário pode cronometrar suas sessões de estudo, adicionar metadados como disciplinas e descrições, visualizar seu desempenho através de gráficos e interagir com amigos, tornando o processo de estudo menos isolado e mais engajador.
+---
 
-## 2. Funcionalidades
+## 📖 Descrição do Projeto
 
-O sistema foi projetado para incluir as seguintes funcionalidades:
+Muitos estudantes enfrentam dificuldades para manter a disciplina e visualizar seu progresso ao longo do tempo. O Study Tracker resolve esse problema oferecendo uma plataforma centralizada onde o usuário pode cronometrar suas sessões de estudo, visualizar seu histórico e ser recompensado pelo esforço com moedas e níveis, tornando o processo menos isolado e mais engajador.
 
-⏰ **Monitoramento de Tempo**
-- Cronômetro para sessões de estudo com funções de iniciar, pausar, continuar e finalizar.
-- Adição de etiquetas (tags) e descrições para cada sessão.
+---
 
-📊 **Análise de Desempenho**
-- Visualização do histórico de estudos diário, semanal e mensal.
-- Gráficos que demonstram o progresso e a evolução ao longo do tempo.
-- Análise do período do dia com maior produtividade.
+## ✨ Funcionalidades
 
-🏆 **Gamificação**
-- Sistema de pontos e moedas recebidos com base nas horas estudadas.
-- Conquistas (badges) desbloqueadas ao atingir metas (ex: estudar 7 dias seguidos).
-- Loja virtual para trocar moedas por itens de personalização (temas, músicas, etc.).
+### ⏰ Monitoramento de Estudos
+- **Cronômetro Real:** Funções de iniciar, pausar, continuar e finalizar sessões.
+- **Metadados:** Registro de disciplina e descrição da tarefa.
+- **Feedback:** Visualização do tempo decorrido em tempo real.
 
-👥 **Funcionalidades Sociais**
-- Sistema de amigos para adicionar e interagir com outros usuários.
-- Visualização do progresso de estudo dos amigos (respeitando a privacidade).
-- Possibilidade de comparar o desempenho e criar um ambiente de competição saudável.
+### 🏆 Gamificação
+- **XP (Experiência):** Ganhe pontos por cada segundo estudado.
+- **Sistema de Níveis:** Suba de nível conforme acumula XP.
+- **Badges (Conquistas):** Desbloqueie títulos (Iniciante, Veterano, Lenda) baseados no seu nível.
+- **Economia Virtual:** Ganhe moedas para gastar na loja.
 
-## 3. Arquitetura do Sistema
+### 🎧 Loja e Multimídia
+- **Loja de Itens:** Compre músicas e itens cosméticos com suas moedas.
+- **Player de Música:** Integração com biblioteca de áudio para tocar músicas de foco (Lofi, Piano, etc.) diretamente pelo terminal enquanto estuda.
+- **Inventário:** Gerencie e utilize os itens comprados.
 
-O projeto foi modelado utilizando a metodologia de **Cartões-CRC (Classe-Responsabilidade-Colaborador)** para garantir um design coeso e orientado a objetos, baseado nos princípios de Responsabilidade Única (SRP) e no padrão de projeto Repositório para a camada de persistência.
+### 💾 Persistência de Dados
+- **Salvamento Automático:** Todo o progresso (usuário, inventário, histórico) é salvo em arquivos `.txt`.
+- **Histórico:** Recarregue suas sessões anteriores mesmo após fechar o programa.
 
-A arquitetura foi dividida nos seguintes módulos:
+---
 
-#### Módulo de Usuários e Social
-- `Usuario`: Modela o usuário, suas credenciais e estado.
-- `GerenciadorAmizades`: Gerencia a lógica de amizades.
-- `Inventario`: Controla os itens que um usuário possui.
+## 🏗 Arquitetura do Sistema
 
-#### Módulo de Estudo e Análise
-- `SessaoEstudo`: Modela uma sessão de estudo individual.
-- `AnalisadorDeDados`: Realiza cálculos e gera estatísticas.
+O projeto adota uma arquitetura robusta baseada no padrão **MVC (Model-View-Controller)** adaptado para aplicações de console, garantindo separação de responsabilidades e facilidade de manutenção.
 
-#### Módulo de Gamificação e Recompensas
-- `SistemaGamificacao`: Controla a lógica de pontos, níveis e conquistas.
-- `Loja`: Gerencia o catálogo de itens e as transações.
-- `Item`: Modela um item individual.
+### 1. Controladores (Controllers)
+Gerenciam a lógica de negócio e o fluxo da aplicação.
+- `ControladorPrincipal`: Gerente geral que roteia a navegação.
+- `ControladorEstudo`: Gerencia o cronômetro, a sessão e o motor de áudio.
+- `ControladorLoja`: Gerencia o catálogo e transações de compra.
+- `ControladorInventario`: Gerencia a lista de itens e polimorfismo (`usar()` item).
+- `ControladorGamificacao`: Calcula regras de evolução e recompensas.
 
-#### Módulo de Persistência
-- `HistoricoEstudos`: Repositório para salvar e carregar sessões de estudo.
-- `RepositorioUsuario`: Repositório para dados de usuários e amizades.
-- `RepositorioGamificacao`: Repositório para o progresso de gamificação.
-- `RepositorioLoja`: Repositório para os itens da loja.
+### 2. Telas (Views)
+Responsáveis apenas pela exibição e captura de entrada (Passivas).
+- `TelaBase`: Classe mãe com utilitários de limpeza de tela e tratamento de input.
+- `TelaEstudo`, `TelaLoja`, `TelaInventario`, `TelaGamificacao`.
 
-#### Módulo de Orquestração
-- `Aplicacao`: A classe principal que gerencia a interface gráfica e coordena a interação entre todos os outros módulos.
+### 3. Repositórios (Persistence Layer)
+Abstraem a manipulação de arquivos de texto.
+- `RepositorioBase`: Lógica genérica de leitura/escrita.
+- `RepositorioEstudos`: Salva histórico de sessões.
+- `RepositorioGamificacao`: Salva estado do usuário (XP, Nível).
+- `RepositorioInventario`: Salva itens comprados.
 
-## 4. Tecnologias Planejadas
+### 4. Entidades (Models)
+Classes de domínio.
+- `Usuario`, `SessaoEstudo`.
+- `Item` (Base) -> `ItemAudio` (Polimorfismo para tocar música).
 
-As seguintes tecnologias foram planejadas para a implementação do projeto:
+---
 
-- **Linguagem: C++23** 
-- **Interface Gráfica (GUI): Qt** 
-- **Banco de Dados: SQLite 3**
-  
-## 5. Como Começar
+## 🛠 Tecnologias Utilizadas
 
-Para executar o projeto em seu ambiente local, siga os passos abaixo.
+- **Linguagem:** C++17
+- **Build System:** GNU Make (Makefile híbrido Windows/Linux)
+- **Áudio:** [miniaudio](https://miniaud.io/) (Biblioteca single-header para reprodução MP3)
+- **Persistência:** Arquivos de Texto (`fstream`)
+- **Interface:** CLI (Command Line Interface) com limpeza de buffer e validação.
 
-```bash
-# 1. Clone o repositório
-git clone [https://github.com/INF112-Programacao2/20252-team-8](https://github.com/INF112-Programacao2/20252-team-8)
+---
 
-# 2. Navegue até o diretório do projeto
-cd study-tracker
+## 📂 Estrutura de Arquivos
 
---- A IMPLEMENTAR ----
-# 3. Crie e ative um ambiente virtual (recomendado)
-# 4. Instale as dependências
-# 5. Execute a aplicação
---- A IMPLEMENTAR ----
+Para o correto funcionamento do áudio e da compilação, a estrutura de pastas deve ser mantida como abaixo:
 
+```text
+StudyTracker/
+├── assets/                 <-- [IMPORTANTE] Crie esta pasta e coloque os .mp3 aqui
+│   ├── lofi.mp3
+│   ├── rock.mp3
+│   └── ...
+├── Makefile                <-- Script de automação
+├── miniaudio.h             <-- Biblioteca de áudio
+├── main.cpp
+├── *.h                     <-- Arquivos de cabeçalho
+├── *.cpp                   <-- Arquivos de implementação
+└── AppEstudos              <-- Executável gerado após compilação
 ```
 
-## 6. Contribuidores
+## 🚀 Como Compilar e Executar
+
+Este projeto possui um **Makefile** que detecta automaticamente seu sistema operacional e configura a compilação.
+
+### Pré-requisitos
+
+1.  **Compilador C++** (`g++`) instalado e configurado no PATH.
+2.  **Make** instalado.
+3.  **Assets:** Arquivos `.mp3` dentro da pasta `assets/` na raiz do projeto.
+
+### Passo a Passo
+
+1.  **Clone o repositório:**
+
+    ```bash
+    git clone https://github.com/INF112-Programacao2/20252-team-8.git
+    cd study-tracker
+    ```
+
+2.  **Compile o projeto:**
+    Basta rodar o comando na raiz do projeto:
+
+    ```bash
+    make
+    ```
+
+3.  **Execute:**
+    Utilize o comando do make para rodar:
+
+    ```bash
+    make run
+    ```
+
+    *Alternativamente, você pode rodar o executável manualmente:*
+
+      * **Linux/WSL:** `./AppEstudos`
+      * **Windows:** `AppEstudos.exe`
+
+4.  **Limpar (Opcional):**
+    Para apagar os arquivos temporários de compilação (`.o`) e o executável:
+
+    ```bash
+    make clean
+    ```
+
+-----
+
+## 👥 Contribuidores
 
 Este projeto foi desenvolvido com a colaboração dos seguintes membros:
 
-- [Nicolas Salvador](https://github.com/NicolasSalvador13)
-- [Gabriel Carneiro](https://github.com/usuario2)
-- [Aloizio Sergio](https://github.com/usuario3)
-- [PedroPaulon](https://github.com/usuario4)
-- [Murilo Sousa](https://github.com/seu-usuario)
+  - [Nicolas Salvador](https://www.google.com/search?q=https://github.com/NicolasSalvador13)
+  - [Gabriel Carneiro](https://www.google.com/search?q=https://github.com/usuario2)
+  - [Aloizio Sergio](https://www.google.com/search?q=https://github.com/usuario3)
+  - [PedroPaulon](https://www.google.com/search?q=https://github.com/usuario4)
+  - [Murilo Sousa](https://www.google.com/search?q=https://github.com/seu-usuario)
 
-## 7. Licença
+-----
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+*Projeto acadêmico - INF 112 - Universidade Federal de Viçosa (UFV)*

@@ -7,9 +7,8 @@ CXX = g++
 
 # Flags de compilação:
 # -std=c++17: Usa uma versão moderna do C++
-# -Wall: Mostra avisos de código 
 # -g: Adiciona símbolos de debug (gdb/valgrind)
-CXXFLAGS = -std=c++17 -Wall -g
+CXXFLAGS = -std=c++17 -g
 
 # Bibliotecas necessárias
 # Necessárias para o miniaudio funcionar corretamente no Linux/Unix
